@@ -1,7 +1,6 @@
 <?php
 /**
  * Plugin Name: Custom order numbers for Blender.org
- * Plugin URI: http://www.woothemes.com/products/sequential-order-numbers-pro/
  * Description: Based on Sequential Numbers Pro, Modified by Bart Veldhuizen
  * Author: SkyVerge
  * Author URI: http://www.skyverge.com
