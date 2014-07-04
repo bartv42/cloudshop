@@ -1,0 +1,397 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce PostNL Parcelware\n"
+"POT-Creation-Date: 2014-01-12 16:35+0100\n"
+"PO-Revision-Date: 2014-01-12 16:35+0100\n"
+"Last-Translator: Bart Pluijms <info@geev.nl>\n"
+"Language-Team: Geev vormgeeving <wordpress@geev.nl>\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.1\n"
+"X-Poedit-KeywordsList: _;_e;_x;__\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../woocommerce-postnl-parcelware.php:63
+msgid ""
+"WooCommerce is not active. Please activate plugin before using WooCommerce "
+"PostNL ParcelWare plugin."
+msgstr ""
+"WooCommerce is niet actief. Activeer WooCommerce voordat je WooCommerce "
+"PostNL Parcelware plugin gebruikt."
+
+#: ../admin/settings.php:20
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Je hebt niet genoeg rechten om deze pagina te bekijken."
+
+#: ../admin/settings.php:52
+msgid "WooCommerce PostNL Parcelware"
+msgstr "WooCommerce PostNL Parcelware"
+
+#: ../admin/settings.php:54
+msgid "Your settings have been saved."
+msgstr "Uw instellingen zijn opgeslagen."
+
+#: ../admin/settings.php:57
+msgid "Restore settings saved / Restore successful."
+msgstr "Herstel instellingen bewaard / Herstel succesvol."
+
+#: ../admin/settings.php:69
+msgid "Quick Export"
+msgstr "Quick Export"
+
+#: ../admin/settings.php:71
+msgid "Please specify date range and order status for your Quick Export."
+msgstr "Geef a.ub. aan welke bestellingen u wilt exporteren met Quick Export."
+
+#: ../admin/settings.php:71
+msgid ""
+"Make sure you've saved Advanced export settings before using Quick Export"
+msgstr ""
+"Bewaar eerst de geavanceerde export instellingen voor dat je Quick Export "
+"gebruikt"
+
+#: ../admin/settings.php:75
+msgid "Date from:"
+msgstr "Datum vanaf:"
+
+#: ../admin/settings.php:80
+msgid "Default: last export date"
+msgstr "Standaard: laatste export datum"
+
+#: ../admin/settings.php:86
+msgid "Date to:"
+msgstr "Datum tot:"
+
+#: ../admin/settings.php:91
+msgid "Default: today"
+msgstr "Standaard: vandaag"
+
+#: ../admin/settings.php:97
+msgid "With order status:"
+msgstr "Met bestelstatus:"
+
+#: ../admin/settings.php:101
+msgid "All statusses"
+msgstr "Alle statussen"
+
+#: ../admin/settings.php:116 ../inc/funct.php:17 ../inc/funct.php:29
+#: ../inc/funct.php:113
+msgid "Export to Parcelware"
+msgstr "Exporteren naar Parcelware"
+
+#: ../admin/settings.php:128
+msgid "Advanced export settings"
+msgstr "Geavanceerde Export instellingen"
+
+#: ../admin/settings.php:130
+msgid "Please specify your Parcelware export defaults / settings."
+msgstr "Bepaal a.u.b. de Parcelware export instellingen."
+
+#: ../admin/settings.php:134
+msgid "Add to actions column:"
+msgstr "Voeg to aan Acties kolom:"
+
+#: ../admin/settings.php:137 ../admin/settings.php:162
+msgid "Yes"
+msgstr "Ja"
+
+#: ../admin/settings.php:138 ../admin/settings.php:151
+#: ../admin/settings.php:163
+msgid "No"
+msgstr "Nee"
+
+#: ../admin/settings.php:140
+msgid "Add Parcelware export to order overview page actions column."
+msgstr ""
+"Voeg Parcelware export toe aan de \"Acties\" kolom op de besteloverzicht "
+"pagina."
+
+#: ../admin/settings.php:146
+msgid "Add shipping costs:"
+msgstr "Verzendkosten:"
+
+#: ../admin/settings.php:149
+msgid "To export button inside Actions column"
+msgstr "Toevoegen aan knop in Acties kolom"
+
+#: ../admin/settings.php:150
+msgid "To Shipping column"
+msgstr "Toevoegen aan Verzending kolom"
+
+#: ../admin/settings.php:153
+msgid "Add shipping costs to order overview page."
+msgstr "Voeg verzendkosten toe aan besteloverzicht pagina."
+
+#: ../admin/settings.php:159
+msgid "Use address 2:"
+msgstr "Gebruik adres 2:"
+
+#: ../admin/settings.php:165
+msgid ""
+"Do you want to show the second address field? You can use this to receive a "
+"apartment, suite, unit, etc."
+msgstr ""
+"Moet het tweede adresveld getoond worden? Dit kan gebruikt worden om een "
+"apartement, suite, etc te verzamelen."
+
+#: ../admin/settings.php:166
+msgid "Not required for PostNL Parcelware."
+msgstr "Niet verplicht voor PostNL Parcelware."
+
+#: ../admin/settings.php:172
+msgid "Save settings"
+msgstr "Bewaar instellingen"
+
+#: ../admin/settings.php:183
+msgid "Buy Pro!"
+msgstr "Koop Pro!"
+
+#: ../admin/settings.php:185
+msgid "Check out our "
+msgstr "Bekijk onze"
+
+#: ../admin/settings.php:185
+msgid "to find out more about WooCommerce PostNL Parcelware Pro."
+msgstr ""
+"voor meer informatie over WooCommerce PostNL Parcelware Pro en alle "
+"functionaliteiten."
+
+#: ../admin/settings.php:186
+msgid ""
+"For only &euro; 49,00 you will get a lot of features and access to our "
+"support section."
+msgstr ""
+"Voor &euro; 49,00 heb je veel meer functionaliteiten en toegang tot onze "
+"support sectie."
+
+#: ../admin/settings.php:187
+msgid "A couple of features:"
+msgstr "Een aantal functionaliteiten:"
+
+#: ../admin/settings.php:188
+msgid "Define your own export filename."
+msgstr "Bepaal de bestandsnaam van je export bestand."
+
+#: ../admin/settings.php:188
+msgid "Bulk export orders to Parcelware."
+msgstr "Bulk Exporteren naar Parcelware."
+
+#: ../admin/settings.php:188
+msgid "Change order status after export."
+msgstr "Wijzig bestelstatus na exporteren."
+
+#: ../admin/settings.php:188
+msgid "Define export based on shipping method & shipping cost."
+msgstr "Bepaal je export bestand gebaseerd op verzendmethode & -kosten."
+
+#: ../admin/settings.php:188
+msgid ""
+"Replace checkout field address in seperated fields for street, number and "
+"extension."
+msgstr ""
+"Vervang het afrekenveld \"adres\" in aparte velden voor straat, nummer en "
+"toevoeging."
+
+#: ../admin/settings.php:188
+msgid "Backup last export and restore it."
+msgstr "Backup de laatste export en herstel het."
+
+#: ../admin/settings.php:192
+msgid "Show Your Love"
+msgstr "Show Your Love"
+
+#: ../admin/settings.php:194
+#, php-format
+msgid ""
+"This plugin is developed by %s, a Dutch graphic design and webdevelopment "
+"company."
+msgstr ""
+"Deze plugin is ontwikkeld door %s, een Nederlands grafisch ontwerpbureau."
+
+#: ../admin/settings.php:195
+msgid ""
+"If you are happy with this plugin please show your love by liking us on "
+"Facebook"
+msgstr "Blij met deze plugin? Like ons op Facebook!"
+
+#: ../admin/settings.php:197
+msgid "Or"
+msgstr "Of"
+
+#: ../admin/settings.php:199
+msgid "Rate the plugin 5&#9733; on WordPress.org"
+msgstr "Waardeer deze plugin met 5&#9733; op WordPress.org"
+
+#: ../admin/settings.php:200
+msgid "Blog about it & link to the plugin page"
+msgstr "Schrijf een blog en link naar de plugin pagina"
+
+#: ../inc/funct-export.php:182
+msgid "PostNL Pakketten"
+msgstr "PostNL Pakketten"
+
+#: ../inc/funct.php:9
+msgid "Parcelware"
+msgstr "Parcelware"
+
+#: ../inc/funct.php:29
+msgid "Export"
+msgstr "Exporteer"
+
+#: ../inc/funct.php:31
+msgid "Exported to Parcelware on:"
+msgstr "Ge&euml;xporteerd naar Parcelware op:"
+
+#: ../inc/funct.php:130
+msgid "Shipping"
+msgstr "Verzending"
+
+#: ../inc/funct.php:134
+msgid "Shipping Cost:"
+msgstr "Verzendkosten:"
+
+#~ msgid "Change status"
+#~ msgstr "Wijzig status"
+
+#~ msgid ""
+#~ "%s to get updates for your Geev plugins. After activation, please refresh "
+#~ "your WooCommerce PostNL Parcelware settings."
+#~ msgstr ""
+#~ "%s om updates te krijgen van je Geev plugins. Na activatie, vernieuw a."
+#~ "ub. de WooCommerce PostNL Parcelware instellingen."
+
+#~ msgid "Install the Geev Updater plugin"
+#~ msgstr "Installeer Geev Updater plugin"
+
+#~ msgid "Shipping method:"
+#~ msgstr "Verzendmethode:"
+
+#~ msgid "Define which shiping methods are allowed for export."
+#~ msgstr "Bepaal welke verzendmethode(n) geëxporteerd moeten worden."
+
+#~ msgid "Minimum shipping cost:"
+#~ msgstr "Minimum verzendkosten:"
+
+#~ msgid "Define the minimum shipping cost for export."
+#~ msgstr "Bepaal de minimum verzendkosten voor exporteren."
+
+#~ msgid "Change order status:"
+#~ msgstr "Wijzig bestelstatus:"
+
+#~ msgid "Don't change"
+#~ msgstr "Niet wijzigen"
+
+#~ msgid "Replace address fields:"
+#~ msgstr "Vervang adresvelden:"
+
+#~ msgid "Leave as is"
+#~ msgstr "Niet wijzigen"
+
+#~ msgid "Street & Number"
+#~ msgstr "Straat & Nummer"
+
+#~ msgid "Street, Number & Extension"
+#~ msgstr "Straat, Nummer & Toevoeging"
+
+#~ msgid "How would receive customer address on checkout?"
+#~ msgstr "Hoe moet het adres verzamelt worden tijdens checkout?"
+
+#~ msgid "Note:"
+#~ msgstr "Let op:"
+
+#~ msgid "BETA function, this may not work on all installations / themes."
+#~ msgstr ""
+#~ "BETA functie, deze functie zal misschien niet werken in alle themes / "
+#~ "installaties en heeft wellicht layout aanpassingen (css) nodig."
+
+#~ msgid "Parcelware Contract name:"
+#~ msgstr "Parcelware contract naam:"
+
+#~ msgid "Not required, you can also select your contract inside Parcelware."
+#~ msgstr "Niet verplicht, je kan dit ook selecteren in Parcelware."
+
+#~ msgid "Parcelware Costcentre:"
+#~ msgstr "Parcelware Kostenplaats"
+
+#~ msgid "Not required. You can also select this in Parcelware."
+#~ msgstr "Niet verplicht. Je kan dit ook selecteren in Parcelware."
+
+#~ msgid "Wikipedia: Cost centre"
+#~ msgstr "Wikipedia: Kostenplaats"
+
+#~ msgid "Export filename:"
+#~ msgstr "Export bestandsnaam:"
+
+#~ msgid "parcelware-export"
+#~ msgstr "parcelware-export"
+
+#~ msgid "Specifiy export filename, without any extension."
+#~ msgstr "Geef de bestandsnaam aan van het export bestand."
+
+#~ msgid "Use for Quick Export:"
+#~ msgstr "Gebruik voor Quick Export:"
+
+#~ msgid "Use above advanced settings also for Quick Export."
+#~ msgstr ""
+#~ "Gebruik bovenstaande geavanceerde instellingen ook voor Quick Export."
+
+#~ msgid "Restore last export"
+#~ msgstr "Herstel laatste export"
+
+#~ msgid ""
+#~ "In case something went wrong, you've got the ability to restore the most "
+#~ "recent export."
+#~ msgstr ""
+#~ "Als er iets verkeerd is gegaan heb je hier de mogelijkheid om de meest "
+#~ "recente export te herstellen."
+
+#~ msgid "Restore order status:"
+#~ msgstr "Herstel bestelstatus:"
+
+#~ msgid ""
+#~ "Do you want to restore the last order status? If you restore the order "
+#~ "status, your customer will be notified about the status update."
+#~ msgstr ""
+#~ "Wil je de bestelstatus van de laatste export herstellen? Indien je de "
+#~ "bestelstatus wijzigt kan het zijn dat de klant hiervan op de hoogte wordt "
+#~ "gesteld."
+
+#~ msgid "Restore export"
+#~ msgstr "Herstel export"
+
+#~ msgid "Need Support?"
+#~ msgstr "Hulp nodig?"
+
+#~ msgid ""
+#~ "If you are having problems with this plugin, please contact us via our "
+#~ msgstr ""
+#~ "Heb je problemen met deze plugin? Neem dan contact met ons op via onze"
+
+#~ msgid ""
+#~ "We will try to support you as soon as possible, mostly within 24 hours."
+#~ msgstr ""
+#~ "We doen onze best om je zo snel mogelijk te helpen met je vragen, meestal "
+#~ "binnen 24 uur."
+
+#~ msgid ""
+#~ "On our website you will also find some basic support information for this "
+#~ "plugin."
+#~ msgstr "Op onze website vind je ook basis help informatie voor deze plugin."
+
+#~ msgid "Parcelware export"
+#~ msgstr "Parcelware export"
+
+#~ msgid "Street"
+#~ msgstr "Straat"
+
+#~ msgid "Number"
+#~ msgstr "Nummer"
+
+#~ msgid "Ext."
+#~ msgstr "Toev."
+
+#~ msgid "Title:"
+#~ msgstr "Titel:"

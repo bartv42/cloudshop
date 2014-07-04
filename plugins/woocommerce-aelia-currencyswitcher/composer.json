@@ -1,0 +1,9 @@
+{
+	"require": {
+		"nategood/httpful": "*",
+		"daigo75/geoip": "~1.24"
+	},
+	"autoload" : {
+		"classmap": ["lib/classes/"]
+	}
+}

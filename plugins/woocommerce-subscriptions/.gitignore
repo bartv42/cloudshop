@@ -1,0 +1,5 @@
+sql-dumps
+*.sql
+clean-slate.sh
+*.zip
+sftp-config.json

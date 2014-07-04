@@ -1,0 +1,124 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "8089eb7154f557297db77d1a92bc5cb7",
+    "packages": [
+        {
+            "name": "daigo75/geoip",
+            "version": "v1.24",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/daigo75/geoip-api-php.git",
+                "reference": "e64cbdd6c58532def451836a50a70f00b0b6e89e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/daigo75/geoip-api-php/zipball/e64cbdd6c58532def451836a50a70f00b0b6e89e",
+                "reference": "e64cbdd6c58532def451836a50a70f00b0b6e89e",
+                "shasum": ""
+            },
+            "conflict": {
+                "ext-geoip": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "geoip.inc",
+                    "geoipcity.inc"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL 2.1+"
+            ],
+            "authors": [
+                {
+                    "name": "MaxMind, Inc.",
+                    "email": "support@maxmind.com",
+                    "homepage": "http://www.maxmind.com/"
+                },
+                {
+                    "name": "Diego Zanella",
+                    "email": "diego@pathtoenlightenment.net",
+                    "homepage": "http://dev.pathtoenlightenment.net/"
+                }
+            ],
+            "description": "Fork of MaxMind GeoIP PHP API with improved error handling",
+            "homepage": "http://dev.maxmind.com/geoip/legacy/downloadable",
+            "keywords": [
+                "geoip",
+                "geolocation",
+                "maxmind"
+            ],
+            "time": "2013-10-18 09:15:19"
+        },
+        {
+            "name": "nategood/httpful",
+            "version": "0.2.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nategood/httpful.git",
+                "reference": "0bf1423028abe2f630e1d2ef8d62486d6655b2f3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nategood/httpful/zipball/0bf1423028abe2f630e1d2ef8d62486d6655b2f3",
+                "reference": "0bf1423028abe2f630e1d2ef8d62486d6655b2f3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Httpful": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nate Good",
+                    "email": "me@nategood.com",
+                    "homepage": "http://nategood.com"
+                }
+            ],
+            "description": "A Readable, Chainable, REST friendly, PHP HTTP Client",
+            "homepage": "http://github.com/nategood/httpful",
+            "keywords": [
+                "api",
+                "curl",
+                "http",
+                "requests",
+                "rest",
+                "restful"
+            ],
+            "time": "2013-10-20 11:03:40"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}

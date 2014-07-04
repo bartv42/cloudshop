@@ -1,0 +1,4 @@
+#customer_details .wooparc-hidden {display:none !important}
+.form-row.form-row-first.wooparc-xsmall,
+.form-row.form-row-last.wooparc-xsmall{width:22%;clear:none !important;}
+.form-row.form-row-first.wooparc-xsmall {margin-left:2%}

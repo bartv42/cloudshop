@@ -1,0 +1,24 @@
+/* Styles for Currency Switcher Widget */
+.error {
+	background-color: #FFEBE8;
+	border: 1px solid #C00;
+	border-radius: 4px;
+	padding: 4px;
+}
+
+.error .title {
+	font-weight: bold;
+	font-size: large;
+}
+
+.widget_wc_aelia_currencyswitcher_widget .button.change_currency {
+	display: none;
+}
+
+.widget_wc_aelia_currencyswitcher_widget .currency_button {
+	display: inline-block;
+}
+
+.widget_wc_aelia_billing_country_selector_widget .button.change_country {
+	display: none;
+}

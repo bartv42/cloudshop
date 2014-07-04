@@ -1,0 +1,11 @@
+_site
+.gh-pages
+composer.lock
+composer.phar
+phpunit.xml
+vendor/
+*.sw?
+t.php
+*.old
+
+/*.komodoproject

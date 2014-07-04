@@ -1,0 +1,50 @@
+*** WooCommerce Braintree Gateway Changelog ***
+
+2014.04.25 - version 2.1.2
+ * Tweak - Added `wc_braintree_form_fields` and `wc_braintree_get_order` filters
+
+2014.02.10 - version 2.1.1
+ * Fix - When the CVV field is set as required, customers using a saved card will now be required to enter a valid CVV
+
+2014.01.20 - version 2.1
+ * Misc - WooCommerce 2.1 compatibility
+ * Misc - Uses SkyVerge Plugin Framework
+ * Localization - Text domain changed from `wc-gateway-braintree` to `woocommerce-gateway-braintree`
+
+2014.01.14 - version 2.0.6
+ * Fix - Fix issue with subscription renewals failing when customer signed up for a subscription with a free trial using a previously saved card
+
+2013.10.18 - version 2.0.5
+ * Feature - Add support for specifying a merchant account ID
+ * Tweak - Pass customer email address to Braintree for guest orders
+
+2013.09.24 - version 2.0.4
+ * Feature - Add support for WooCommerce Subscriptions 1.4 "Change Payment Method" feature
+
+2013.08.27 - version 2.0.3
+ * Fix - Fix potential PHP error when an existing customer is signing up for a subscription using a new credit card
+
+2013.08.09 - version 2.0.2
+ * Fix - Fix potential PHP errors when in debug mode
+
+2013.07.16 - version 2.0.1
+ * Tweak - You can now edit and delete the Braintree CustomerID stored from the Users > Edit User page
+
+2013.07.01 - version 2.0
+ * Feature - Merged Braintree and Braintree TR into a single master extension to rule all
+ * Feature - WooCommerce Subscriptions support!
+ * Feature - WooCommerce Pre-Orders support!
+ * Feature - Now uses braintree.js to ease your PCI compliance (like TR), but with the simple one-page checkout process offered by a direct gateway
+ * Tweak - Payment Fields and My Cards section are templates, so you can override them to further customize your store
+
+2013.02.08 - version 1.1
+ * WooCommerce 2.0 Compatibility
+
+2012.12.05 - version 1.0.2
+ * Updater
+
+2012.03.21 - version 1.0.1
+ * Minor update for recurring order compatibility
+
+2012.03.01 - version 1.0.0
+ * First Release
