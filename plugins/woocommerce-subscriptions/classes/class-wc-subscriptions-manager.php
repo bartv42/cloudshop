@@ -102,7 +102,7 @@ class WC_Subscriptions_Manager {
 		$order = new WC_Order( $subscription['order_id'] );
 
 		$item = WC_Subscriptions_Order::get_item_by_product_id( $order, $subscription['product_id'] );
-
+//		echo "<pre>";print_r($subscription);die();
 		if ( $subscription['status'] != 'pending' && ! self::can_subscription_be_changed_to( 'active', $subscription_key, $user_id ) ) {
 
 		 	$order->add_order_note( sprintf( __( 'Unable to activate subscription "%s".', 'woocommerce-subscriptions' ), $item['name'] ) );
@@ -1111,6 +1111,7 @@ class WC_Subscriptions_Manager {
 					$subscription_can_be_changed = apply_filters( 'woocommerce_can_subscription_be_changed_to', false, $new_status_or_meta, $args );
 					break;
 			}
+			
 		}
 
 		return apply_filters( 'woocommerce_subscription_can_be_changed_to_' . $new_status_or_meta, $subscription_can_be_changed, $subscription, $order );
@@ -1136,6 +1137,8 @@ class WC_Subscriptions_Manager {
 		$item = WC_Subscriptions_Order::get_item_by_subscription_key( $subscription_key );
 
 		if ( ! empty( $item ) ) {
+			
+//			echo "** $subscription_key" . $item['subscription_completed_payments'] . " ** ";
 
 			$subscription = array(
 				'order_id'           => $item['order_id'],
@@ -1160,7 +1163,6 @@ class WC_Subscriptions_Manager {
 				'suspension_count'   => isset( $item['subscription_suspension_count'] ) ? $item['subscription_suspension_count'] : 0,
 				'last_payment_date'  => isset( $item['subscription_completed_payments'] ) ? end( $item['subscription_completed_payments'] ) : '',
 			);
-
 		} else {
 
 			$subscription = array();
@@ -1630,9 +1632,23 @@ class WC_Subscriptions_Manager {
 
 		// No date scheduled, try calculating it (if the length of the subscription hasn't been reached)
 		$subscription_length = WC_Subscriptions_Order::get_subscription_length( $subscription['order_id'], $subscription['product_id'] );
+
+/*
+		echo "<br> in get_next_payment_date()";
+		echo "<br/> next payment date: " . $next_payment_date;
+		echo "<br/> subscription_length = $subscription_length";
+		echo "<br/> completed payment count = " . self::get_subscriptions_completed_payment_count( $subscription_key );
+		echo "<br/> subscription status: " . $subscription['status'];
+		echo "<br/> next_payment_date false: " . ((false === $next_payment_date)?'true':'false');
+		echo "<br/> C1: " . (((false === $next_payment_date) && 'active' == $subscription['status'])?'true':'false');
+		echo "<br/> C2: " . (( 0 == $subscription_length || self::get_subscriptions_completed_payment_count( $subscription_key ) < $subscription_length )?'true':'false');
+*/
+		
 		if ( false === $next_payment_date && 'active' == $subscription['status'] && ( 0 == $subscription_length || self::get_subscriptions_completed_payment_count( $subscription_key ) < $subscription_length ) ) {
 
 			$next_payment_date = self::calculate_next_payment_date( $subscription_key, $user_id, 'timestamp' );
+
+			echo "<li> next payment date: " . $next_payment_date;
 
 			// Repair the schedule next payment date
 			if ( $next_payment_date != 0 ) {
@@ -1642,7 +1658,7 @@ class WC_Subscriptions_Manager {
 		}
 
 		$next_payment_date = ( 'mysql' == $type && 0 != $next_payment_date ) ? date( 'Y-m-d H:i:s', $next_payment_date ) : $next_payment_date;
-
+//		die("3: ".apply_filters( 'woocommerce_subscription_next_payment_date', $next_payment_date, $subscription_key, $user_id, $type ));
 		return apply_filters( 'woocommerce_subscription_next_payment_date', $next_payment_date, $subscription_key, $user_id, $type );
 	}
 
