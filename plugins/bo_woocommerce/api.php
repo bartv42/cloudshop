@@ -1,11 +1,10 @@
 <?php
 		
 function blendercloud_api( $atts ) {
-     //return "foo = {$atts['foo']}";
+
+	// map blenderid to userid
 	 
-	 // map blenderid to userid
-	 
-	 $user_data = array();
+	$user_data = array();
 	
 	$args = array(
 		'search'         => $_GET['blenderid'],
@@ -22,66 +21,72 @@ function blendercloud_api( $atts ) {
 		$user_id = $users[0]->ID;
 	
 		$user_data['shop_id'] = $user_id;
-
+		
 		$subscriptions = WC_Subscriptions_Manager::get_users_subscriptions( $user_id );
-	
+
 		if( !empty( $subscriptions ) ) {
 		
 			// iterate over all subscriptions. Logic still needs to be defined
 			foreach( $subscriptions as $subscription ) {
-				//print_r($subscription);
-				// regular subscription
-				if( $subscription['status'] == 'active' && $subscription['product_id'] == 14 ) {
-					$tmp = array();
-					$tmp['cloud_access'] = '1';
-					$tmp['account_type'] = 'individual';
-
-					if( $subscription['expiry_date'] != 0 ) {
-						$tmp['next_payment_date'] = $subscription['expiry_date'];
-					} else {
-						$tmp['next_payment_date'] = $subscription['trial_expiry_date'];						
-					}
-					
-					$user_data['subscriptions'][]=$tmp;
-				}
 				
-				// team subscription
-				if( $subscription['status'] == 'active' && $subscription['product_id'] == 73 ) {
+				if( $subscription['status'] == 'active' ) {
+					
+					$order_id			= $subscription['order_id'];
+					$product_id			= $subscription['product_id'];
+					$subscription_key	= WC_Subscriptions_Manager::get_subscription_key( $order_id, $product_id );
+					$next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+
+					/*** TEST HACK ****/	
+					// WC_Subscriptions_Manager::set_trial_expiration_date( $subscription_key, $user_id = '' );
+					// WC_Subscriptions_Manager::set_next_payment_date( $subscription_key, $user_id = '' );
+					/*** TEST HACK ****/	
+
+
 					$tmp = array();
 					$tmp['cloud_access'] = '1';
-					$tmp['account_type'] = 'team';
+					$tmp['next_payment_date'] = $next_payment_date;
 
-					if( $subscription['expiry_date'] != 0 ) {
-						$tmp['next_payment_date'] = $subscription['expiry_date'];
-					} else {
-						$tmp['next_payment_date'] = $subscription['trial_expiry_date'];						
-					}
+					switch( $subscription['product_id'] ) {
+						
+						case 14:
+							$tmp['account_type'] = 'individual';
+							break;
 					
-					// use variation ID to get number of subscriptions
-					$variation_id = $subscription['variation_id'];
-					$sku = strtoupper( get_post_meta( $variation_id, '_sku', true ));
+						case 73:
+							$tmp['account_type'] = 'team';
 					
-					$members=0;
+							// use variation ID to get number of subscriptions
+							$variation_id = $subscription['variation_id'];
+							$sku = strtoupper( get_post_meta( $variation_id, '_sku', true ));
 					
-					if( strpos( $sku, 'CLOUD-TEAM-') === 0 ) {
-						$team_members = (int)substr( $sku, 11, strlen($sku)-11);
-					}
+							$members=0;
+					
+							if( strpos( $sku, 'CLOUD-TEAM-') === 0 ) {
+								$team_members = (int)substr( $sku, 11, strlen($sku)-11);
+							}
 										
-					$tmp['team_members'] = $team_members;
+							$tmp['team_members'] = $team_members;
+							break;
+					}
 					
-					$user_data['subscriptions'][]=$tmp;
-				}				
+					$user_data['subscriptions'][]=$tmp;	
+				}		
 			}
 		
 		} else {
 			$user_data['cloud_access'] = '0';
+		}
+		
+		if( !isset( $user_data['subscriptions'] ) ) {
+			$user_data['cloud_access'] = '0';
+			$user_data['shop_id'] = 0;
 		}
 
 	} else {
 		
 		// user not found
 		$user_data['shop_id'] = 0;
-   	 $user_data['cloud_access'] = '0';
+   	 	$user_data['cloud_access'] = '0';
 		
 	}
 	
