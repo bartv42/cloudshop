@@ -1,0 +1,63 @@
+*** Customer/Order/Coupon CSV Import Suite Changelog ***
+
+2014.05.27 - version 2.6
+ * Feature - Support for multiple tax items
+ * Tweak - Customer import role by name supported
+ * Tweak - Customer import skipped if role doesn't exist within WordPress install
+ * Fix - Compatibility fix for WC 2.1.8
+ * Misc - Updated sample import files
+
+2014.04.25 - version 2.5
+ * Feature - Support for the User Website field
+ * Fix - Improved coupon code handling to fix "coupon not found" bug
+ * Fix - Bug with order item importing
+ * Fix - WC 2.1 compatibility for "Download Permissions Granted" and order/shipping tax
+
+2014.02.24 - version 2.4
+ * Feature - Update product total_sales value for imported order items
+ * Feature - Option to allow line items for unknown products
+
+2014.01.28 - version 2.3.1
+ * Tweak - Order import line item format allows product_id: in place of SKU
+
+2014.01.20 - version 2.3
+ * Feature - Coupon import format supports exclude_sale_items, limit_usage_to_x_items, and usage_limit_per_user columns
+ * Tweak - Orders with custom product types can now be imported
+ * Misc - Uses SkyVerge Plugin Framework
+ * Misc - WooCommerce 2.1 Compatibility
+
+2013.09.06 - version 2.2
+ * Feature - Order item meta supported
+
+2013.05.31 - version 2.1.1
+ * Fix - Coupon import discount type localization issue
+
+2013.03.26 - version 2.1
+ * Feature - Downloadable product permissions can be granted by including column "Download Permissions Granted"
+ * Fix - Product variations support in WC 2.0+
+ * Fix - Custom order numbers supported with Customer/Order Export Suite formats
+
+2013.01.13 - version 2.0
+ * Feature - User role can be set for customer import
+ * Feature - Coupon import
+ * Feature - Compatibility with the Customer/Order Export Suite (order import)
+ * Feature - Local file import supported
+ * Feature - Option to choose delimiter
+ * Fix - Only encode utf-8 if csv is not utf
+
+2012.12.07 - version 1.1.3
+ * Fix - imported order modified date set to date of import, rather than date of order
+ * WC 2.0 compatibility
+
+2012.12.04 - version 1.1.2
+ * New updater
+
+2012.08.30 - version 1.1.1
+ * Fix - order item meta
+
+2012.07.12 - version 1.1
+ * Fix - improved support for orders containing variation products
+ * Feature - option to not hash customer passwords
+
+2012.07.04 - version 1.0
+ * Initial release

@@ -1,0 +1,15 @@
+#icon-woocommerce-importer {
+	background-image: url(../../images/import.png) !important;
+	background-position: -3px -5px;
+}
+.widefat_importer td{
+	vertical-align: middle;
+	padding: 5px 9px;
+}
+.importer_loader {
+	width: 220px;
+	height: 19px;
+	margin: 20px 0 20px 0;
+	display: block;
+	background: url(../../images/ajax-loader.gif) no-repeat top left;
+}

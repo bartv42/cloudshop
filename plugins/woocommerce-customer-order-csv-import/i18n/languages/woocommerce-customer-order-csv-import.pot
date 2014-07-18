@@ -1,0 +1,527 @@
+# Copyright (C) 2014 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version:  \n"
+"Report-Msgid-Bugs-To: http://wordpress.org/tag/woocommerce-customer-order-csv-import\n"
+"POT-Creation-Date: 2014-01-06 01:02:15+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: classes/class-wc-coupon-import.php:136
+#: classes/class-wc-customer-import.php:145
+#: classes/class-wc-order-import.php:160
+msgid "Advanced Options"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:138
+#: classes/class-wc-customer-import.php:147
+#: classes/class-wc-order-import.php:162
+msgid "Dry Run"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:140
+#: classes/class-wc-customer-import.php:149
+#: classes/class-wc-order-import.php:164
+msgid "Perform a test dry run of the import process to check for errors prior to the actual import"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:143
+#: classes/class-wc-customer-import.php:157
+#: classes/class-wc-order-import.php:167
+msgid "Skip Records"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:145
+#: classes/class-wc-customer-import.php:159
+#: classes/class-wc-order-import.php:169
+msgid "Skip this number of records before parsing.  Use this option when importing very large files that are unable to complete in a single upload attempt."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:148
+#: classes/class-wc-customer-import.php:162
+#: classes/class-wc-order-import.php:172
+msgid "Submit"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:169
+#: classes/class-wc-customer-import.php:183
+#: classes/class-wc-order-import.php:193
+msgid "Import complete - imported <strong>%s</strong>, merged <strong>%s</strong>, skipped <strong>%s</strong>"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:185
+#: classes/class-wc-coupon-import.php:194
+#: classes/class-wc-coupon-import.php:231
+#: classes/class-wc-coupon-import.php:246
+#: classes/class-wc-customer-import.php:199
+#: classes/class-wc-customer-import.php:208
+#: classes/class-wc-customer-import.php:257
+#: classes/class-wc-customer-import.php:272
+#: classes/class-wc-order-import.php:209 classes/class-wc-order-import.php:218
+#: classes/class-wc-order-import.php:254 classes/class-wc-order-import.php:269
+msgid "Sorry, there has been an error."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:186
+#: classes/class-wc-customer-import.php:200
+#: classes/class-wc-order-import.php:210
+msgid "The file does not exist, please try again."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:213
+#: classes/class-wc-customer-import.php:238
+#: classes/class-wc-order-import.php:236
+msgid "All done!"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:213
+msgid "View Coupons"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:268
+msgid "Processing coupons."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:280
+msgid "> Merging coupon %s."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:292
+msgid "Failed to update coupon %s: %s"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:302
+msgid "> Coupon '%s' already processed. Skipping."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:321
+msgid "Failed to insert coupon %s: %s"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:344
+msgid "> Finished merging coupon  %s."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:347
+msgid "> Finished importing coupon %s."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:352
+msgid "Finished processing coupons."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:376 customer-csv-import.php:282
+msgid "Import Coupons"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:394
+msgid "Hi there! Upload a CSV file containing coupon data to import the contents into your shop."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:395
+#: classes/class-wc-customer-import.php:475
+#: classes/class-wc-order-import.php:528
+msgid "Choose a CSV (.csv) file to upload, then click Upload file and import."
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:403
+#: classes/class-wc-customer-import.php:483
+#: classes/class-wc-order-import.php:536
+msgid "Before you can upload your import file, you will need to fix the following error:"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:412
+#: classes/class-wc-customer-import.php:492
+#: classes/class-wc-order-import.php:545
+msgid "Choose a file from your computer:"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:418
+#: classes/class-wc-customer-import.php:498
+#: classes/class-wc-order-import.php:551
+msgid "Maximum size: %s"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:424
+#: classes/class-wc-customer-import.php:504
+#: classes/class-wc-order-import.php:557
+msgid "OR enter path to file:"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:432
+#: classes/class-wc-customer-import.php:512
+#: classes/class-wc-order-import.php:565
+msgid "Delimiter"
+msgstr ""
+
+#: classes/class-wc-coupon-import.php:438
+#: classes/class-wc-customer-import.php:518
+#: classes/class-wc-order-import.php:571
+msgid "Upload file and import"
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:243
+msgid "Dry Run: no %s will be imported"
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:245
+msgid "Parsing %s CSV."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:251
+msgid "Finished parsing %s CSV."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:293
+msgid "> Warning: Unknown column named '%s' will be ignored."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:305 classes/class-wc-csv-parser.php:563
+#: classes/class-wc-csv-parser.php:1081
+msgid "> Row %s - skipped due to record offset."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:312
+msgid "> Row %s%s - preparing for import."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:316
+msgid "> > Skipped. Missing coupon code."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:327
+msgid "> > Skipped. Coupon code '%s' not found, unable to merge."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:336
+msgid "> > Skipped. Coupon code '%s' already exists."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:347
+msgid "> > Skipped. Missing discount type."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:363
+msgid "> > Skipped. Unknown discount type '%s'."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:389
+msgid "> > Skipped. Unknown product sku: %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:409
+msgid "> > Skipped. Unknown product category: %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:425
+msgid "> > Skipped. Invalid email: %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:439
+msgid "> > Skipped. Column '%s' must be 'yes' or 'no'."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:450
+msgid "> > Skipped. Invalid date format '%s'."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:462
+msgid "> > Skipped. Invalid %s '%s'."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:574 classes/class-wc-csv-parser.php:1147
+msgid "> Row %s - preparing for import."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:582
+msgid "> > Skipped. Order number field must be an integer: %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:590
+msgid "> > Skipped. Formatted order number provided but no numerical order number, see the documentation for further details."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:631
+msgid "> > Skipped. Order %s already exists."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:647 classes/class-wc-csv-parser.php:1107
+msgid "> > Skipped. Cannot find customer with id %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:664
+msgid "> > Skipped. Cannot find customer with email/username %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:691
+msgid "> > Skipped. Unknown order status %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:703
+msgid "> > Skipped. Invalid date format %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:949
+msgid "> > Skipped. Missing SKU, quantity or total for %s on row %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:959
+msgid "> > Skipped. Unknown order item: %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:992
+msgid "> > Row %d - %s - skipped. Missing SKU, quantity or total"
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1002
+msgid "> > Row %d - %s - skipped. Unknown order item: %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1091
+msgid "> Row %s - preparing for merge."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1095
+msgid "> > Skipped. Cannot merge without id, email or username."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1113
+msgid "> > Found user with ID %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1121
+msgid "> > Skipped. Cannot find customer with username %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1126
+msgid "> > Found user with username %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1136
+msgid "> > Skipped. Cannot find customer with email %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1141
+msgid "> > Found user with email %s."
+msgstr ""
+
+#: classes/class-wc-csv-parser.php:1151
+msgid "> > Skipped. No email set for new customer."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:140
+msgid "Shipping Address"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:143
+msgid "Use billing address as shipping address if not set"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:152
+msgid "Don't hash user passwords"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:154
+msgid "Enable this if your customer import file contains passwords which are already correctly hashed for WordPress."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:238
+msgid "View Users"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:299
+msgid "Processing customers."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:307
+msgid "> Customer already processed. Skipping."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:317
+msgid "> %s already exists."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:325
+msgid "> Invalid username: %s."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:332
+msgid "> Invalid email: %s."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:342
+msgid "> Merging customer ID %s."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:366
+msgid "Failed to update customer %s: %s;"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:376
+msgid "> > Skipped. Email %s already in use."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:383
+msgid "> > Skipped. Username %s already in use."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:389
+msgid "> Inserting %s"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:404
+msgid "Failed to import customer %s: %s;"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:409
+msgid "> Inserted - customer ID is %s."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:438
+msgid "> Finished merging customer ID %s."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:441
+msgid "> Finished importing customer ID %s."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:445
+msgid "Finished processing customers."
+msgstr ""
+
+#: classes/class-wc-customer-import.php:456 customer-csv-import.php:264
+msgid "Import Customers"
+msgstr ""
+
+#: classes/class-wc-customer-import.php:474
+msgid "Hi there! Upload a CSV file containing customer data to import the contents into your shop."
+msgstr ""
+
+#: classes/class-wc-order-import.php:236
+msgid "View Orders"
+msgstr ""
+
+#: classes/class-wc-order-import.php:293
+msgid "Processing orders."
+msgstr ""
+
+#: classes/class-wc-order-import.php:300
+msgid "> Order %s already processed. Skipping."
+msgstr ""
+
+#: classes/class-wc-order-import.php:449
+msgid "Original order #%s"
+msgstr ""
+
+#: classes/class-wc-order-import.php:459
+msgid "> Finished importing order %s"
+msgstr ""
+
+#: classes/class-wc-order-import.php:464
+msgid "Finished processing orders."
+msgstr ""
+
+#: classes/class-wc-order-import.php:509 customer-csv-import.php:273
+msgid "Import Orders"
+msgstr ""
+
+#: classes/class-wc-order-import.php:527
+msgid "Hi there! Upload a CSV file containing order data to import the contents into your shop."
+msgstr ""
+
+#: customer-csv-import.php:104
+msgid "Import <strong>customers</strong> to your store via a csv file."
+msgstr ""
+
+#: customer-csv-import.php:109
+msgid "Import <strong>orders</strong> to your store via a csv file."
+msgstr ""
+
+#: customer-csv-import.php:114
+msgid "Import <strong>coupons</strong> to your store via a csv file."
+msgstr ""
+
+#: customer-csv-import.php:135
+msgid "Import"
+msgstr ""
+
+#: customer-csv-import.php:200 customer-csv-import.php:201
+msgid "CSV Customer Import Suite"
+msgstr ""
+
+#: customer-csv-import.php:229
+msgid "Import Customers &amp; Orders"
+msgstr ""
+
+#: customer-csv-import.php:248
+msgid "<strong>Customer CSV Import Suite</strong> &#8211; Before getting started prepare your CSV files"
+msgstr ""
+
+#: customer-csv-import.php:250
+msgid "Documentation"
+msgstr ""
+
+#: customer-csv-import.php:251
+msgid "Sample Customer CSV"
+msgstr ""
+
+#: customer-csv-import.php:252
+msgid "Sample Order CSV"
+msgstr ""
+
+#: customer-csv-import.php:253
+msgid "Sample Coupon CSV"
+msgstr ""
+
+#: customer-csv-import.php:260
+msgid "Import Customer CSV"
+msgstr ""
+
+#: customer-csv-import.php:261
+msgid "Import customers into WooCommerce using this tool."
+msgstr ""
+
+#: customer-csv-import.php:262
+msgid "Upload a CSV from your computer. Click import to import your CSV as new customers (existing customers will be skipped), or click merge to merge customers. Importing requires the <code>email</code> column, whilst merging requires <code>email</code>, <code>username</code> or <code>id</code>."
+msgstr ""
+
+#: customer-csv-import.php:264
+msgid "Merge Customers"
+msgstr ""
+
+#: customer-csv-import.php:270
+msgid "Import Orders CSV"
+msgstr ""
+
+#: customer-csv-import.php:271
+msgid "Import and add orders using this tool."
+msgstr ""
+
+#: customer-csv-import.php:272
+msgid "Upload a CSV from your computer to import previous orders."
+msgstr ""
+
+#: customer-csv-import.php:279
+msgid "Import Coupons CSV"
+msgstr ""
+
+#: customer-csv-import.php:280
+msgid "Import and add coupons using this tool."
+msgstr ""
+
+#: customer-csv-import.php:281
+msgid "Import a CSV from your computer. Click import to import your CSV as new coupons (existing coupons will be skipped), or click merge to merge coupons."
+msgstr ""
+
+#: customer-csv-import.php:282
+msgid "Merge Coupons"
+msgstr ""
+
+#: customer-csv-import.php:400
+msgid "WooCommerce Customer/Order CSV Import"
+msgstr ""
