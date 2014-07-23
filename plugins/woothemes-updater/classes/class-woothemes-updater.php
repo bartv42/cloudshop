@@ -280,7 +280,7 @@ class WooThemes_Updater {
 	 */
 	public function need_license_message ( $plugin_data, $r ) {
 		if( empty( $r->package ) ) {
-			_e( ' To enable updates for this WooThemes product, please activate your license.', 'woothemes-updater' );
+			_e( ' To enable updates for this WooThemes product, please activate your license by visiting the Dashboard > WooThemes Helper screen.', 'woothemes-updater' );
 		}
 	} // End need_license_message()
 
@@ -298,9 +298,11 @@ class WooThemes_Updater {
 
 			if( empty( $woothemes_queued_updates ) ) return $transient;
 
+			$notice_text = __( 'To enable this update please activate your WooThemes license by visiting the Dashboard > WooThemes Helper screen.' , 'woothemes-updater' );
+
 			foreach ( $woothemes_queued_updates as $key => $value ) {
-				if( isset( $transient->response[ $value->file ] ) && isset( $transient->response[ $value->file ]->package ) && '' == $transient->response[ $value->file ]->package && ( FALSE === stristr($transient->response[ $value->file ]->upgrade_notice, 'To enable this update please activate your WooThemes license. ') ) ){
-					$message = __( 'To enable this update please activate your WooThemes license.' , 'woothemes-updater' ) . ' ' . $transient->response[ $value->file ]->upgrade_notice;
+				if( isset( $transient->response[ $value->file ] ) && isset( $transient->response[ $value->file ]->package ) && '' == $transient->response[ $value->file ]->package && ( FALSE === stristr($transient->response[ $value->file ]->upgrade_notice, $notice_text ) ) ){
+					$message = $notice_text . ' ' . $transient->response[ $value->file ]->upgrade_notice;
 					$transient->response[ $value->file ]->upgrade_notice = $message;
 				}
 			}

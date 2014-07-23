@@ -31,11 +31,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 class WooThemes_Updater_API {
 	private $token;
 	private $api_url;
+	private $products_api_url;
 	private $errors;
 
 	public function __construct () {
 		$this->token = 'woothemes-updater';
 		$this->api_url = 'http://www.woothemes.com/wc-api/product-key-api';
+		$this->products_api_url = 'http://www.woothemes.com/wc-api/woothemes-installer-api';
 		$this->errors = array();
 	} // End __construct()
 
@@ -92,13 +94,59 @@ class WooThemes_Updater_API {
 		return ! isset( $request->error );
 	} // End check()
 
+	/**
+	 * Check if the API is up and reachable.
+	 * @since    1.2.4
+	 * @return boolean Whether or not the API is up and reachable.
+	 */
 	public function ping () {
 		$response = false;
 
 		$request = $this->request( 'ping' );
 
 		return isset( $request->success );
-	}
+	} // End ping()
+
+	/**
+	 * Check if a product license key is actually active for the current website.
+	 * @access   public
+	 * @since    1.3.0
+	 * @return   boolean Whether or not the given key is actually active for the current website.
+	 */
+	public function product_active_status_check ( $file, $product_id, $file_id, $license_hash ) {
+		$response = true;
+
+		$request_type = 'pluginupdatecheck';
+		$name_label = 'plugin_name';
+		if ( strpos( $file, 'style.css' ) ) {
+			$request_type = 'themeupdatecheck';
+			$name_label = 'theme_name';
+			$file = str_replace( '/style.css', '', $file );
+		}
+
+		$args = array(
+	        $name_label => $file,
+	        'product_id' => $product_id,
+	        'version' => '1.0.0',
+	        'file_id' => $file_id,
+	        'license_hash' => $license_hash,
+	        'url' => esc_url( home_url( '/' ) )
+	    );
+
+	    // Send request checking for an update
+	    $request = $this->request( $request_type, $args, 'POST' );
+
+	    // If request is false, don't alter the transient
+	    if( false !== $request ) {
+	    	if ( isset( $request->payload->errors->woo_updater_api_license_deactivated ) ) {
+	    		$response = false;
+	    	} else {
+	    		$response = true;
+	    	}
+	    }
+	    return (bool)$response;
+	} // End product_active_status_check()
+
 	/**
 	 * Make a request to the WooThemes API.
 	 *
@@ -108,35 +156,52 @@ class WooThemes_Updater_API {
 	 * @param array $params
 	 * @return array $data
 	 */
-	private function request ( $endpoint = 'check', $params = array() ) {
+	private function request ( $endpoint = 'check', $params = array(), $method = 'get' ) {
 		// $url = add_query_arg( 'wc-api', 'product-key-api', $this->api_url );
 		$url = $this->api_url;
 
-		$supported_methods = array( 'check', 'activation', 'deactivation', 'ping' );
-		$supported_params = array( 'licence_key', 'file_id', 'product_id', 'home_url' );
-
-		if ( in_array( $endpoint, $supported_methods ) ) {
-			$url = add_query_arg( 'request', $endpoint, $url );
+		if ( in_array( $endpoint, array( 'themeupdatecheck', 'pluginupdatecheck' ) ) ) {
+			$url = $this->products_api_url;
 		}
 
-		if ( 0 < count( $params ) ) {
-			foreach ( $params as $k => $v ) {
-				if ( in_array( $k, $supported_params ) ) {
-					$url = add_query_arg( $k, $v, $url );
+		$supported_methods = array( 'check', 'activation', 'deactivation', 'ping', 'pluginupdatecheck', 'themeupdatecheck' );
+		$supported_params = array( 'licence_key', 'file_id', 'product_id', 'home_url', 'license_hash', 'plugin_name', 'theme_name', 'version' );
+
+		if ( 'GET' == strtoupper( $method ) ) {
+			if ( 0 < count( $params ) ) {
+				foreach ( $params as $k => $v ) {
+					if ( in_array( $k, $supported_params ) ) {
+						$url = add_query_arg( $k, $v, $url );
+					}
 				}
+			}
+
+			if ( in_array( $endpoint, $supported_methods ) ) {
+				$url = add_query_arg( 'request', $endpoint, $url );
+			}
+
+			// Pass if this is a network install on all requests
+			$url = add_query_arg( 'network', is_multisite() ? 1 : 0, $url );
+		} else {
+			if ( is_multisite() ) {
+				$params['network'] = 1;
+			} else {
+				$params['network'] = 0;
+			}
+
+			if ( in_array( $endpoint, $supported_methods ) ) {
+				$params['request'] = $endpoint;
 			}
 		}
 
-		// Pass if this is a network install on all requests
-		$url = add_query_arg( 'network', is_multisite() ? 1 : 0, $url );
-
 		$response = wp_remote_get( $url, array(
-			'method' => 'GET',
+			'method' => strtoupper( $method ),
 			'timeout' => 45,
 			'redirection' => 5,
 			'httpversion' => '1.0',
 			'blocking' => true,
-			'headers' => array(),
+			'headers' => array( 'user-agent' => 'WooThemesUpdater/1.3.0' ),
+			'body' => $params,
 			'cookies' => array(),
 			'ssl_verify' => false,
 			'user-agent' => 'WooThemes Updater; http://www.woothemes.com'
@@ -158,7 +223,7 @@ class WooThemes_Updater_API {
 			if ( isset( $data->additional_info ) ) { $error .= '<br /><br />' . esc_html( $data->additional_info ); }
 			$this->log_request_error( $error );
 		}elseif ( empty( $data ) ) {
-			$error = '<strong>There was an error making your request, please try again.</strong>';
+			$error = '<strong>' . __( 'There was an error making your request, please try again.', 'woothemes-updater' ) . '</strong>';
 			$this->log_request_error( $error );
 		}
 

@@ -96,6 +96,8 @@ class WooThemes_Updater_Admin {
 		add_action( 'admin_init', array( $this, 'maybe_process_dismiss_link' ) );
 
 		add_action( 'admin_footer', array( $this, 'theme_upgrade_form_adjustments' ) );
+
+		add_action( 'woothemes_updater_license_screen_before', array( $this, 'ensure_keys_are_actually_active' ) );
 	} // End __construct()
 
 	/**
@@ -204,7 +206,6 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 					_e( 'Looking for a hand with activating your licenses, or have questions about your WooThemes products? We\'ve got you covered.', 'woothemes-updater' );
 				?>
 			</div>
-			<div class="ninja"><img src="<?php echo esc_url( $this->assets_url . 'images/woo-logo.png' ); ?>" /></div><!--/.ninja-->
 		</div><!--/#welcome-panel .welcome-panel-->
 		<?php
 
@@ -215,20 +216,26 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		switch ( $screen ) {
 			// Help screen.
 			case 'help':
+				do_action( 'woothemes_updater_help_screen_before' );
 				$this->load_help_screen_boxes();
 				require_once( $this->screens_path . 'screen-help.php' );
+				do_action( 'woothemes_updater_help_screen_after' );
 			break;
 
 			// Licenses screen.
 			case 'license':
 			default:
-				if( $this->api->ping() ) {
+				if ( $this->api->ping() ) {
 					$this->installed_products = $this->get_detected_products();
 					$this->pending_products = $this->get_pending_products();
 
+					do_action( 'woothemes_updater_license_screen_before' );
 					require_once( $this->screens_path . 'screen-manage.php' );
+					do_action( 'woothemes_updater_license_screen_after' );
 				} else {
+					do_action( 'woothemes_updater_api_unreachable_screen_before' );
 					require_once( $this->screens_path . 'woothemes-api-unreachable.php' );
+					do_action( 'woothemes_updater_api_unreachable_screen_after' );
 				}
 			break;
 		}
@@ -247,7 +254,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 		add_action( 'woothemes_helper_column_left', array( $this, 'display_sensei_links' ) );
 		add_action( 'woothemes_helper_column_middle', array( $this, 'display_woocommerce_links' ) );
 		add_action( 'woothemes_helper_column_middle', array( $this, 'display_themes_links' ) );
-		add_action( 'woothemes_helper_column_right', array( $this, 'display_panic_button' ) );
+		// add_action( 'woothemes_helper_column_right', array( $this, 'display_panic_button' ) );
 	} // End load_help_screen_boxes()
 
 	/**
@@ -497,7 +504,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 				}
 
 				$response .= '<div class="error fade">' . "\n";
-				$response .= $message;
+				$response .= make_clickable( $message );
 				$response .= '</div>' . "\n";
 
 				// Clear the error log.
@@ -648,10 +655,11 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 	/**
 	 * Deactivate a given product key.
 	 * @since    1.0.0
-	 * @param   string $filename File name of the to deactivate plugin licence
-	 * @return boolean      Whether or not the deactivation was successful.
+	 * @param    string $filename File name of the to deactivate plugin licence
+	 * @param    bool $local_only Deactivate the product locally without pinging WooThemes.com.
+	 * @return   boolean          Whether or not the deactivation was successful.
 	 */
-	protected function deactivate_product ( $filename ) {
+	protected function deactivate_product ( $filename, $local_only = false ) {
 		$response = false;
 		$already_active = $this->get_activated_products();
 
@@ -661,7 +669,9 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 			if ( isset( $already_active[ $filename ][0] ) ) {
 				$key = $already_active[ $filename ][2];
 
-				$deactivated = $this->api->deactivate( $key );
+				if ( false == $local_only ) {
+					$deactivated = $this->api->deactivate( $key );
+				}
 			}
 
 			if ( $deactivated ) {
@@ -677,6 +687,7 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 
 	/**
 	 * Load an instance of the updater class for each activated WooThemes Product.
+	 * @access public
 	 * @since  1.0.0
 	 * @return void
 	 */
@@ -700,5 +711,24 @@ if ( jQuery( 'form[name="upgrade-themes"]' ).length ) {
 			}
 		}
 	} // End load_updater_instances()
+
+	/**
+	 * Run checks against the API to ensure the product keys are actually active on WooThemes.com. If not, deactivate them locally as well.
+	 * @access public
+	 * @since  1.3.0
+	 * @return void
+	 */
+	public function ensure_keys_are_actually_active () {
+		$products = (array)$this->get_activated_products();
+
+		if ( 0 < count( $products ) ) {
+			foreach ( $products as $k => $v ) {
+				$status = $this->api->product_active_status_check( $k, $v[0], $v[1], $v[2] );
+				if ( false == $status ) {
+					$this->deactivate_product( $k, true );
+				}
+			}
+		}
+	} // End ensure_keys_are_actually_active()
 } // End Class
 ?>

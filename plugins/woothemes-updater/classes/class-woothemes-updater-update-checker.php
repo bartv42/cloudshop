@@ -95,7 +95,7 @@ class WooThemes_Updater_Update_Checker {
 	    // If response is false, don't alter the transient
 	    if( false !== $response ) {
 
-	    	if( isset( $response->errors ) && isset ( $response->errors->woo_updater_api_license_deactivated ) ){
+	    	if( isset( $response->errors ) && isset ( $response->errors->woo_updater_api_license_deactivated ) ) {
 
 	    		add_action('admin_notices', array( $this, 'error_notice_for_deactivated_plugin') );
 
@@ -115,7 +115,7 @@ class WooThemes_Updater_Update_Checker {
 	 * @param  strin $message The message
 	 * @return void
 	 */
-	public function error_notice_for_deactivated_plugin( $message ) {
+	public function error_notice_for_deactivated_plugin ( $message ) {
 
 		$plugins = get_plugins();
 
@@ -183,7 +183,7 @@ class WooThemes_Updater_Update_Checker {
 			'redirection' => 5,
 			'httpversion' => '1.0',
 			'blocking' => true,
-			'headers' => array( 'user-agent' => 'WooThemesUpdater/1.2.3' ),
+			'headers' => array( 'user-agent' => 'WooThemesUpdater/1.3.0' ),
 			'body' => $args,
 			'cookies' => array(),
 			'sslverify' => false
