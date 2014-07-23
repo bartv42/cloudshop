@@ -233,8 +233,6 @@ class WC_Subscriptions_Product {
 
 		$include = apply_filters( 'woocommerce_subscriptions_product_price_string_inclusions', $include, $product );
 
-		print_r($include);
-
 		$base_price = self::get_price( $product );
 
 		if ( true === $include['sign_up_fee'] )
