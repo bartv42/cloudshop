@@ -8,6 +8,9 @@ Author: Bart Veldhuizen
 Author URI: http://www.blendernation.com
 */
 
+DEFINE( 'BO_BRAINTREE_MERCHANT_ID_EUR', 'BlenderInstituteEUR');
+DEFINE( 'BO_BRAINTREE_MERCHANT_ID_USD', '46njsqh7fdhyk3fc');
+
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 function fontawesome_dashboard() {
@@ -92,15 +95,14 @@ function bo_get_braintree_merchant_account_id( $default_id ) {
 	
 	switch( $curr ) {
 		case 'USD':
-			return '46njsqh7fdhyk3fc';
+			return BO_BRAINTREE_MERCHANT_ID_USD;
 		case 'EUR':
-			return 'BlenderInstituteEUR';
+			return BO_BRAINTREE_MERCHANT_ID_EUR;
 		default:
 			wp_die( 'Invalid currency selected in bo_Gateway_Braintree::get_merchant_account_id()' );
 	}
 }
 add_filter( 'wc_braintree_get_merchant_account_id', 'bo_get_braintree_merchant_account_id' );
-
 
 /***
  * Blender Cloud API
