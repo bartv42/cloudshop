@@ -446,19 +446,13 @@ class WC_Subscriptions_Order {
 		$subscription_interval     = self::get_subscription_interval( $order, $product_id );
 		$subscription_trial_length = self::get_subscription_trial_length( $order, $product_id );
 		$subscription_trial_period = self::get_subscription_trial_period( $order, $product_id );
-		
+		$subscription_length       = self::get_subscription_length( $order, $product_id );
 
-/*		echo "<br>in calculate_next_payment_date";
-		echo "<br/> subscription_period = $subscription_period";
-		echo "<br/> subscription_interval = $subscription_interval";
-		echo "<br/> subscription_trial_length = $subscription_trial_length";
-		echo "<br/> subscription_trial_period = $subscription_period";
-*/
 		$trial_end_time   = ( ! empty( $subscription['trial_expiry_date'] ) ) ? $subscription['trial_expiry_date'] : WC_Subscriptions_Product::get_trial_expiration_date( $product_id, get_gmt_from_date( $order->order_date ) );
 		$trial_end_time   = strtotime( $trial_end_time );
 
 		// If the subscription is not active, there is no next payment date
-		if ( $subscription['status'] != 'active' ) {
+		if ( $subscription['status'] != 'active' || $subscription_interval == $subscription_length ) {
 
 			$next_payment_timestamp = 0;
 
@@ -503,13 +497,11 @@ class WC_Subscriptions_Order {
 
 			$from_timestamp = strtotime( $from_date );
 
-			if ( 'month' == $subscription_period ){ // Workaround potential PHP issue
+			if ( 'month' == $subscription_period ) // Workaround potential PHP issue
 				$next_payment_timestamp = WC_Subscriptions::add_months( $from_timestamp, $subscription_interval );
-				// echo "** ADDING1 $subscription_interval months starting from $from_date";
-			}else{
+			else
 				$next_payment_timestamp = strtotime( "+ {$subscription_interval} {$subscription_period}", $from_timestamp );
-				// echo "** ADDING2 $subscription_interval $subscription_period starting from $from_date";
-			}
+
 			// Make sure the next payment is in the future
 			$i = 1;
 			while ( $next_payment_timestamp < gmdate( 'U' ) && $i < 30 ) {
@@ -1454,8 +1446,8 @@ class WC_Subscriptions_Order {
 		}
 
 		// Make sure the recurring order totals are correct
-		update_post_meta( $post_id, '_order_recurring_discount_total', stripslashes( $_POST['_order_recurring_discount_total'] ) );
-		update_post_meta( $post_id, '_order_recurring_total', stripslashes( $_POST['_order_recurring_total'] ) );
+		update_post_meta( $post_id, '_order_recurring_discount_total', WC_Subscriptions::format_total( $_POST['_order_recurring_discount_total'] ) );
+		update_post_meta( $post_id, '_order_recurring_total', WC_Subscriptions::format_total( $_POST['_order_recurring_total'] ) );
 
 		// Update fields for WC < 2.1
 		if ( WC_Subscriptions::is_woocommerce_pre_2_1() ) {
@@ -1538,13 +1530,13 @@ class WC_Subscriptions_Order {
 				woocommerce_update_order_item_meta( $item_id, 'compound', $compound );
 
 				if ( isset( $recurring_order_taxes_amount[ $item_id ] ) ) {
-					woocommerce_update_order_item_meta( $item_id, 'tax_amount', woocommerce_clean( $recurring_order_taxes_amount[ $item_id ] ) );
+					woocommerce_update_order_item_meta( $item_id, 'tax_amount', WC_Subscriptions::format_total( $recurring_order_taxes_amount[ $item_id ] ) );
 
 					$total_tax += WC_Subscriptions::format_total( $recurring_order_taxes_amount[ $item_id ] );
 				}
 
 				if ( isset( $recurring_order_taxes_shipping_amount[ $item_id ] ) ) {
-					woocommerce_update_order_item_meta( $item_id, 'shipping_tax_amount', woocommerce_clean( $recurring_order_taxes_shipping_amount[ $item_id ] ) );
+					woocommerce_update_order_item_meta( $item_id, 'shipping_tax_amount', WC_Subscriptions::format_total( $recurring_order_taxes_shipping_amount[ $item_id ] ) );
 
 					$total_shipping_tax += WC_Subscriptions::format_total( $recurring_order_taxes_shipping_amount[ $item_id ] );
 				}

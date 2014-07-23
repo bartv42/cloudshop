@@ -42,8 +42,8 @@ class WC_Subscriptions_Cart {
 		add_action( 'woocommerce_before_calculate_totals', __CLASS__ . '::add_calculation_price_filter', 10 );
 		add_action( 'woocommerce_calculate_totals', __CLASS__ . '::remove_calculation_price_filter', 10 );
 
-		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::calculate_subscription_totals', 100, 2 );
-		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::set_calculated_total', 100, 1 );
+		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::calculate_subscription_totals', 1000, 2 );
+		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::set_calculated_total', 1001, 1 );
 
 		// Override Formatted Discount Totals
 		add_filter( 'woocommerce_cart_discounts_before_tax', __CLASS__ . '::get_formatted_discounts_before_tax', 11, 2 );

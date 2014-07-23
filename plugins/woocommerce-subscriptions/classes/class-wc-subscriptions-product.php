@@ -222,7 +222,7 @@ class WC_Subscriptions_Product {
 			return;
 
 		$include = wp_parse_args( $include, array(
-				'tax_calculation'     => false,
+				'tax_calculation'     => 'exclude_tax',
 				'subscription_price'  => true,
 				'subscription_period' => true,
 				'subscription_length' => true,
@@ -232,6 +232,8 @@ class WC_Subscriptions_Product {
 		);
 
 		$include = apply_filters( 'woocommerce_subscriptions_product_price_string_inclusions', $include, $product );
+
+		print_r($include);
 
 		$base_price = self::get_price( $product );
 

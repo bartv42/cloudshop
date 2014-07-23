@@ -447,8 +447,8 @@ class WC_Subscriptions_Upgrader {
 					// Add line item meta
 					if ( $item_id ) {
 						woocommerce_update_order_item_meta( $item_id, 'compound', absint( isset( $order_taxes[ $index ]['compound'] ) ? $order_taxes[ $index ]['compound'] : 0 ) );
-						woocommerce_update_order_item_meta( $item_id, 'tax_amount', woocommerce_clean( $order_taxes[ $index ]['cart_tax'] ) );
-						woocommerce_update_order_item_meta( $item_id, 'shipping_tax_amount', woocommerce_clean( $order_taxes[ $index ]['shipping_tax'] ) );
+						woocommerce_update_order_item_meta( $item_id, 'tax_amount', WC_Subscriptions::format_total( $order_taxes[ $index ]['cart_tax'] ) );
+						woocommerce_update_order_item_meta( $item_id, 'shipping_tax_amount', WC_Subscriptions::format_total( $order_taxes[ $index ]['shipping_tax'] ) );
 					}
 				}
 

@@ -62,8 +62,8 @@ class WC_Subscriptions_Synchroniser {
 		add_filter( 'woocommerce_cart_total', __CLASS__ . '::customise_subscription_price_string', 12 );
 
 		// Maybe mock a free trial on the product for calculating order totals
-		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::maybe_set_free_trial', 99, 1 );
-		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::maybe_unset_free_trial', 101, 1 );
+		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::maybe_set_free_trial', 0, 1 );
+		add_filter( 'woocommerce_calculated_total', __CLASS__ . '::maybe_unset_free_trial', 10000, 1 );
 
 		// But don't display the free trial in cart subscription price strings unless the product actually has free trial
 		add_filter( 'woocommerce_cart_subscription_string_details', __CLASS__ . '::maybe_hide_free_trial', 11, 4 );

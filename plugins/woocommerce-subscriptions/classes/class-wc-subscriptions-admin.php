@@ -885,6 +885,7 @@ class WC_Subscriptions_Admin {
 	 * @since 1.0
 	 */
 	public static function subscriptions_management_page() {
+
 		$subscriptions_table = self::get_subscriptions_list_table();
 		$subscriptions_table->prepare_items(); ?>
 <div class="wrap">

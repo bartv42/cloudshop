@@ -78,6 +78,7 @@ class WC_Product_Subscription_Variation extends WC_Product_Variation {
 	public function get_price_html( $price = '' ) {
 
 		$price = parent::get_price_html( $price = '' );
+
 		return WC_Subscriptions_Product::get_price_string( $this, array( 'price' => $price )  );
 	}
 

@@ -228,12 +228,12 @@ class WC_Subscriptions_Renewal_Order {
 			}
 
 			// Set order totals based on recurring totals from the original order
-			$cart_discount      = $failed_payment_multiplier * get_post_meta( $original_order->id, '_order_recurring_discount_cart', true );
-			$order_discount     = $failed_payment_multiplier * get_post_meta( $original_order->id, '_order_recurring_discount_total', true );
-			$order_shipping_tax = $failed_payment_multiplier * get_post_meta( $original_order->id, '_order_recurring_shipping_tax_total', true );
-			$order_shipping     = $failed_payment_multiplier * get_post_meta( $original_order->id, '_order_recurring_shipping_total', true );
-			$order_tax          = $failed_payment_multiplier * get_post_meta( $original_order->id, '_order_recurring_tax_total', true );
-			$order_total        = $failed_payment_multiplier * get_post_meta( $original_order->id, '_order_recurring_total', true );
+			$cart_discount      = $failed_payment_multiplier * wc_format_decimal( get_post_meta( $original_order->id, '_order_recurring_discount_cart', true ) );
+			$order_discount     = $failed_payment_multiplier * wc_format_decimal( get_post_meta( $original_order->id, '_order_recurring_discount_total', true ) );
+			$order_shipping_tax = $failed_payment_multiplier * wc_format_decimal( get_post_meta( $original_order->id, '_order_recurring_shipping_tax_total', true ) );
+			$order_shipping     = $failed_payment_multiplier * wc_format_decimal( get_post_meta( $original_order->id, '_order_recurring_shipping_total', true ) );
+			$order_tax          = $failed_payment_multiplier * wc_format_decimal( get_post_meta( $original_order->id, '_order_recurring_tax_total', true ) );
+			$order_total        = $failed_payment_multiplier * wc_format_decimal( get_post_meta( $original_order->id, '_order_recurring_total', true ) );
 
 			update_post_meta( $renewal_order_id, '_cart_discount', $cart_discount );
 			update_post_meta( $renewal_order_id, '_order_discount', $order_discount );
@@ -286,8 +286,8 @@ class WC_Subscriptions_Renewal_Order {
 				foreach( $item_ids as $item_id ) {
 
 					woocommerce_add_order_item_meta( $item_id, 'compound', absint( isset( $recurring_order_tax['compound'] ) ? $recurring_order_tax['compound'] : 0 ) );
-					woocommerce_add_order_item_meta( $item_id, 'tax_amount', woocommerce_clean( $failed_payment_multiplier * $recurring_order_tax['tax_amount'] ) );
-					woocommerce_add_order_item_meta( $item_id, 'shipping_tax_amount', woocommerce_clean( $failed_payment_multiplier * $recurring_order_tax['shipping_tax_amount'] ) );
+					woocommerce_add_order_item_meta( $item_id, 'tax_amount', $failed_payment_multiplier * WC_Subscriptions::format_total( $recurring_order_tax['tax_amount'] ) );
+					woocommerce_add_order_item_meta( $item_id, 'shipping_tax_amount', $failed_payment_multiplier * WC_Subscriptions::format_total( $recurring_order_tax['shipping_tax_amount'] ) );
 
 					if ( isset( $recurring_order_tax['rate_id'] ) ) {
 						woocommerce_add_order_item_meta( $item_id, 'rate_id', $recurring_order_tax['rate_id'] );
@@ -322,7 +322,7 @@ class WC_Subscriptions_Renewal_Order {
 				// Add shipping item meta
 				foreach( $item_ids as $item_id ) {
 					woocommerce_add_order_item_meta( $item_id, 'method_id', $recurring_shipping_item['method_id'] );
-					woocommerce_add_order_item_meta( $item_id, 'cost', woocommerce_clean( $failed_payment_multiplier * $recurring_shipping_item['cost'] ) );
+					woocommerce_add_order_item_meta( $item_id, 'cost', $failed_payment_multiplier * WC_Subscriptions::format_total( $recurring_shipping_item['cost'] ) );
 				}
 			}
 
@@ -385,20 +385,16 @@ class WC_Subscriptions_Renewal_Order {
 					// Map line item totals based on recurring line totals
 					switch( $meta_key ) {
 						case '_recurring_line_total':
-							woocommerce_delete_order_item_meta( $recurring_item_id, '_line_total');
-							woocommerce_update_order_item_meta( $recurring_item_id, '_line_total', woocommerce_format_decimal( $failed_payment_multiplier * $meta_value ) );
+							woocommerce_update_order_item_meta( $recurring_item_id, '_line_total', $failed_payment_multiplier * woocommerce_format_decimal( $meta_value ) );
 							break;
 						case '_recurring_line_tax':
-							woocommerce_delete_order_item_meta( $recurring_item_id, '_line_tax');
-							woocommerce_update_order_item_meta( $recurring_item_id, '_line_tax', woocommerce_format_decimal( $failed_payment_multiplier * $meta_value ) );
+							woocommerce_update_order_item_meta( $recurring_item_id, '_line_tax', $failed_payment_multiplier * woocommerce_format_decimal( $meta_value ) );
 							break;
 						case '_recurring_line_subtotal':
-							woocommerce_delete_order_item_meta( $recurring_item_id, '_line_subtotal');
-							woocommerce_update_order_item_meta( $recurring_item_id, '_line_subtotal', woocommerce_format_decimal( $failed_payment_multiplier * $meta_value ) );
+							woocommerce_update_order_item_meta( $recurring_item_id, '_line_subtotal', $failed_payment_multiplier * woocommerce_format_decimal( $meta_value ) );
 							break;
 						case '_recurring_line_subtotal_tax':
-							woocommerce_delete_order_item_meta( $recurring_item_id, '_line_subtotal_tax');
-							woocommerce_update_order_item_meta( $recurring_item_id, '_line_subtotal_tax', woocommerce_format_decimal( $failed_payment_multiplier * $meta_value ) );
+							woocommerce_update_order_item_meta( $recurring_item_id, '_line_subtotal_tax', $failed_payment_multiplier * woocommerce_format_decimal( $meta_value ) );
 							break;
 						default:
 							break;
@@ -938,15 +934,14 @@ class WC_Subscriptions_Renewal_Order {
 
 					WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );
 
-				// Make sure we don't actually need the variation ID
-				} elseif ( $product->is_type( array( 'variable-subscription' ) ) ) {
+				// Make sure we don't actually need the variation ID (if the product was a variation, it will have a variation ID; however, if the product has changed from a simple subscription to a variable subscription, there will be no variation_id)
+				} elseif ( $product->is_type( array( 'variable-subscription' ) ) && ! empty( $item['variation_id'] ) ) {
 
 					$variation_id   = $item['variation_id'];
 					$variation      = get_product( $variation_id );
 
 					if ( false === $variation ) {
-						WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );
-						$variation_data = array();
+						WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );							$variation_data = array();
 					} else {
 						$variation_data = $variation->get_variation_attributes();
 					}
@@ -1035,8 +1030,8 @@ class WC_Subscriptions_Renewal_Order {
 
 					WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );
 
-				// Make sure we don't actually need the variation ID
-				} elseif ( $product->is_type( array( 'variable-subscription' ) ) ) {
+				// Make sure we don't actually need the variation ID (if the product was a variation, it will have a variation ID; however, if the product has changed from a simple subscription to a variable subscription, there will be no variation_id)
+				} elseif ( $product->is_type( array( 'variable-subscription' ) ) && ! empty( $item['variation_id'] ) ) {
 
 					$item           = WC_Subscriptions_Order::get_item_by_product_id( $original_order, $product_id );
 					$variation_id   = $item['variation_id'];
@@ -1045,7 +1040,6 @@ class WC_Subscriptions_Renewal_Order {
 					// Display error message for deleted product variations
 					if ( false === $variation ) {
 						WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );
-						$variation_data = array();
 					} else {
 						$variation_data = $variation->get_variation_attributes();
 					}

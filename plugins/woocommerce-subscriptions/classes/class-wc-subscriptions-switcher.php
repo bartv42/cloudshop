@@ -81,6 +81,9 @@ class WC_Subscriptions_Switcher {
 
 		// Don't carry switch meta data to renewal orders
 		add_filter( 'woocommerce_subscriptions_renewal_order_meta_query', __CLASS__ . '::remove_renewal_order_meta_query', 10 );
+
+		// Make sure the switch process persists when having to choose product addons
+		add_action( 'addons_add_to_cart_url', __CLASS__ . '::addons_add_to_cart_url', 10 );
 	}
 
 	/**
@@ -935,10 +938,13 @@ class WC_Subscriptions_Switcher {
 	 *
 	 * @since 1.5
 	 */
-	public static function subscription_switch_autocomplete( $new_order_status, $order_id  ) {
+	public static function subscription_switch_autocomplete( $new_order_status, $order_id ) {
 
 		if ( 'processing' == $new_order_status && self::order_contains_subscription_switch( $order_id ) ) {
-			$new_order_status = 'completed';
+			$order = new WC_Order( $order_id );
+			if ( 1 == count( $order->get_items() ) ) { // Can't use $order->get_item_count() because it takes quantity into account
+				$new_order_status = 'completed';
+			}
 		}
 
 		return $new_order_status;
@@ -956,5 +962,18 @@ class WC_Subscriptions_Switcher {
 		return $order_meta_query;
 	}
 
+	/**
+	 * Make the switch process persist even if the subscription product has Product Addons that need to be set.
+	 *
+	 * @since 1.5.6
+	 */
+	public static function addons_add_to_cart_url( $add_to_cart_url ) {
+
+		if ( isset( $_GET['switch-subscription'] ) && false === strpos( $add_to_cart_url, 'switch-subscription' ) ) {
+			$add_to_cart_url = add_query_arg( array( 'switch-subscription' => $_GET['switch-subscription'] ), $add_to_cart_url );
+		}
+
+		return $add_to_cart_url;
+	}
 }
 WC_Subscriptions_Switcher::init();

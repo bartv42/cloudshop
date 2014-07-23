@@ -440,7 +440,7 @@ class WC_Product_Variable_Subscription extends WC_Product_Variable {
 			$price .= $this->get_price_suffix();
 
 			$price = WC_Subscriptions_Product::get_price_html( $price, $this );
-			
+
 		}
 
 		return apply_filters( 'woocommerce_variable_subscription_price_html', $price, $this );
@@ -483,11 +483,7 @@ class WC_Product_Variable_Subscription extends WC_Product_Variable {
 	 */
 	function is_purchasable() {
 
-//		echo "price: " . $this->get_price();
-
 		$purchasable = parent::is_purchasable();
-
-//		echo ($purchasable)?"yes purchasable":"not purchasable";
 
 		if ( true === $purchasable && 'no' != $this->limit_subscriptions && ( ( 'active' == $this->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, $this->limit_subscriptions ) ) && false === strpos( $_SERVER['REQUEST_URI'], 'order-received' ) ) { // we can't use is_order_received_page() becuase get_cart_from_session() is called before the query vars are setup
 			$purchasable = false;

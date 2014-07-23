@@ -200,7 +200,7 @@ class WC_Subscriptions_List_Table extends WP_List_Table {
 							) 
 						);
 						$column_content .= '</div>';
-						$column_content .= '</form>';
+						$column_content .= '</div>';
 					}
 				}
 				break;

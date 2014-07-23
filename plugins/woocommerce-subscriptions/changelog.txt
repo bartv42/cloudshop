@@ -1,5 +1,20 @@
 *** WooCommerce Subscriptions Changelog ***
 
+2014.07.15 - version 1.5.7
+ * Tweak: do not display "product deleted" error message when manually renewing a simple subscription that has since been changed to a variable subscription
+ * Tweak: when an order to switch a subscription also contains non-subscription items, do not automatically transition it to completed as those items may need shipping
+ * Fix: update Action Scheduler to work around issues when using ALTERNATE_WP_CRON
+ * Fix: format recurring order total using WC 2.1 API functions to handle non-period decimal separators (e.g. ',')
+ * Fix: initial payment on synchronised subscriptions when there is no sign-up fee
+ * Fix: allow product and cart coupons to be applied to the cart when it contains products and a subscription with a free trial
+
+2014.07.04 - version 1.5.6
+ * Tweak: add support for switching subscription products that include Product Addons
+ * Tweak: when calculating next payment date, add additional safeguard against calculating a date for a subscription for 1 billing period
+ * Fix: when a manual renewal order has been automatically cancelled by WooCommerce, do not allow the customer to reactive the associated subscription from their My Account page
+ * Fix: compatibility with WooCommerce Additional Fees plugin
+ * Fix: format renewal order tax totals using WC 2.1 API functions to handle non-period decimal separators (e.g. ',')
+
 2014.06.24 - version 1.5.5
  * Fix: handle the PayPal Express Checkout 'recurring_payment_suspended_due_to_max_failed_payment' IPN message because PayPal sends it for subscriptions created with PayPal Standard in lieu of any other payment failure notification.
  * Fix: synchronised payment date displayed on an order or the cart's totals for subscriptions that have no sign-up fee and are synchronised to the last day of the month (i.e. display "on last day of each month" not "on the 28th of each month").
