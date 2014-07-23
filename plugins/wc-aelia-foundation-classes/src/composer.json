@@ -1,0 +1,9 @@
+{
+	"require-dev": {
+		"mockery/mockery": "*",
+		"geoip2/geoip2": "0.6.*"
+  },
+	"autoload" : {
+		"classmap": ["lib/classes/"]
+	}
+}

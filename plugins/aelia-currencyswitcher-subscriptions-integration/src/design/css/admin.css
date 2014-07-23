@@ -1,0 +1,39 @@
+/* CSS Styles for Admin pages */
+
+#wc_aelia_cs_subscription_prices {
+	/*border: 1px solid red;*/
+}
+
+#wc_aelia_cs_subscription_prices table {
+	width: 99%;
+}
+
+#wc_aelia_cs_subscription_prices table .Currency {
+	width: 6em;
+}
+
+#wc_aelia_cs_subscription_prices table .form-field {
+	margin-top: 0;
+	padding: 4px !important;
+}
+
+#wc_aelia_cs_subscription_prices table .form-field label {
+	display: none;
+}
+
+#wc_aelia_cs_subscription_prices table .wc_input_price {
+	width: 90%;
+}
+
+/* Subscription Variation */
+#wc_aelia_cs_subscription_prices.variation table .wc_input_price {
+	width: 6em;
+}
+
+#wc_aelia_cs_subscription_prices.variation table .Currency {
+	padding-top: 10px;
+}
+
+#wc_aelia_cs_subscription_prices.variation table tbody td {
+	padding: 0;
+}

@@ -1,0 +1,23 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - hhvm
+
+before_install:
+  - ./.travis-install.sh
+
+script:
+  - ./.travis-test.sh
+
+after_script:
+  - php vendor/bin/coveralls
+
+notifications:
+  email:
+    recipients:
+      - dev@maxmind.com
+    on_success: change
+    on_failure: always
