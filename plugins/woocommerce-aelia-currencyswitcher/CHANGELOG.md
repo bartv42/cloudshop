@@ -1,6 +1,34 @@
 # Aelia Currency Switcher - Change Log
 
 ## Version 3.x
+####3.4.5.140717
+* Modified logic of "currency by billing country" feature, so that the default GeoIP currency is taken when a billing country uses an unsupported currency.
+* Optimised semaphore logic used for auto-updates to improve performance.
+
+####3.4.3.140717
+* Added support for bulk edit of variation prices.
+
+####3.4.2.140711
+* Updated GeoIP database.
+* Set visibility of `WC_Aelia_CurrencySwitcher::is_valid_currency()` to public, to simplify integration with addons.
+
+####3.4.1.140707
+* Fixed bug in conversion of coupons.
+* Removed legacy function used for WooCommerce 1.6 (no longer supported).
+
+####3.4.0.140706
+* Added possibility to specify a currency symbol for each currency.
+* Redesigned Currency Switcher Options page.
+* Added world currencies to the list of the available currencies.
+
+####3.3.14.140704
+* Fixed bug in loading of auxiliary functions.
+* Removed unneeded legacy functions.
+
+####3.3.13.140704
+* Fixed bug in handling of currency decimals.
+* Removed unneeded warning message, originally displayed when the detected currency for a user was not amongst the enabled ones.
+
 ####3.3.12.140626
 * Added "wc_aelia_ip2location_country_code" filter, to allow overriding the country code detected by the plugin.
 * Updated Geolite database file.

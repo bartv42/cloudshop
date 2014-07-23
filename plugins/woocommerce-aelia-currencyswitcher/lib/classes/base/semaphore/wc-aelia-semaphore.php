@@ -16,6 +16,7 @@ class Semaphore {
 	protected $lock_name = 'lock';
 
 	const DEFAULT_SEMAPHORE_LOCK_WAIT = 300;
+	const SEMAPHORE_ROWS = 3;
 
 	/**
 	 * Logs a message.
@@ -65,10 +66,18 @@ class Semaphore {
 				(option_name IN ('aelia_locked_" . $this->lock_name . "', 'aelia_unlocked_" . $this->lock_name . "'))
 		");
 
-		if(!count($results)) {
-			update_option('aelia_unlocked_' . $this->lock_name, '1');
-			update_option('aelia_last_lock_time_' . $this->lock_name, current_time('mysql', 1));
-			update_option('aelia_semaphore_' . $this->lock_name, '0');
+		if(count($results) < self::SEMAPHORE_ROWS) {
+			// Insert the rows used by the semaphore. Ignore duplicates on INSERT,
+			// if they occur it means that another process started and will take care
+			// of the updates
+			$results = $wpdb->query("
+				INSERT IGNORE INTO {$wpdb->options}
+					(option_name, option_value, autoload)
+				VALUES
+					('aelia_unlocked_{$this->lock_name}', 1, 'no'),
+					('aelia_last_lock_time_{$this->lock_name}', NOW(), 'no'),
+					('aelia_semaphore_{$this->lock_name}', 0, 'no')
+			");
 		}
 	}
 

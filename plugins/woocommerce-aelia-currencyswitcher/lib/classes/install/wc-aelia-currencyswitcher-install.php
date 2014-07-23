@@ -25,9 +25,6 @@ class WC_Aelia_CurrencySwitcher_Install extends WC_Aelia_Install {
 		parent::__construct();
 
 		$this->settings = WC_Aelia_CurrencySwitcher::settings();
-		$this->semaphore = new Semaphore('Aelia_CurrencySwitcher');
-
-		$this->semaphore->initialize();
 	}
 
 	/**
@@ -71,6 +68,8 @@ class WC_Aelia_CurrencySwitcher_Install extends WC_Aelia_Install {
 			return true;
 		}
 
+		$this->semaphore = new Semaphore('Aelia_CurrencySwitcher');
+		$this->semaphore->initialize();
 		if(!$this->semaphore->lock()) {
 			Logger::log(__('Plugin Autoupdate - Could not obtain semaphore lock. This may mean that '.
 										 'the process has already started, or that the lock is ' .

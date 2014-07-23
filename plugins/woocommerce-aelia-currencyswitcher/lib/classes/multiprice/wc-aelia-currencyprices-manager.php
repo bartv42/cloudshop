@@ -370,6 +370,9 @@ class WC_Aelia_CurrencyPrices_Manager implements IWC_Aelia_CurrencyPrices_Manage
 		// WooCommerce 2.1
 		add_filter('woocommerce_get_variation_regular_price', array($this, 'woocommerce_get_variation_regular_price'), 20, 4);
 		add_filter('woocommerce_get_variation_sale_price', array($this, 'woocommerce_get_variation_sale_price'), 20, 4);
+
+		// Bulk pricing for variable products
+		add_action('woocommerce_variable_product_bulk_edit_actions', array($this, 'woocommerce_variable_product_bulk_edit_actions'));
 	}
 
 	/**
@@ -776,6 +779,35 @@ class WC_Aelia_CurrencyPrices_Manager implements IWC_Aelia_CurrencyPrices_Manage
 		$sale_price = $this->process_variation_price_tax($sale_price, $product, $min_or_max, $display);
 
 		return $sale_price;
+	}
+
+	public function woocommerce_variable_product_bulk_edit_actions() {
+		$enabled_currencies = $this->enabled_currencies();
+		if(empty($enabled_currencies)) {
+			return;
+		}
+
+		$text_domain = WC_Aelia_CurrencySwitcher::$text_domain;
+		echo '<optgroup label="' . __('Currency prices', $text_domain) . '">';
+		foreach($enabled_currencies as $currency) {
+			// No need to add an option for the base currency, it already exists in standard WooCommerce menu
+			if($currency == $this->base_currency()) {
+				continue;
+			}
+
+			// Display entry for variation's regular prices
+			echo "<option value=\"variable_regular_currency_prices_{$currency}\" currency=\"{$currency}\">";
+			printf(__('Regular prices (%s)', $text_domain),
+						 $currency);
+			echo '</option>';
+
+			// Display entry for variation's sale prices
+			echo "<option value=\"variable_sale_currency_prices_{$currency}\"  currency=\"{$currency}\">";
+			printf(__('Sale prices (%s)', $text_domain),
+						 $currency);
+			echo '</option>';
+		}
+		echo '</optgroup>';
 	}
 
 	/**

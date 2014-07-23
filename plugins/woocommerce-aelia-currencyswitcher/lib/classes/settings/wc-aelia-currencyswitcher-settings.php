@@ -53,6 +53,9 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 	// @var array Stores the price decimals of the currencies. Used for caching purposes.
 	protected $prices_decimals = array();
 
+	// @var int The number of decimals configured in WooCommerce.
+	public $woocommerce_currency_decimals = 2;
+
 	/**
 	 * Registers a model used to retrieve Exchange Rates.
 	 */
@@ -265,7 +268,7 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 					'rate' => 1,
 					'set_manually' => 1,
 					// For base currency, take the decimals from the WooCommerce configuration
-					'decimals' => (int)get_option('woocommerce_price_num_decimals'),
+					'decimals' => $this->woocommerce_currency_decimals,
 					'rate_markup' => 0,
 				),
 			),
@@ -334,6 +337,10 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 
 		// Return all exchange rates, excluding the invalid ones
 		foreach($exchange_rates_settings as $currency => $settings) {
+			if($currency == $this->base_currency()) {
+				continue;
+			}
+
 			if(is_numeric(get_value('rate', $settings))) {
 				$exchange_rate = (float)$settings['rate'];
 			}
@@ -357,11 +364,11 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 	 * @return array
 	 */
 	public function get_currency_decimals($currency) {
-		$default_decimals = default_currency_decimals($currency);
+		$default_decimals = default_currency_decimals($currency, $this->woocommerce_currency_decimals);
 
 		// Decimals for the base currency are stored in WooCommerce settings
 		if($currency == $this->base_currency()) {
-			return get_option('woocommerce_price_num_decimals', $default_decimals);
+			return $this->woocommerce_currency_decimals;
 		}
 
 		$exchange_rates = $this->current_settings(self::FIELD_EXCHANGE_RATES);
@@ -374,6 +381,26 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 
 		$decimals = get_value('decimals', $currency_settings, $default_decimals);
 		return is_numeric($decimals) ? $decimals : $default_decimals;
+	}
+
+	/**
+	 * Returns the symbol to be used for a specifc currency.
+	 *
+	 * @param string currency A currency code.
+	 * @return array
+	 */
+	public function get_currency_symbol($currency, $default_symbol = null) {
+		$exchange_rates = $this->current_settings(self::FIELD_EXCHANGE_RATES);
+		$currency_settings = get_value($currency, $exchange_rates);
+
+		// If no settings are found for the currency, return the default
+		if(!is_array($currency_settings) ||
+			 !isset($currency_settings['symbol']) ||
+			 empty($currency_settings['symbol'])) {
+			return $default_symbol;
+		}
+
+		return $currency_settings['symbol'];
 	}
 
 	/**
@@ -712,6 +739,8 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 
 		// Register available Exchange Rates models
 		$this->register_exchange_rates_models();
+		// Store the number of decimals used by WooCommerce
+		$this->woocommerce_currency_decimals = (int)get_option('woocommerce_price_num_decimals');
 
 		add_action('admin_init', array($this, 'init_settings'));
 

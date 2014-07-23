@@ -124,6 +124,10 @@ html[xmlns] .clearfix {
 }
 
 /* Currency Exchange Rates table */
+#section-exchange_rates_section .form-table tbody th[scope="row"] {
+	display: none;
+}
+
 #wc_aelia_currency_switcher_form #exchange_rates_settings th {
 	font-weight: bold;
 }
@@ -136,12 +140,20 @@ html[xmlns] .clearfix {
 	padding: 4px 8px;
 }
 
-#wc_aelia_currency_switcher_form #exchange_rates_settings .numeric {
-	width: 8em;
+#wc_aelia_currency_switcher_form #exchange_rates_settings td input.numeric {
+	width: 100%;
+}
+
+#wc_aelia_currency_switcher_form #exchange_rates_settings tbody .numeric {
+	text-align: right;
+}
+
+#wc_aelia_currency_switcher_form #exchange_rates_settings .currency_name {
+	width: 15em;
 }
 
 #wc_aelia_currency_switcher_form #exchange_rates_settings .exchange_rate {
-	width: 9em;
+	width: 11em;
 }
 
 #wc_aelia_currency_switcher_form #exchange_rates_settings .rate_markup {
@@ -155,6 +167,10 @@ html[xmlns] .clearfix {
 
 #wc_aelia_currency_switcher_form #exchange_rates_settings .decimals {
 	width: 7em;
+}
+
+#wc_aelia_currency_switcher_form #exchange_rates_settings .symbol {
+	width: 10em;
 }
 
 #wc_aelia_currency_switcher_form #exchange_rates_settings #set_manually_all {

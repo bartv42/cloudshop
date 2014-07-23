@@ -508,6 +508,10 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 	 * Renders the Options page for the plugin.
 	 */
 	public function render_options_page() {
+		if(!defined('AELIA_CS_SETTINGS_PAGE')) {
+			define('AELIA_CS_SETTINGS_PAGE', true);
+		}
+
 		echo '<div class="wrap">';
 		echo '<div class="icon32" id="icon-options-general"></div>';
 		echo '<h2>';
@@ -896,7 +900,7 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 		// Table header
 		$html .= '<thead>';
 		$html .= '<tr>';
-		$html .= '<th>' . __('Currency', $this->_textdomain) . '</th>';
+		$html .= '<th class="currency_name">' . __('Currency', $this->_textdomain) . '</th>';
 		$html .= '<th class="exchange_rate">' . __('Exchange Rate', $this->_textdomain) . '</th>';
 		$html .= '<th class="set_manually">' .
 						 __('Set Manually', $this->_textdomain) .
@@ -921,9 +925,24 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 						 '"></span>';
 		$html .= '</th>';
 
+		$html .= '<th class="symbol">';
+		$html .= __('Symbol', $this->_textdomain);
+		$html .= '<span class="help-icon" title="' .
+						 __('The symbol that will be used to represent the currency. You can use this ' .
+								'settings to distinguish currencies more easily, for example by displaying ' .
+								'US$, AU$, NZ$ and so on.', $this->_textdomain) .
+						 '"></span>';
+		$html .= '</th>';
+
 		$html .= '</tr>';
 		$html .= '</thead>';
 		$html .= '<tbody>';
+
+		// Render one line to display settings for base currency
+		$html .= $this->render_settings_for_base_currency($woocommerce_base_currency,
+																											$exchange_rates,
+																											$base_field_id,
+																											$base_field_name);
 
 		foreach($enabled_currencies as $currency) {
 			// No need to render an Exchange Rate for main currency, as it would be 1:1
@@ -935,7 +954,7 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 			$currency_field_name = $this->group_field($currency, $base_field_name);
 			$html .= '<tr>';
 			// Output currency label
-			$html .= '<td>';
+			$html .= '<td class="currency_name">';
 			$html .= '<span>' . $this->_settings_controller->get_currency_description($currency) . '</span>';
 			$html .= '</td>';
 
@@ -991,20 +1010,38 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 			$field_html = ob_get_contents();
 			ob_end_clean();
 			$html .= $field_html;
+			$html .= '</td>';
 
 			// Render decimals field
-			$default_currency_decimals = default_currency_decimals($currency);
+			$default_currency_decimals = default_currency_decimals($currency, $this->_settings_controller->woocommerce_currency_decimals);
 			$currency_decimals = get_value('decimals', $currency_settings, null);
 			if(!is_numeric($currency_decimals)) {
 				$currency_decimals = $default_currency_decimals;
 			}
 
-			$html .= '<td>';
+			$html .= '<td class="decimals">';
 			$field_args = array(
 				'id' => $currency_field_id . '[decimals]',
 				'value' => $currency_decimals,
 				'attributes' => array(
 					'class' => 'numeric',
+				),
+			);
+			ob_start();
+			$this->render_textbox($field_args);
+      $field_html = ob_get_contents();
+      ob_end_clean();
+			$html .= $field_html;
+			$html .= '</td>';
+
+			// Render currency symbol field
+			$currency_symbol = get_value('symbol', $currency_settings, get_woocommerce_currency_symbol($currency));
+			$html .= '<td class="symbol">';
+			$field_args = array(
+				'id' => $currency_field_id . '[symbol]',
+				'value' => $currency_symbol,
+				'attributes' => array(
+					'class' => 'text',
 				),
 			);
 			ob_start();
@@ -1021,6 +1058,89 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 		$html .= '</table>';
 
 		echo $html;
+	}
+
+	/**
+	 * Renders a "special" row on the exchange rates table, which contains the
+	 * settings for the base currency.
+	 *
+	 * @param string currency The currency to display on the row.
+	 * @param string exchange_rates An array of currency settings.
+	 * @param string base_field_id The base ID that will be assigned to the
+	 * fields in the row.
+	 * @param string base_field_id The base name that will be assigned to the
+	 * fields in the row.
+	 * @return string The HTML for the row.
+	 */
+	protected function render_settings_for_base_currency($currency, $exchange_rates, $base_field_id, $base_field_name) {
+		$currency_field_id = $this->group_field($currency, $base_field_id);
+		$currency_field_name = $this->group_field($currency, $base_field_name);
+
+		$html = '<tr>';
+		// Output currency label
+		$html .= '<td class="currency_name">';
+		$html .= '<span>' . $this->_settings_controller->get_currency_description($currency) . '</span>';
+		$html .= '</td>';
+
+		$currency_settings = get_value($currency, $exchange_rates, array());
+		$currency_settings = array_merge($this->_settings_controller->default_currency_settings(), $currency_settings);
+		//var_dump($currency_settings);
+
+		// Render exchange rate field
+		$html .= '<td class="numeric">';
+		$html .= '1'; // Exchange rate for base currency is always 1
+		$html .= '</td>';
+
+		// Render "Set Manually" checkbox
+		$html .= '<td>';
+		$html .= '</td>';
+
+		// Render exchange rate markup field
+		$html .= '<td>';
+		$html .= '</td>';
+
+		// Render decimals field
+		$default_currency_decimals = default_currency_decimals($currency, $this->_settings_controller->woocommerce_currency_decimals);
+		$currency_decimals = get_value('decimals', $currency_settings, null);
+		if(!is_numeric($currency_decimals)) {
+			$currency_decimals = $default_currency_decimals;
+		}
+
+		$html .= '<td class="decimals">';
+		$field_args = array(
+			'id' => $currency_field_id . '[decimals]',
+			'value' => $currency_decimals,
+			'attributes' => array(
+				'class' => 'numeric',
+			),
+		);
+		ob_start();
+		$this->render_textbox($field_args);
+		$field_html = ob_get_contents();
+		ob_end_clean();
+		$html .= $field_html;
+		$html .= '</td>';
+
+		// Render currency symbol field
+		$currency_symbol = get_value('symbol', $currency_settings, get_woocommerce_currency_symbol($currency));
+		$html .= '<td class="symbol">';
+		$field_args = array(
+			'id' => $currency_field_id . '[symbol]',
+			'value' => $currency_symbol,
+			'attributes' => array(
+				'class' => 'text',
+			),
+		);
+		ob_start();
+		$this->render_textbox($field_args);
+		$field_html = ob_get_contents();
+		ob_end_clean();
+		$html .= $field_html;
+		$html .= '</td>';
+
+		$html .= '</tr>';
+
+		return $html;
 	}
 
 

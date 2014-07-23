@@ -5,51 +5,6 @@
  */
 global $woocommerce;
 
-if(($woocommerce->version < '2') && !function_exists('get_woocommerce_currencies')) {
-	/**
-	 * Get full list of currency codes.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	function get_woocommerce_currencies() {
-		return array_unique(
-			apply_filters('woocommerce_currencies',
-				// This currency list has been extracted from WooCommerce 1.6.6
-				array(
-					'USD' => __('US Dollars (&#36;)', 'woocommerce'),
-					'EUR' => __('Euros (&euro;)', 'woocommerce'),
-					'GBP' => __('Pounds Sterling (&pound;)', 'woocommerce'),
-					'AUD' => __('Australian Dollars (&#36;)', 'woocommerce'),
-					'BRL' => __('Brazilian Real (&#36;)', 'woocommerce'),
-					'CAD' => __('Canadian Dollars (&#36;)', 'woocommerce'),
-					'CZK' => __('Czech Koruna (&#75;&#269;)', 'woocommerce'),
-					'DKK' => __('Danish Krone', 'woocommerce'),
-					'HKD' => __('Hong Kong Dollar (&#36;)', 'woocommerce'),
-					'HUF' => __('Hungarian Forint', 'woocommerce'),
-					'ILS' => __('Israeli Shekel', 'woocommerce'),
-					'RMB' => __('Chinese Yuan (&yen;)', 'woocommerce'),
-					'JPY' => __('Japanese Yen (&yen;)', 'woocommerce'),
-					'MYR' => __('Malaysian Ringgits (RM)', 'woocommerce'),
-					'MXN' => __('Mexican Peso (&#36;)', 'woocommerce'),
-					'NZD' => __('New Zealand Dollar (&#36;)', 'woocommerce'),
-					'NOK' => __('Norwegian Krone', 'woocommerce'),
-					'PHP' => __('Philippine Pesos', 'woocommerce'),
-					'PLN' => __('Polish Zloty', 'woocommerce'),
-					'SGD' => __('Singapore Dollar (&#36;)', 'woocommerce'),
-					'SEK' => __('Swedish Krona', 'woocommerce'),
-					'CHF' => __('Swiss Franc', 'woocommerce'),
-					'TWD' => __('Taiwan New Dollars', 'woocommerce'),
-					'THB' => __('Thai Baht', 'woocommerce'),
-					'TRY' => __('Turkish Lira (TL)', 'woocommerce'),
-					'ZAR' => __('South African rand (R)', 'woocommerce'),
-					'RON' => __('Romanian Leu (RON)', 'woocommerce'),
-				)
-			)
-		);
-	}
-}
-
 if(!function_exists('get_raw_number')) {
 	/**
 	 * Given a number formatted by WooCommerce, it returns the raw number. Input
@@ -75,42 +30,16 @@ if(!function_exists('get_raw_number')) {
 	}
 }
 
-if(($woocommerce->version < '2') && !function_exists('get_woocommerce_price_format')) {
-	/**
-	 * Returns a format string that can be used to format prices.
-	 *
-	 * @return string.
-	 */
-	function get_woocommerce_price_format() {
-		$currency_pos = get_option('woocommerce_currency_pos');
-
-		switch($currency_pos) {
-			case 'left' :
-				$format = '%1$s%2$s';
-			break;
-			case 'right' :
-				$format = '%2$s%1$s';
-			break;
-			case 'left_space' :
-				$format = '%1$s&nbsp;%2$s';
-			break;
-			case 'right_space' :
-				$format = '%2$s&nbsp;%1$s';
-			break;
-		}
-
-		return apply_filters('woocommerce_price_format', $format, $currency_pos);
-	}
-}
-
 if(!function_exists('default_currency_decimals')) {
 	/**
 	 * Returns the decimals used by a currency.
 	 *
 	 * @param string currency A currency code.
+	 * @param int default_decimals The value return by default if the number of
+	 * decimals cannot be determined.
 	 * @return int
 	 */
-	function default_currency_decimals($currency) {
+	function default_currency_decimals($currency, $default_decimals = 2) {
 		$currency_decimals = array(
 			'AED' => 2, // UAE Dirham
 			'AFN' => 2, // Afghanistan Afghani
@@ -277,6 +206,6 @@ if(!function_exists('default_currency_decimals')) {
 			'ZWD' => 2, // Zimbabwe Dollar
 		);
 
-		return get_value($currency, $currency_decimals, (int)get_option('woocommerce_price_num_decimals'));
+		return get_value($currency, $currency_decimals, $default_decimals);
 	}
 }

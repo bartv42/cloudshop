@@ -9,7 +9,7 @@ Plugin URI: http://dev.pathtoenlightenment.net/shop
 Description: WooCommerce Currency Switcher. Allows to switch currency on the fly and perform all transactions in such currency.
 Author: Aelia (Diego Zanella)
 Author URI: http://dev.pathtoenlightenment.net
-Version: 3.3.12.140626
+Version: 3.4.5.140717
 License: GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
 */
 
@@ -54,7 +54,7 @@ interface IWC_Aelia_CurrencySwitcher {
  */
 class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	// @var string The plugin version
-	const VERSION = '3.3.12.140626';
+	const VERSION = '3.4.5.140717';
 
 	// @var string The plugin slug
 	public static $plugin_slug = AELIA_CS_PLUGIN_SLUG;
@@ -82,6 +82,9 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 	// @var array A list of orders corresponding to item IDs. Used to retrieve the order ID starting from one of the items it contains.
 	private $items_orders = array();
+
+	// @var int The amount of decimals to use when formatting prices.
+	protected $price_decimals = null;
 
 	/**
 	 * Adds a message to the log.
@@ -487,6 +490,31 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	}
 
 	/**
+	 * Overrides the currency symbol by loading the one configured in the settings.
+	 *
+	 * @param string currency_symbol The symbol passed by WooCommerce.
+	 * @param string currency The currency for which the symbol is requested.
+	 * @return string
+	 */
+	public function woocommerce_currency_symbol($currency_symbol, $currency) {
+		if(defined('AELIA_CS_SETTINGS_PAGE')) {
+			return $currency_symbol;
+		}
+
+		return self::settings()->get_currency_symbol($currency, $currency_symbol);
+	}
+
+	/**
+	 * Adds more currencies to the list of the available ones.
+	 *
+	 * @param array currencies The list of currencies passed by WooCommerce.
+	 * @return array
+	 */
+	public function woocommerce_currencies($currencies) {
+		return array_merge(WC_Aelia_Currencies_Manager::world_currencies(), $currencies);
+	}
+
+	/**
 	 * Returns the currently selected currency.
 	 *
 	 * @param string currency The currency used by default by WooCommerce.
@@ -634,6 +662,19 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		}
 
 		return '<del>' . $min_regular_price_in_currency . '</del> <ins>' . $min_sale_price_in_currency . '</ins>' . $this->get_price_suffix($product);
+	}
+
+	/**
+	 * Overrides the number of decimals used to format prices.
+	 *
+	 * @param int decimals The number of decimals passed by WooCommerce.
+	 * @return int
+	 */
+	public function pre_option_woocommerce_price_num_decimals($decimals) {
+		if(empty($this->price_decimals)) {
+			$this->price_decimals = $this->price_decimals($this->get_selected_currency());
+		}
+		return $this->price_decimals;
 	}
 
 	/**
@@ -820,11 +861,16 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 * will then be used to reconfigure the JavaScript used in Order edit page.
 	 *
 	 * @param int order_id The Order ID.
+	 * @param array woocommerce_admin_params An array of parameters to pass to the
+	 * admin scripts.
+	 * @return array
 	 */
-	public function load_order_currency_settings($order_id) {
+	public function load_order_currency_settings($order_id, array $woocommerce_admin_params = array()) {
 		// Add filter to retrieve the currently selected currency. This will be used
 		// when creating a new order, to associate the proper currency to it
 		add_filter('woocommerce_currency', array($this, 'woocommerce_currency'), 5);
+		// Display prices with the amount of decimals configured for the active currency
+		add_filter('pre_option_woocommerce_price_num_decimals', array($this, 'pre_option_woocommerce_price_num_decimals'), 10, 1);
 
 		$order = new Aelia_Order($order_id);
 
@@ -837,9 +883,19 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 			// TODO Load the thousand separator from the Currency Switcher settings
 		);
 
+		$woocommerce_admin_params = array_merge($woocommerce_admin_params, $woocommerce_writepanel_params);
+	}
+
+	/**
+	 * Loads the localization for the scripts in the Admin section.
+	 *
+	 * @param array woocommerce_admin_params An array of parameters to pass to the
+	 * admin scripts.
+	 */
+	protected function localize_admin_scripts($woocommerce_admin_params) {
 		wp_localize_script('wc-aelia-currency-switcher-admin-overrides',
 											 'aelia_cs_woocommerce_writepanel_params',
-											 $woocommerce_writepanel_params);
+											 $woocommerce_admin_params);
 	}
 
 	/**
@@ -866,21 +922,15 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		add_action('wp_ajax_nopriv_woocommerce_add_to_cart', $callback, 5);
 		add_action('wp_ajax_woocommerce-checkout', $callback, 5);
 		add_action('wp_ajax_nopriv_woocommerce-checkout', $callback, 5);
+		// Display prices with the amount of decimals configured for the active currency
+		add_filter('pre_option_woocommerce_price_num_decimals', array($this, 'pre_option_woocommerce_price_num_decimals'), 10, 1);
 	}
 
 	/**
 	 * Sets hooks related to discount coupons.
 	 */
 	protected function set_coupon_hooks() {
-		if($this->wc()->version < '2') {
-			add_filter('woocommerce_get_shop_coupon_data',
-								 array($this, 'wc_16_get_shop_coupon_data'),
-								 1,
-								 2);
-		}
-		else {
-			add_action('woocommerce_coupon_loaded', array($this, 'wc_coupon_loaded'));
-		}
+		add_action('woocommerce_coupon_loaded', array($this, 'wc_coupon_loaded'));
 	}
 
 	/**
@@ -927,86 +977,6 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		// Shortcode to render the billing country selector
 		add_shortcode('aelia_cs_billing_country_selector_widget',
 									array('Aelia\CurrencySwitcher\Billing_Country_Selector_Widget', 'render_billing_country_selector'));
-	}
-
-	/**
-	 * WooCommerce 1.6.x
-	 * Loads a coupon. The logic in this method is an exact copy of the one found
-	 * in WC_Coupon::__construct(). This method had to be implemented because WC 1.6
-	 * doesn't allow to intercept a coupon after is has been loaded and before it
-	 * is used for calculations.
-	 *
-	 * @param array coupon_data An array of coupon data.
-	 * @param string coupon_code A coupon code.
-	 * @return mixed An array of coupon data, or False if the coupon is not valid
-	 * or not enabled.
-	 */
-	public function wc_16_get_shop_coupon_data($coupon, $coupon_code) {
-		global $wpdb;
-		if(!is_array($coupon_data)) {
-			$coupon_data = array();
-		}
-
-		$coupon_id = $wpdb->get_var($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE BINARY post_title = %s AND post_type= %s", $coupon_code, 'shop_coupon'));
-		if(!$coupon_id) {
-			return false;
-		}
-		// Fetch coupon
-		$coupon = get_page($coupon_id);
-
-		// Check that coupon is loaded and it has been published
-		if(empty($coupon) || (get_value('post_status', $coupon) !== 'publish')) {
-			return false;
-		}
-
-		// Check titles match
-		if($coupon_code !== $coupon->post_title) {
-			return false;
-		}
-
-		$coupon_data['id'] = $coupon->ID;
-		$coupon_custom_fields = get_post_custom($coupon_data['id']);
-
-		$load_data = array(
-			'discount_type' => 'fixed_cart',
-			'coupon_amount'	=> 0,
-			'individual_use' => 'no',
-			'product_ids' => '',
-			'exclude_product_ids' => '',
-			'usage_limit' => '',
-			'usage_count' => '',
-			'expiry_date' => '',
-			'apply_before_tax' => 'yes',
-			'free_shipping' => 'no',
-			'product_categories' => array(),
-			'exclude_product_categories' => array(),
-			'minimum_amount' => '',
-			'customer_email' => array(),
-		);
-
-		foreach($load_data as $key => $default) {
-			$coupon_attribute = get_value($key, $coupon_custom_fields);
-			$coupon_attribute_value = get_value(0, $coupon_attribute);
-			$coupon_data[$key] = !empty($coupon_attribute_value) ? $coupon_attribute_value : $default;
-		}
-		$coupon_data['type'] = $coupon_data['discount_type'];
-		$coupon_data['amount'] = $coupon_data['coupon_amount'];
-
-		// Formatting
-		$coupon_data['product_ids'] = array_filter(array_map('trim', explode(',', $coupon_data['product_ids'])));
-		$coupon_data['exclude_product_ids'] = array_filter(array_map('trim', explode(',', $coupon_data['exclude_product_ids'])));
-		$coupon_data['expiry_date'] = !empty($coupon_data['expiry_date']) ? strtotime($coupon_data['expiry_date']) : '';
-		$coupon_data['product_categories'] = array_filter(array_map('trim', (array)maybe_unserialize($coupon_data['product_categories'])));
-		$coupon_data['exclude_product_categories'] = array_filter(array_map('trim', (array)maybe_unserialize($coupon_data['exclude_product_categories'])));
-		$coupon_data['customer_email'] = array_filter(array_map('trim', array_map('strtolower', (array)maybe_unserialize($coupon_data['customer_email']))));
-
-		if(in_array($coupon_data['type'], array('fixed_cart', 'fixed_product'))) {
-			$coupon_data['amount'] = $this->convert($coupon_data['amount'],
-																							$this->settings_controller()->base_currency(),
-																							$this->get_selected_currency());
-		}
-
-		return $coupon_data;
 	}
 
 	/**
@@ -1232,7 +1202,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	/**
 	 * Returns a list of enabled currencies.
 	 */
-	public function wc_aelia_cs_enabled_currencies($default) {
+	public function enabled_currencies() {
 		return $this->_settings_controller->get_enabled_currencies();
 	}
 
@@ -1240,6 +1210,19 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 * Sets the hook handlers for WooCommerce and WordPress.
 	 */
 	private function set_hooks() {
+		// called only after woocommerce has finished loading
+		add_action('init', array($this, 'wordpress_loaded'));
+		add_action('woocommerce_init', array($this, 'woocommerce_loaded'), 1);
+		add_action('woocommerce_integrations_init', array($this, 'woocommerce_integrations_init'), 1);
+		add_action('woocommerce_integrations', array($this, 'woocommerce_integrations_override'), 20);
+
+		// Override currency symbol
+		add_action('woocommerce_currency_symbol', array($this, 'woocommerce_currency_symbol'), 5, 2);
+		add_action('woocommerce_currencies', array($this, 'woocommerce_currencies'), 5, 1);
+
+		// called after all plugins have loaded
+		add_action('plugins_loaded', array($this, 'plugins_loaded'));
+
 		// WooCommerce 2.1 - Force setting of cart cookie, to ensure that session
 		// data is loaded
 		do_action('woocommerce_set_cart_cookies', true);
@@ -1254,6 +1237,9 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 			// Add filter to alter price based on selected currency
 			add_filter('woocommerce_get_price', array($this, 'woocommerce_get_price'), 5, 2);
+			// Display prices with the amount of decimals configured for the active currency
+			add_filter('pre_option_woocommerce_price_num_decimals', array($this, 'pre_option_woocommerce_price_num_decimals'), 10, 1);
+
 			add_filter('woocommerce_sale_price_html', array($this, 'woocommerce_sale_price_html'), 5, 2);
 			add_filter('woocommerce_free_sale_price_html', array($this, 'woocommerce_sale_price_html'), 5, 2);
 
@@ -1306,7 +1292,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		add_filter('woocommerce_available_payment_gateways', array($this, 'woocommerce_available_payment_gateways'), 20);
 
 		// Add a filter for 3rd parties to retrieve the list of enabled currencies
-		add_filter('wc_aelia_cs_enabled_currencies', array($this, 'wc_aelia_cs_enabled_currencies'));
+		add_filter('wc_aelia_cs_enabled_currencies', array($this, 'enabled_currencies'));
 
 	}
 
@@ -1321,6 +1307,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		// Load required support classes
 		require_once(dirname(__FILE__) . '/vendor/autoload.php');
+		require_once('lib/woocommerce-core-aux-functions.php');
 
 		$this->_wp_error = new WP_Error();
 		$this->load_error_messages();
@@ -1332,17 +1319,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		register_activation_hook(__FILE__, array($this, 'setup'));
 		register_uninstall_hook(__FILE__, array('WC_Aelia_CurrencySwitcher', 'cleanup'));
 
-		// called only after woocommerce has finished loading
-		add_action('init', array($this, 'wordpress_loaded'));
-		add_action('woocommerce_init', array($this, 'woocommerce_loaded'), 1);
-		add_action('woocommerce_integrations_init', array($this, 'woocommerce_integrations_init'), 1);
-		add_action('woocommerce_integrations', array($this, 'woocommerce_integrations_override'), 20);
-
-		// called after all plugins have loaded
-		add_action('plugins_loaded', array($this, 'plugins_loaded'));
-
-		// called just before the woocommerce template functions are included
-		add_action('init', array($this, 'include_template_functions'), 20);
+		// Set all required hooks
+		$this->set_hooks();
 
 		// indicates we are running the admin
 		if(is_admin()) {
@@ -1379,11 +1357,11 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	/**
 	 * Checks that a Currency is valid.
 	 *
-	 * @param string selected_currency The currency to check.
+	 * @param string currency The currency to check.
 	 * @return bool True, if the Currency is valid, False otherwise.
 	 */
-	private function is_valid_currency($selected_currency) {
-		if(empty($selected_currency)) {
+	public function is_valid_currency($currency) {
+		if(empty($currency)) {
 			return false;
 		}
 
@@ -1392,8 +1370,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		// To be valid, a Currency must be amongst the enabled ones and have an
 		// Exchange Rate greater than zero
-		$is_valid = in_array($selected_currency, $valid_currencies) &&
-								($this->settings_controller()->get_exchange_rate($selected_currency) > 0);
+		$is_valid = in_array($currency, $valid_currencies) &&
+								($this->settings_controller()->get_exchange_rate($currency) > 0);
 		return $is_valid;
 	}
 
@@ -1445,17 +1423,17 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		$user_id = get_current_user_id();
 		$user_currency = !empty($user_id) ? get_user_meta($user_id, AELIA_CS_USER_CURRENCY, true) : null;
 
-		$base_currency = $this->settings_controller()->base_currency();
+		$base_currency = self::settings()->base_currency();
 		// Try to get the Currency that User selected manually
 		$selected_currency = coalesce(Aelia_SessionManager::get_value(AELIA_CS_USER_CURRENCY),
 																	$user_currency);
 
 		if(empty($selected_currency)) {
-			if($this->settings_controller()->currency_geolocation_enabled()) {
+			if(self::settings()->currency_geolocation_enabled()) {
 				// Try to set the Currency to the one used in the Country from which the
 				// User is connecting
 				$selected_currency = WC_Aelia_Currencies_Manager::factory()->get_currency_by_host($this->get_visitor_ip_address(),
-																																													$this->settings_controller()->default_geoip_currency());
+																																													self::settings()->default_geoip_currency());
 				//var_dump($selected_currency);die();
 
 				// Save the currency detected by geolocation
@@ -1571,6 +1549,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		add_filter('woocommerce_currency', array($this, 'woocommerce_currency'), 50);
 		// Add filter to alter price based on selected currency
 		add_filter('woocommerce_get_price', array($this, 'woocommerce_get_price'), 50, 2);
+		// Display prices with the amount of decimals configured for the active currency
+		add_filter('pre_option_woocommerce_price_num_decimals', array($this, 'pre_option_woocommerce_price_num_decimals'), 10, 1);
 
 		$this->recalculate_cart_totals(true);
 	}
@@ -1583,6 +1563,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		add_filter('woocommerce_currency', array($this, 'woocommerce_currency'), 50);
 		// Add filter to alter price based on selected currency
 		add_filter('woocommerce_get_price', array($this, 'woocommerce_get_price'), 50, 2);
+		// Display prices with the amount of decimals configured for the active currency
+		add_filter('pre_option_woocommerce_price_num_decimals', array($this, 'pre_option_woocommerce_price_num_decimals'), 10, 1);
 	}
 
 	/**
@@ -1600,6 +1582,13 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 			$coupon->amount = $this->convert($coupon->amount,
 																			 $this->settings_controller()->base_currency(),
 																			 $this->get_selected_currency());
+		}
+
+		// Convert minimum amount to the selected currency
+		if((int)$coupon->minimum_amount > 0) {
+			$coupon->minimum_amount = $this->convert($coupon->minimum_amount,
+																							 $this->settings_controller()->base_currency(),
+																							 $this->get_selected_currency());
 		}
 
 		return $coupon;
@@ -1760,11 +1749,6 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 * Performs operations when woocommerce has been loaded.
 	 */
 	public function woocommerce_loaded() {
-		require_once('lib/woocommerce-core-aux-functions.php');
-
-		// Set all required hooks
-		$this->set_hooks();
-
 		// Load the class that will handle currency prices for current WooCommerce version
 		$this->load_currencyprices_manager();
 
@@ -1779,18 +1763,18 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		// If no currency was explicitly selected and currency by billing country is
 		// enabled, determine the one to use from the billing country
-		if(empty($selected_currency) &&
-			 $this->currency_by_billing_country_enabled()) {
-				$selected_currency = $this->get_currency_by_billing_country();
+		if(empty($selected_currency) && $this->currency_by_billing_country_enabled()) {
+			$selected_currency = $this->get_currency_by_billing_country();
 		}
 
 		// Update selected Currency
 		if(!empty($selected_currency)) {
 			// If the selected currency is not valid, go back to WooCommerce base currency
 			if(!$this->is_valid_currency($selected_currency)) {
-				$selected_currency = $this->settings_controller()->base_currency();
+				// Debug
+				//$this->trigger_error(AELIA_CS_ERR_INVALID_CURRENCY, E_USER_NOTICE, array($selected_currency));
 
-				$this->trigger_error(AELIA_CS_ERR_INVALID_CURRENCY, E_USER_WARNING, array($selected_currency));
+				$selected_currency = $this->settings_controller()->base_currency();
 			}
 
 			$this->save_user_selected_currency($selected_currency);
@@ -1817,13 +1801,6 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 */
 	public function plugins_loaded() {
 		// ...
-	}
-
-	/**
-	 * Override any of the template functions from woocommerce/woocommerce-template.php
-	 * with our own template functions file
-	 */
-	public function include_template_functions() {
 	}
 
 	/**
@@ -1980,11 +1957,20 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		// WooCommerce behaviour by making its pages aware of multi-currency orders
 		wp_enqueue_script('wc-aelia-currency-switcher-admin-overrides');
 
+		// Prepare parameters for common admin scripts
+		$woocommerce_admin_params = array(
+			'base_currency' => self::settings()->base_currency(),
+			'enabled_currencies' => $this->enabled_currencies(),
+		);
+
 		// When viewing an Order, load the settings for the currency used when it
 		// was placed
 		if(get_value('post_type', $post) == 'shop_order') {
-			$this->load_order_currency_settings($post->ID);
+			$woocommerce_admin_params = $this->load_order_currency_settings($post->ID, $woocommerce_admin_params);
 		}
+
+		// Add localization for admin scripts
+		$this->localize_admin_scripts($woocommerce_admin_params);
 	}
 
 	/**
@@ -2227,6 +2213,12 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	protected function get_currency_by_billing_country() {
 		$billing_country = $this->get_billing_country();
 		$currency = WC_Aelia_Currencies_Manager::factory()->get_country_currency($billing_country);
+
+		// If currency used in the billing country is not enabled, take the default
+		// used for GeoIP
+		if(!$this->is_valid_currency($currency)) {
+			$currency = self::settings()->default_geoip_currency();
+		}
 
 		// Debug
 		//var_dump("CURRENCY BY BILLING COUNTRY: $currency");
