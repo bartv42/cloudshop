@@ -1,0 +1,12 @@
+/*
+Theme Name:     Bthree Store Quick
+Theme URI:      http://example.com/
+Description:    Child theme for the Twenty Twelve theme
+Author:         Your name here
+Author URI:     http://example.com/about/
+Template:       twentytwelve
+Version:        0.1.0
+*/
+
+@import url("../twentytwelve/style.css");
+@import url("bthree-store.css");
