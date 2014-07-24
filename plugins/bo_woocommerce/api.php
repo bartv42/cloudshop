@@ -92,7 +92,7 @@ function blendercloud_api( $atts ) {
 
 				if( $subscription_details['status'] != 'trash' ) {
 					
-					//print_r($subscription_details);
+					// print_r($subscription_details);
 					
 					$order_id			= $subscription_details['order_id'];
 					$product_id			= $subscription_details['product_id'];
@@ -103,7 +103,8 @@ function blendercloud_api( $atts ) {
 					if ( $subscription_details['expiry_date'] == 0 && ! in_array( $subscription_details['status'], array( 'cancelled', 'switched' ) ) ) {
 
 						$subscription_key	= WC_Subscriptions_Manager::get_subscription_key( $order_id, $product_id );
-						$end_timestamp	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+						$end_time = WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+						$end_timestamp = strtotime( $end_time );
 
 					} else if ( in_array( $subscription_details['status'], array( 'cancelled', 'switched' ) ) ) {
 
