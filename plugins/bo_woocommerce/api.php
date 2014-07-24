@@ -6,7 +6,7 @@ function blendercloud_api( $atts ) {
 	$user_data = array(	
 		'shop_id' => '0',
 		'cloud_access' => '0',
-		'expiration_date' => '1970-01-01 00:00:00'
+		'expiration_date' => '1970-01-01 00:00:00',
 	);
 
 	$last_expiration_date = new DateTime( '1970-01-01 00:00:00' );
@@ -63,6 +63,8 @@ function blendercloud_api( $atts ) {
 				}
 
 				$tmp['expiration_date'] = $expiry_date->format('Y-m-d H:i:s');
+							
+				$tmp['subscription_status'] = 'prepaid';			
 								
 				$now = new DateTime("now");	
 
@@ -85,34 +87,59 @@ function blendercloud_api( $atts ) {
 		$subscriptions = WC_Subscriptions_Manager::get_users_subscriptions( $user_id );
 		if( !empty( $subscriptions ) ) {
 		
-			// iterate over all subscriptions. Logic still needs to be defined
-			foreach( $subscriptions as $subscription ) {
-				
-				if( $subscription['status'] == 'active' ) {
+			// iterate over all subscriptions.
+			foreach( $subscriptions as $subscription_details ) {
+
+				if( $subscription_details['status'] != 'trash' ) {
 					
-					$order_id			= $subscription['order_id'];
-					$product_id			= $subscription['product_id'];
-					$subscription_key	= WC_Subscriptions_Manager::get_subscription_key( $order_id, $product_id );
-					$next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+					//print_r($subscription_details);
+					
+					$order_id			= $subscription_details['order_id'];
+					$product_id			= $subscription_details['product_id'];
+
+					// $next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+
+
+					if ( $subscription_details['expiry_date'] == 0 && ! in_array( $subscription_details['status'], array( 'cancelled', 'switched' ) ) ) {
+
+						$subscription_key	= WC_Subscriptions_Manager::get_subscription_key( $order_id, $product_id );
+						$end_timestamp	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+
+					} else if ( in_array( $subscription_details['status'], array( 'cancelled', 'switched' ) ) ) {
+
+						$end_of_prepaid_term = wc_next_scheduled_action( 'scheduled_subscription_end_of_prepaid_term', array( 'user_id' => (int)$user_id, 'subscription_key' => $subscription_key ) );
+							
+						if ( false === $end_of_prepaid_term ) {
+							$end_timestamp = strtotime( $subscription_details['end_date'] );
+						} else {
+							$end_timestamp = $end_of_prepaid_term;
+						}
+					} else {
+
+						$end_timestamp = strtotime( $subscription_details['expiry_date'] );
+
+					}
+					
+					$end_time = date("Y-m-d H:i:s", $end_timestamp );
 
 					$product = get_product( $product_id );
 					$sku = $product->get_sku();
 
-					/*** TEST HACK ****/	
-					// WC_Subscriptions_Manager::set_trial_expiration_date( $subscription_key, $user_id = '' );
-					// WC_Subscriptions_Manager::set_next_payment_date( $subscription_key, $user_id = '' );
-					/*** TEST HACK ****/	
-
-
 					$tmp = bo_empty_subscription_line();
-					$tmp['cloud_access'] = '1';
-					$tmp['expiration_date'] = $next_payment_date;
-					
-					$expiry_date = new DateTime( $next_payment_date );
+					$tmp['expiration_date'] = $end_time;
+					$tmp['subscription_status'] = $subscription_details['status'];
+																				
+
+					$expiry_date = new DateTime( $end_time );
 					if( $expiry_date > $last_expiration_date ) {
 						$last_expiration_date = $expiry_date;
 					}
+					
+					$now = new DateTime("now");	
 
+					$tmp['cloud_access'] = ($expiry_date > $now)?'1':'0';
+
+					
 					$tmp['sku'] = $sku;
 
 					switch( $sku ) {
@@ -202,6 +229,7 @@ function bo_get_all_user_orders($user_id,$status='completed'){
 function bo_empty_subscription_line() {
 	$tmp = array( 
 		'sku' => '',
+		'subscription_status' => 'undefined',
 		'expiration_date' => '',
 		'cloud_access' => '0',
 	 );
