@@ -29,9 +29,10 @@ function blendercloud_api( $atts ) {
 		$user_data['shop_id'] = $user_id;
 		
 		// process simple products (prepaid subscriptions)
-		$order_ids = bo_get_all_user_orders( $user_id, 'completed' );
-						
+		$order_ids = bo_get_all_user_orders( $user_id, 'cloud_expiration_date' );
+
 		foreach( $order_ids as $order_id ) {
+			
 			$order = new WC_Order( $order_id );
 			
 			$order_date = $order->order_date;
@@ -60,6 +61,15 @@ function blendercloud_api( $atts ) {
 						
 					default: 
 						continue 2;	// skip to next product
+				}
+
+				// override end_time with cloud_expiration_date meta?
+				$cloud_expiration_date_override = get_post_meta( $order_id, 'cloud_expiration_date', true );				
+				if( isset( $cloud_expiration_date_override )) {
+					$overrride = new DateTime( $cloud_expiration_date_override );
+					if( $override > $expiry_date ) {
+						$expiry_date = $override;
+					}
 				}
 
 				$tmp['expiration_date'] = $expiry_date->format('Y-m-d H:i:s');
@@ -122,6 +132,14 @@ function blendercloud_api( $atts ) {
 					}
 					
 					$end_time = date("Y-m-d H:i:s", $end_timestamp );
+					
+					// override end_time with cloud_expiration_date meta?
+					$cloud_expiration_date_override = get_post_meta( $order_id, 'cloud_expiration_date', true );
+					if( isset( $cloud_expiration_date_override )) {
+						if( $cloud_expiration_date_override > $end_time ) {
+							$end_time = $cloud_expiration_date_override;
+						}
+					}
 
 					$product = get_product( $product_id );
 					$sku = $product->get_sku();
