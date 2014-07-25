@@ -19,7 +19,6 @@ function fontawesome_dashboard() {
  
 add_action('admin_init', 'fontawesome_dashboard');
 
-
 add_action( 'restrict_manage_posts', 'wpse45436_admin_posts_filter_restrict_manage_posts' );
 /**
  * First create the dropdown
@@ -103,6 +102,26 @@ function bo_get_braintree_merchant_account_id( $default_id ) {
 	}
 }
 add_filter( 'wc_braintree_get_merchant_account_id', 'bo_get_braintree_merchant_account_id' );
+
+/***
+ * login errors 
+ */
+
+
+add_filter('login_errors','bo_login_error_message');
+
+function bo_login_error_message($error){
+	
+    //check if that's the error you are looking for
+    $pos = strpos($error, 'Invalid username');
+    if (is_int($pos)) {
+        //its the right error so you can overwrite it
+        $error = "<strong>Error</strong> Invalid username";
+    }
+
+    return $error;
+}
+
 
 /***
  * Blender Cloud API

@@ -660,15 +660,15 @@ function disable_function() {
 add_action('admin_init', 'pp_db_auth_init' );
 add_action('admin_menu', 'pp_db_auth_add_menu');
 add_action('wp_authenticate', 'pp_db_auth_check_login', 1, 2 );
-add_action('lost_password', 'disable_function');
+//add_action('lost_password', 'disable_function');
 //add_action('user_register', 'disable_function');
 add_action('register_form', 'disable_function_register');
 add_action('retrieve_password', 'disable_function');
 add_action('password_reset', 'disable_function');
 add_action('profile_personal_options','pp_db_warning');
-add_filter('login_errors','pp_db_errors');
-add_filter('show_password_fields','pp_db_show_password_fields');
-add_filter('login_message','pp_db_auth_warning');
+//add_filter('login_errors','pp_db_errors');
+//add_filter('show_password_fields','pp_db_show_password_fields');
+//add_filter('login_message','pp_db_auth_warning');
 
 register_activation_hook( __FILE__, 'pp_db_auth_activate' );
 ?>
