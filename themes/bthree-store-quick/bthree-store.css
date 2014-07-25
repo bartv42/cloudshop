@@ -108,6 +108,13 @@ h3 label:hover {
 	margin-top: 4%;
 }
 
+.variations label { /* e.g: Team size label on Cloud Team sub */
+	color: gray;
+	font-size: 130%;
+	position: relative;
+	top: 5px;
+}
+
 /* WOOCOMMERCE ALERTS */
 .woocommerce .woocommerce-error, .woocommerce .woocommerce-info, .woocommerce .woocommerce-message, .woocommerce-page .woocommerce-error, .woocommerce-page .woocommerce-info, .woocommerce-page .woocommerce-message
 {
