@@ -45,7 +45,7 @@ get_header(); ?>
 				        'echo'           => true,
 				        'redirect'       => get_permalink( wc_get_page_id( 'checkout' ) ), 
 				        'form_id'        => 'loginform',
-				        'label_username' => __( 'Username' ),
+				        'label_username' => 'Your Blender ID',
 				        'label_password' => __( 'Password' ),
 				        'label_remember' => __( 'Remember Me' ),
 				        'label_log_in'   => __( 'Log In' ),
