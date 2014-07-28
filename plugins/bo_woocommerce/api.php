@@ -102,12 +102,12 @@ function blendercloud_api( $atts ) {
 
 				if( $subscription_details['status'] != 'trash' ) {
 					
-					// print_r($subscription_details);
+					print_r($subscription_details);
 					
 					$order_id			= $subscription_details['order_id'];
 					$product_id			= $subscription_details['product_id'];
 
-					// $next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+					$next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
 
 
 					if ( $subscription_details['expiry_date'] == 0 && ! in_array( $subscription_details['status'], array( 'cancelled', 'switched' ) ) ) {
@@ -125,6 +125,11 @@ function blendercloud_api( $atts ) {
 						} else {
 							$end_timestamp = $end_of_prepaid_term;
 						}
+						
+						if( $end_timestamp == '' ) {
+							$end_timestamp = strtotime( $subscription_details['trial_expiry_date'] );
+						}
+						
 					} else {
 
 						$end_timestamp = strtotime( $subscription_details['expiry_date'] );
