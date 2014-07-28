@@ -41,6 +41,7 @@ label {display: initial;}
 .main-navigation li a {
 	font-family:'Open Sans Condensed','Lucida Sans','Lucida Grande',sans-serif,sans-serif;font-weight:normal;
 	font-size: 150%;
+	border-bottom: 2px solid transparent;
 }
 
 
