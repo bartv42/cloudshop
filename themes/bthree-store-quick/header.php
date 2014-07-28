@@ -46,7 +46,7 @@
 
 			<a class="logo pull-left absolute offset-top-2" href="/"></a>
 
-			<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_class' => 'nav-menu list-bullets-none content-align-right pull-right' ) ); ?>
+			<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_class' => 'nav-menu list-bullets-none content-align-right pull-right', 'exclude' => 55 ) ); ?>
 		</nav><!-- #site-navigation -->
 
 		<?php if ( get_header_image() ) : ?>
