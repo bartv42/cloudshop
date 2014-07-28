@@ -102,7 +102,7 @@ function blendercloud_api( $atts ) {
 
 				if( $subscription_details['status'] != 'trash' ) {
 					
-					print_r($subscription_details);
+					// print_r($subscription_details);
 					
 					$order_id			= $subscription_details['order_id'];
 					$product_id			= $subscription_details['product_id'];
