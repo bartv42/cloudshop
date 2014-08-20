@@ -77,8 +77,9 @@ class WC_Subscriptions_Coupon {
 
 		$product_id = ( $cart_item['data']->is_type( array( 'subscription_variation' ) ) ) ? $cart_item['data']->variation_id : $cart_item['data']->id;
 
-		if ( ! WC_Subscriptions_Product::is_subscription( $product_id ) )
+		if ( ! WC_Subscriptions_Product::is_subscription( $product_id ) ) {
 			return $original_price;
+		}
 
 		$price = $original_price;
 
@@ -110,20 +111,24 @@ class WC_Subscriptions_Coupon {
 
 							if ( ! WC_Subscriptions_Cart::cart_contains_free_trial() ) { // Apply recurring discounts to initial total
 
-								if ( 'recurring_fee' == $coupon->type )
+								if ( 'recurring_fee' == $coupon->type ) {
 									$apply_initial_coupon = true;
+								}
 
-								if ( 'recurring_percent' == $coupon->type )
+								if ( 'recurring_percent' == $coupon->type ) {
 									$apply_initial_percent_coupon = true;
+								}
 							}
 
 							if ( WC_Subscriptions_Cart::get_cart_subscription_sign_up_fee() > 0 ) { // Apply sign-up discounts to initial total
 
-								if ( 'sign_up_fee' == $coupon->type )
+								if ( 'sign_up_fee' == $coupon->type ) {
 									$apply_initial_coupon = true;
+								}
 
-								if ( 'sign_up_fee_percent' == $coupon->type )
+								if ( 'sign_up_fee_percent' == $coupon->type ) {
 									$apply_initial_percent_coupon = true;
+								}
 							}
 
 						}
@@ -138,15 +143,16 @@ class WC_Subscriptions_Coupon {
 
 							$price = $price - $discount_amount;
 
-							if ( $price < 0 )
+							if ( $price < 0 ) {
 								$price = 0;
+							}
 
 						} elseif ( $apply_sign_up_percent_coupon || $apply_recurring_percent_coupon ) {
 
 							$discount_amount = round( ( $cart_item['data']->get_price() / 100 ) * $coupon->amount, $woocommerce->cart->dp );
 
-							$woocommerce->cart->discount_cart = $woocommerce->cart->discount_cart + $discount_amount;
-							WC_Subscriptions_Cart::increase_coupon_discount_amount( $coupon->code, $discount_amount );
+							$woocommerce->cart->discount_cart = $woocommerce->cart->discount_cart + ( $discount_amount * $cart_item['quantity'] );
+							WC_Subscriptions_Cart::increase_coupon_discount_amount( $coupon->code, $discount_amount * $cart_item['quantity'] );
 
 							$price = $price - $discount_amount;
 
@@ -157,11 +163,13 @@ class WC_Subscriptions_Coupon {
 
 								$base_total = $woocommerce->cart->base_sign_up_fees[ $product_id ] + $woocommerce->cart->base_recurring_prices[ $product_id ];
 
-								if ( 'recurring_percent' == $coupon->type )
+								if ( 'recurring_percent' == $coupon->type ) {
 									$portion_of_total = $woocommerce->cart->base_recurring_prices[ $product_id ] / $base_total;
+								}
 
-								if ( 'sign_up_fee_percent' == $coupon->type )
+								if ( 'sign_up_fee_percent' == $coupon->type ) {
 									$portion_of_total = $woocommerce->cart->base_sign_up_fees[ $product_id ] / $base_total;
+								}
 
 								$amount_to_discount = WC_Subscriptions_Manager::get_amount_from_proportion( $base_total, $portion_of_total );
 
@@ -173,8 +181,8 @@ class WC_Subscriptions_Coupon {
 
 							$discount_amount = round( ( $amount_to_discount / 100 ) * $coupon->amount, $woocommerce->cart->dp );
 
-							$woocommerce->cart->discount_cart = $woocommerce->cart->discount_cart + $discount_amount;
-							WC_Subscriptions_Cart::increase_coupon_discount_amount( $coupon->code, $discount_amount );
+							$woocommerce->cart->discount_cart = $woocommerce->cart->discount_cart + $discount_amount * $cart_item['quantity'];
+							WC_Subscriptions_Cart::increase_coupon_discount_amount( $coupon->code, $discount_amount * $cart_item['quantity'] );
 
 							$price = $price - $discount_amount;
 
@@ -220,20 +228,24 @@ class WC_Subscriptions_Coupon {
 
 					if ( ! WC_Subscriptions_Cart::cart_contains_free_trial() ) { // Apply recurring discounts to initial total
 
-						if ( 'recurring_fee' == $coupon->type )
+						if ( 'recurring_fee' == $coupon->type ) {
 							$apply_initial_coupon = true;
+						}
 
-						if ( 'recurring_percent' == $coupon->type )
+						if ( 'recurring_percent' == $coupon->type ) {
 							$apply_initial_percent_coupon = true;
+						}
 					}
 
 					if ( WC_Subscriptions_Cart::get_cart_subscription_sign_up_fee() > 0 ) { // Apply sign-up discounts to initial total
 
-						if ( 'sign_up_fee' == $coupon->type )
+						if ( 'sign_up_fee' == $coupon->type ) {
 							$apply_initial_coupon = true;
+						}
 
-						if ( 'sign_up_fee_percent' == $coupon->type )
+						if ( 'sign_up_fee_percent' == $coupon->type ) {
 							$apply_initial_percent_coupon = true;
+						}
 					}
 
 				}
@@ -241,10 +253,11 @@ class WC_Subscriptions_Coupon {
 				// Deduct coupon amounts
 				if ( $apply_sign_up_coupon || $apply_recurring_coupon || $apply_initial_coupon ) {
 
-					if ( $price < $coupon->amount )
+					if ( $price < $coupon->amount ) {
 						$discount_amount = $price;
-					else
+					} else {
 						$discount_amount = $coupon->amount;
+					}
 
 					$woocommerce->cart->discount_total = $woocommerce->cart->discount_total + ( $discount_amount * $cart_item['quantity'] );
 					WC_Subscriptions_Cart::increase_coupon_discount_amount( $coupon->code, $discount_amount * $cart_item['quantity'] );
@@ -265,11 +278,13 @@ class WC_Subscriptions_Coupon {
 
 						$base_total = $woocommerce->cart->base_sign_up_fees[ $product_id ] + $woocommerce->cart->base_recurring_prices[ $product_id ];
 
-						if ( 'recurring_percent' == $coupon->type )
+						if ( 'recurring_percent' == $coupon->type ) {
 							$portion_of_total = $woocommerce->cart->base_recurring_prices[ $product_id ] / $base_total;
+						}
 
-						if ( 'sign_up_fee_percent' == $coupon->type )
+						if ( 'sign_up_fee_percent' == $coupon->type ) {
 							$portion_of_total = $woocommerce->cart->base_sign_up_fees[ $product_id ] / $base_total;
+						}
 
 						$amount_to_discount = WC_Subscriptions_Manager::get_amount_from_proportion( $price, $portion_of_total );
 
@@ -347,16 +362,19 @@ class WC_Subscriptions_Coupon {
 		} else {
 
 			// prevent subscription coupons from being applied to renewal payments
-			if ( WC_Subscriptions_Cart::cart_contains_subscription_renewal() )
+			if ( WC_Subscriptions_Cart::cart_contains_subscription_renewal() ) {
 				self::$coupon_error = __( 'Sorry, this coupon is only valid for new subscriptions.', 'woocommerce-subscriptions' );
+			}
 
 			// prevent subscription coupons from being applied to non-subscription products
-			if ( ! WC_Subscriptions_Cart::cart_contains_subscription_renewal() && ! WC_Subscriptions_Cart::cart_contains_subscription() )
+			if ( ! WC_Subscriptions_Cart::cart_contains_subscription_renewal() && ! WC_Subscriptions_Cart::cart_contains_subscription() ) {
 				self::$coupon_error = __( 'Sorry, this coupon is only valid for subscription products.', 'woocommerce-subscriptions' );
+			}
 
 			// prevent sign up fee coupons from being applied to subscriptions without a sign up fee
-			if ( 0 == WC_Subscriptions_Cart::get_cart_subscription_sign_up_fee() && in_array( $coupon->type, array( 'sign_up_fee', 'sign_up_fee_percent' ) ) )
+			if ( 0 == WC_Subscriptions_Cart::get_cart_subscription_sign_up_fee() && in_array( $coupon->type, array( 'sign_up_fee', 'sign_up_fee_percent' ) ) ) {
 				self::$coupon_error = __( 'Sorry, this coupon is only valid for subscription products with a sign-up fee.', 'woocommerce-subscriptions' );
+			}
 
 		}
 
@@ -375,10 +393,11 @@ class WC_Subscriptions_Coupon {
 	 */
 	public static function add_coupon_error( $error ) {
 
-		if( self::$coupon_error )
+		if ( self::$coupon_error ) {
 			return self::$coupon_error;
-		else
+		} else {
 			return $error;
+		}
 
 	}
 
@@ -396,14 +415,16 @@ class WC_Subscriptions_Coupon {
 		// Specific products get the discount
 		if ( sizeof( $coupon->product_ids ) > 0 ) {
 
-			if ( in_array( $cart_item['product_id'], $coupon->product_ids ) || in_array( $cart_item['variation_id'], $coupon->product_ids ) || in_array( $cart_item['data']->get_parent(), $coupon->product_ids ) )
+			if ( in_array( $cart_item['product_id'], $coupon->product_ids ) || in_array( $cart_item['variation_id'], $coupon->product_ids ) || in_array( $cart_item['data']->get_parent(), $coupon->product_ids ) ) {
 				$this_item_is_discounted = true;
+			}
 
 			// Category discounts
 		} elseif ( sizeof( $coupon->product_categories ) > 0 ) {
 
-			if ( sizeof( array_intersect( $product_cats, $coupon->product_categories ) ) > 0 )
+			if ( sizeof( array_intersect( $product_cats, $coupon->product_categories ) ) > 0 ) {
 				$this_item_is_discounted = true;
+			}
 
 		} else {
 
@@ -413,14 +434,18 @@ class WC_Subscriptions_Coupon {
 		}
 
 		// Specific product ID's excluded from the discount
-		if ( sizeof( $coupon->exclude_product_ids ) > 0 )
-			if ( in_array( $cart_item['product_id'], $coupon->exclude_product_ids ) || in_array( $cart_item['variation_id'], $coupon->exclude_product_ids ) || in_array( $cart_item['data']->get_parent(), $coupon->exclude_product_ids ) )
+		if ( sizeof( $coupon->exclude_product_ids ) > 0 ) {
+			if ( in_array( $cart_item['product_id'], $coupon->exclude_product_ids ) || in_array( $cart_item['variation_id'], $coupon->exclude_product_ids ) || in_array( $cart_item['data']->get_parent(), $coupon->exclude_product_ids ) ) {
 				$this_item_is_discounted = false;
+			}
+		}
 
 		// Specific categories excluded from the discount
-		if ( sizeof( $coupon->exclude_product_categories ) > 0 )
-			if ( sizeof( array_intersect( $product_cats, $coupon->exclude_product_categories ) ) > 0 )
+		if ( sizeof( $coupon->exclude_product_categories ) > 0 ) {
+			if ( sizeof( array_intersect( $product_cats, $coupon->exclude_product_categories ) ) > 0 ) {
 				$this_item_is_discounted = false;
+			}
+		}
 
 		// Apply filter
 		return apply_filters( 'woocommerce_item_is_discounted', $this_item_is_discounted, $cart_item, $before_tax = false );

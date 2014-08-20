@@ -1,0 +1,72 @@
+/* CSS Styles for Admin pages */
+#wc_aelia_tax_display_by_country_form .buttons {
+	margin-top: 1em;
+}
+
+#wc_aelia_tax_display_by_country_form #section-tax_display tbody th {
+	width: 10em;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings {
+	width: 100%;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings thead td {
+	padding: 4px;
+	margin-bottom: 6px;
+	vertical-align: top;
+	font-weight: bold;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings tbody td {
+	margin: 0;
+	padding: 4px;
+	vertical-align: top;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings .countries {
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings .cart_prices,
+#wc_aelia_tax_display_by_country_form #tax_display_settings .shop_prices {
+	width: 10em;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings .price_suffix {
+	width: 8em;
+}
+
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings select,
+#wc_aelia_tax_display_by_country_form #tax_display_settings .chosen-container {
+	width: 100% !important;
+}
+
+/* Sortable handle element */
+#wc_aelia_tax_display_by_country_form #tax_display_settings tbody .sort {
+	padding: 4px 6px;
+	cursor: move;
+	position: relative;
+	background: #F9F9F9;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings tbody .sort:before {
+    color: #999999;
+    content: "";
+    display: block;
+    float: left;
+    font-family: WooCommerce;
+    height: 100%;
+    line-height: 1;
+    text-align: center;
+    width: 17px;
+}
+
+#wc_aelia_tax_display_by_country_form #tax_display_settings tbody .template {
+	display: none;
+}
+
+/*** Fixes for Chosen styles ***/
+#wc_aelia_tax_display_by_country_form .chosen-choices .search-field input {
+	height: 100%;
+}

@@ -240,6 +240,10 @@ class WC_PayPal_Standard_Subscriptions {
 		// Save the profile ID if it's not a cancellation/expiration request
 		if ( isset( $transaction_details['subscr_id'] ) && ! in_array( $transaction_details['txn_type'], array( 'subscr_cancel', 'subscr_eot' ) ) ) {
 			update_post_meta( $order_id, 'PayPal Subscriber ID', $transaction_details['subscr_id'] );
+
+			if ( 'S-' == substr( $transaction_details['subscr_id'], 0, 2 ) && 'disabled' != get_option( 'wcs_paypal_invalid_profile_id' ) ) {
+				update_option( 'wcs_paypal_invalid_profile_id', 'yes' );
+			}
 		}
 
 		// Get the subscription this IPN message relates to
@@ -741,8 +745,9 @@ class WC_PayPal_Standard_Subscriptions {
 
 		$item = WC_Subscriptions_Order::get_item_by_product_id( $order, $product_id );
 
-		if ( isset( $response['ACK'] ) && $response['ACK'] == 'Success' )
+		if ( isset( $response['ACK'] ) && $response['ACK'] == 'Success' ) {
 			$order->add_order_note( sprintf( __( 'Subscription "%s" cancelled with PayPal', 'woocommerce-subscriptions' ), $item['name'] ) );
+		}
 	}
 
 	/**
@@ -781,8 +786,9 @@ class WC_PayPal_Standard_Subscriptions {
 
 		$item = WC_Subscriptions_Order::get_item_by_product_id( $order, $product_id );
 
-		if ( isset( $response['ACK'] ) && $response['ACK'] == 'Success' )
+		if ( isset( $response['ACK'] ) && $response['ACK'] == 'Success' ) {
 			$order->add_order_note( sprintf( __( 'Subscription "%s" reactivated with PayPal', 'woocommerce-subscriptions' ), $item['name'] ) );
+		}
 	}
 
 	/**
@@ -845,19 +851,36 @@ class WC_PayPal_Standard_Subscriptions {
 		$response = curl_exec( $ch );
 
 		// If no response was received from PayPal there is no point parsing the response
-		if( ! $response && self::$debug )
+		if( ! $response && self::$debug ) {
 			self::$log->add( 'paypal', 'Calling PayPal to change_subscription_status failed: ' . curl_error( $ch ) . '(' . curl_errno( $ch ) . ')' );
+		}
 
 		curl_close( $ch );
 
 		// An associative array is more usable than a parameter string
 		parse_str( $response, $parsed_response );
 
-		if( ( 0 == sizeof( $parsed_response ) || ! array_key_exists( 'ACK', $parsed_response ) ) && self::$debug )
+		if( ( 0 == sizeof( $parsed_response ) || ! array_key_exists( 'ACK', $parsed_response ) ) && self::$debug ) {
 			self::$log->add( 'paypal', "Invalid HTTP Response for change_subscription_status POST request($api_request) to " . self::$api_endpoint );
+		}
 
-		if( $parsed_response['ACK'] == 'Failure' && self::$debug )
+		if( $parsed_response['ACK'] == 'Failure' && self::$debug ) {
 			self::$log->add( 'paypal', "Calling PayPal to change_subscription_status has Failed: " . $parsed_response['L_LONGMESSAGE0'] );
+
+			if ( 10002 == (int)$parsed_response['L_ERRORCODE0'] ) {
+
+				// Store the profile IDs affected
+				$profile_ids   = get_option( 'wcs_paypal_credentials_error_affected_profiles', '' );
+				if ( ! empty ( $profile_ids ) ) {
+					$profile_ids .= ', ';
+				}
+				$profile_ids .= $profile_id;
+				update_option( 'wcs_paypal_credentials_error_affected_profiles', $profile_ids );
+
+				// And set a flag to display notice
+				update_option( 'wcs_paypal_credentials_error', 'yes' );
+			}
+		}
 
 		return $parsed_response;
 	}
@@ -916,8 +939,9 @@ class WC_PayPal_Standard_Subscriptions {
 	 */
 	private static function get_wc_paypal_settings() {
 
-		if ( ! isset( self::$paypal_settings ) )
+		if ( ! isset( self::$paypal_settings ) ) {
 			self::$paypal_settings = get_option( 'woocommerce_paypal_settings' );
+		}
 
 		return self::$paypal_settings;
 	}
@@ -956,12 +980,35 @@ class WC_PayPal_Standard_Subscriptions {
 	 */
 	public static function maybe_show_admin_notice() {
 
-		self::get_wc_paypal_settings();
+		if ( isset( $_GET['wcs_disable_paypal_invalid_profile_id_notice'] ) ) {
+			update_option( 'wcs_paypal_invalid_profile_id', 'disabled' );
+		}
 
-		if ( ! in_array( get_woocommerce_currency(), apply_filters( 'woocommerce_paypal_supported_currencies', array( 'AUD', 'BRL', 'CAD', 'MXN', 'NZD', 'HKD', 'SGD', 'USD', 'EUR', 'JPY', 'TRY', 'NOK', 'CZK', 'DKK', 'HUF', 'ILS', 'MYR', 'PHP', 'PLN', 'SEK', 'CHF', 'TWD', 'THB', 'GBP', 'RMB' ) ) ) )
+		$current_options = self::get_wc_paypal_settings();
+
+		// Check if the API credentials are being saved - we can't do this on the 'woocommerce_update_options_payment_gateways_paypal' hook because it is triggered after 'admin_notices'
+		if ( isset( $_POST['woocommerce_paypal_api_username'] ) || isset( $_POST['woocommerce_paypal_api_password'] ) || isset( $_POST['woocommerce_paypal_api_signature'] ) ) {
+
+			$credentials_updated = false;
+
+			if ( isset( $_POST['woocommerce_paypal_api_username'] ) && $_POST['woocommerce_paypal_api_username'] != $current_options['api_username'] ) {
+				$credentials_updated = true;
+			} elseif ( isset( $_POST['woocommerce_paypal_api_password'] ) && $_POST['woocommerce_paypal_api_password'] != $current_options['api_password'] ) {
+				$credentials_updated = true;
+			} elseif ( isset( $_POST['woocommerce_paypal_api_signature'] ) && $_POST['woocommerce_paypal_api_signature'] != $current_options['api_signature'] ) {
+				$credentials_updated = true;
+			}
+
+			if ( $credentials_updated ) {
+				delete_option( 'wcs_paypal_credentials_error' );
+			}
+		}
+
+		if ( ! in_array( get_woocommerce_currency(), apply_filters( 'woocommerce_paypal_supported_currencies', array( 'AUD', 'BRL', 'CAD', 'MXN', 'NZD', 'HKD', 'SGD', 'USD', 'EUR', 'JPY', 'TRY', 'NOK', 'CZK', 'DKK', 'HUF', 'ILS', 'MYR', 'PHP', 'PLN', 'SEK', 'CHF', 'TWD', 'THB', 'GBP', 'RMB' ) ) ) ) {
 			$valid_for_use = false;
-		else
+		} else {
 			$valid_for_use = true;
+		}
 
 		if ( WC_Subscriptions::is_woocommerce_pre_2_1() ) {
 			$payment_gateway_tab_url = admin_url( 'admin.php?page=woocommerce_settings&tab=payment_gateways&section=WC_Gateway_Paypal' );
@@ -969,21 +1016,40 @@ class WC_PayPal_Standard_Subscriptions {
 			$payment_gateway_tab_url = admin_url( 'admin.php?page=wc-settings&tab=checkout&section=wc_gateway_paypal' );
 		}
 
-		if ( ! self::are_credentials_set() && $valid_for_use && 'yes' == self::$paypal_settings['enabled'] && ! has_action( 'admin_notices', 'WC_Subscriptions_Admin::admin_installed_notice' ) && current_user_can( 'manage_options' ) ) { ?>
+		if ( ! self::are_credentials_set() && $valid_for_use && 'yes' == self::$paypal_settings['enabled'] && ! has_action( 'admin_notices', 'WC_Subscriptions_Admin::admin_installed_notice' ) && current_user_can( 'manage_options' ) ) : ?>
 <div id="message" class="updated error">
-	<p>
-		<?php 
-		printf( __( 'PayPal is inactive for subscription transactions. Please %sset up the PayPal IPN%s and %senter your API credentials%s to enable PayPal for Subscriptions.', 'woocommerce-subscriptions' ),
+	<p><?php printf( __( 'PayPal is inactive for subscription transactions. Please %sset up the PayPal IPN%s and %senter your API credentials%s to enable PayPal for Subscriptions.', 'woocommerce-subscriptions' ),
 				'<a href="http://docs.woothemes.com/document/subscriptions/store-manager-guide/#section-4" target="_blank">',
 				'</a>',
 				'<a href="' . $payment_gateway_tab_url . '">',
 				'</a>'
-		); 
-		?>
+		); ?>
 	</p>
 </div>
-<?php
-		}
+<?php 	endif;
+
+		if ( false !== get_option( 'wcs_paypal_credentials_error' ) ) : ?>
+<div id="message" class="updated error">
+	<p><?php printf( __( 'There is a problem with PayPal. Your API credentials may be incorrect. Please update your %sAPI credentials%s. %sLearn more%s.', 'woocommerce-subscriptions' ),
+			'<a href="' . $payment_gateway_tab_url . '">',
+			'</a>',
+			'<a href="https://support.woothemes.com/hc/en-us/articles/202882473#paypal-credentials" target="_blank">',
+			'</a>' ); ?>
+	</p>
+</div>
+<?php 	endif;
+
+		if ( 'yes' == get_option( 'wcs_paypal_invalid_profile_id' ) ) : ?>
+<div id="message" class="updated error">
+	<p><?php printf( __( 'There is a problem with PayPal. Your PayPal account is issuing out-of-date subscription IDs. %sLearn more%s. %sDismiss%s.', 'woocommerce-subscriptions' ),
+			'<a href="https://support.woothemes.com/hc/en-us/articles/202882473#old-paypal-account" target="_blank">',
+			'</a>',
+			'<a href="' . add_query_arg( 'wcs_disable_paypal_invalid_profile_id_notice', 'true' ) . '">',
+			'</a>'
+		); ?>
+	</p>
+</div>
+<?php 	endif;
 	}
 
 	/**

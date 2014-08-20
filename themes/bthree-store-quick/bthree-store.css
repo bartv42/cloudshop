@@ -41,6 +41,7 @@ label {display: initial;}
 .main-navigation li a {
 	font-family:'Open Sans Condensed','Lucida Sans','Lucida Grande',sans-serif,sans-serif;font-weight:normal;
 	font-size: 150%;
+	border-bottom: 2px solid transparent;
 }
 
 
@@ -106,6 +107,13 @@ h3 label:hover {
 	font-size: 220%;
 	line-height: 0;
 	margin-top: 4%;
+}
+
+.variations label { /* e.g: Team size label on Cloud Team sub */
+	color: gray;
+	font-size: 130%;
+	position: relative;
+	top: 5px;
 }
 
 /* WOOCOMMERCE ALERTS */

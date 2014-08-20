@@ -111,7 +111,9 @@ class WC_Subscriptions_Payment_Gateways {
 				$amount_to_charge += $outstanding_payments;
 			}
 
-			do_action( 'scheduled_subscription_payment_' . $order->recurring_payment_method, $amount_to_charge, $order, $subscription['product_id'] );
+			if ( $amount_to_charge > 0 ) {
+				do_action( 'scheduled_subscription_payment_' . $order->recurring_payment_method, $amount_to_charge, $order, $subscription['product_id'] );
+			}
 		}
 	}
 

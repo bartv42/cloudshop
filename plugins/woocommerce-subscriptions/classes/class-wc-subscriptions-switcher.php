@@ -115,7 +115,7 @@ class WC_Subscriptions_Switcher {
 
 			}
 
-		} elseif ( ( is_cart() || is_checkout() ) && false !== ( $cart_item = self::cart_contains_subscription_switch() ) ) {
+		} elseif ( ( is_cart() || is_checkout() ) && ! is_order_received_page() && false !== ( $cart_item = self::cart_contains_subscription_switch() ) ) {
 
 			if ( ! WC_Subscriptions_Manager::user_owns_subscription( $cart_item['subscription_key'] ) ) {
 
@@ -545,7 +545,21 @@ class WC_Subscriptions_Switcher {
 
 		$subscription = WC_Subscriptions_Manager::get_subscription( $_GET['switch-subscription'] );
 
-		if ( $product_id == $subscription['product_id'] && ( empty( $variation_id ) || $variation_id == $subscription['variation_id'] ) ) {
+		// Check if the chosen variation's attributes are different to the existing subscription's attributes (to support switching between a "catch all" variation)
+		$original_order = new WC_Order( $subscription['order_id'] );
+		$product_id     = $subscription['product_id'];
+		$item           = WC_Subscriptions_Order::get_item_by_product_id( $original_order, $product_id );
+
+		$identical_attributes = true;
+
+		foreach ( $_POST as $key => $value ) {
+			if ( false !== strpos( $key, 'attribute_' ) && ! empty( $item[ str_replace( 'attribute_', '', $key ) ] ) && $item[ str_replace( 'attribute_', '', $key ) ] != $value ) {
+				$identical_attributes = false;
+				break;
+			}
+		}
+
+		if ( $product_id == $subscription['product_id'] && ( empty( $variation_id ) || ( $variation_id == $subscription['variation_id'] && true == $identical_attributes ) ) ) {
 			WC_Subscriptions::add_notice( __( 'You can not switch to the same subscription.', 'woocommerce-subscriptions' ), 'error' );
 			$is_valid = false;
 		}
@@ -904,7 +918,7 @@ class WC_Subscriptions_Switcher {
 	public static function is_purchasable( $is_purchasable, $product ) {
 		global $woocommerce;
 
-		if ( false === $is_purchasable && WC_Subscriptions_Product::is_subscription( $product->id ) && 'no' != $product->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $product->id, $product->limit_subscriptions ) ) {
+		if ( false === $is_purchasable && WC_Subscriptions_Product::is_subscription( $product->id ) && 'no' != $product->limit_subscriptions && is_user_logged_in() && WC_Subscriptions_Manager::user_has_subscription( 0, $product->id, $product->limit_subscriptions ) ) {
 
 			// Adding to cart from the product page
 			if ( isset ( $_GET['switch-subscription'] ) ) {

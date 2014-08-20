@@ -301,8 +301,7 @@ jQuery(document).ready(function($){
 
 	if($.getParameterByName('select_subscription')=='true'){
 		$('select#product-type option[value="'+WCSubscriptions.productType+'"]').attr('selected', 'selected');
-		$('select#product-type').trigger('woocommerce-product-type-change');
-		$('select#product-type').select();
+		$('select#product-type').select().change();
 	}
 
 	// Before saving a subscription product, validate the trial period
@@ -572,7 +571,7 @@ jQuery(document).ready(function($){
 		var order_shipping_tax 	= 0;
 		var order_tax 			= 0;
 		var cart_discount		= 0;
-		var order_discount		= $('#_order_recurring_discount_total').val();
+		var order_discount		= $('#_order_recurring_discount_total').val() || '0';
 
 		if ('true' == WCSubscriptions.isWCPre21) {
 			var cart_discount 		= 0;
@@ -646,14 +645,8 @@ jQuery(document).ready(function($){
 			cart_discount = order_discount;
 		}
 
-		// Total
-		var order_total = line_totals + order_tax + order_shipping + order_shipping_tax - order_discount;
-		order_total = order_total.toFixed( 2 );
-
 		// Set fields
-		$('#_order_recurring_discount_total').val( cart_discount ).change();
-		$('#_order_recurring_tax_total').val( order_tax ).change();
-		$('#_order_recurring_total').val( order_total ).change();
+		$('#_order_recurring_total').val( accounting.formatNumber( line_totals + order_tax + order_shipping - order_discount, woocommerce_admin_meta_boxes.currency_format_num_decimals, '', woocommerce_admin.mon_decimal_point ) ).change();
 
 		$('#woocommerce-order-totals').unblock();
 

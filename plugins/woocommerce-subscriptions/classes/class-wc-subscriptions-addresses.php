@@ -161,16 +161,18 @@ jQuery(document).ready(function($){
 
 			$users_subscriptions = WC_Subscriptions_Manager::get_users_subscriptions( $user_id );
 
-			foreach ( $users_subscriptions as $subscription )
+			foreach ( $users_subscriptions as $subscription ) {
 				self::maybe_update_order_address( $subscription, $address_fields );
+			}
 
 		} elseif ( isset( $_POST['update_subscription_address'] ) ) {
 
 			$subscription = WC_Subscriptions_Manager::get_subscription( $_POST['update_subscription_address'] );
 
 			// Update the address only if the user actually owns the subscription
-			if ( ! empty( $subscription ) )
+			if ( ! empty( $subscription ) ) {
 				self::maybe_update_order_address( $subscription, $address_fields );
+			}
 
 		}
 	}

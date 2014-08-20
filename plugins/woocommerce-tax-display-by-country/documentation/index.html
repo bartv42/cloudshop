@@ -1,0 +1,244 @@
+<!doctype html>  
+<!--[if IE 6 ]><html lang="en-us" class="ie6"> <![endif]-->
+<!--[if IE 7 ]><html lang="en-us" class="ie7"> <![endif]-->
+<!--[if IE 8 ]><html lang="en-us" class="ie8"> <![endif]-->
+<!--[if (gt IE 7)|!(IE)]><!-->
+<html lang="en-us"><!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	
+	<title>Aelia Tax Display by Currency for WooCommerce</title>
+	
+	<meta name="description" content="Tax Display by Country for WooCommerce 2.0.x/2.1 allows your shop to display prices with or without tax and to pre-select the billing country, which is detected automatically based on their IP address, using Geolocation resolution.">
+	<meta name="author" content="Aelia">
+	<meta name="copyright" content="Aelia">
+	<meta name="generator" content="Documenter v2.0 http://rxa.li/documenter">
+	<meta name="date" content="2014-07-14T00:00:00+02:00">
+	
+	<link rel="stylesheet" href="assets/css/documenter_style.css" media="all">
+	
+	
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+
+	<script src="assets/js/jquery.js"></script>
+	
+	<script src="assets/js/jquery.scrollTo.js"></script>
+	<script src="assets/js/jquery.easing.js"></script>
+	
+	<script>document.createElement('section');var duration='500',easing='swing';</script>
+	<script src="assets/js/script.js"></script>
+	
+	<style>
+		html{background-color:#FFFFFF;color:#383838;}
+		::-moz-selection{background:#444444;color:#DDDDDD;}
+		::selection{background:#444444;color:#DDDDDD;}
+		#documenter_sidebar #documenter_logo{background-image:url(assets/images/image_8.png);}
+		a{color:#0000FF;}
+		.btn {
+			border-radius:3px;
+		}
+		.btn-primary {
+			  background-image: -moz-linear-gradient(top, #0088CC, #0044CC);
+			  background-image: -ms-linear-gradient(top, #0088CC, #0044CC);
+			  background-image: -webkit-gradient(linear, 0 0, 0 0088CC%, from(#DDDDDD), to(#0044CC));
+			  background-image: -webkit-linear-gradient(top, #0088CC, #0044CC);
+			  background-image: -o-linear-gradient(top, #0088CC, #0044CC);
+			  background-image: linear-gradient(top, #0088CC, #0044CC);
+			  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0088CC', endColorstr='#0044CC', GradientType=0);
+			  border-color: #0044CC #0044CC #bfbfbf;
+			  color:#FFFFFF;
+		}
+		.btn-primary:hover,
+		.btn-primary:active,
+		.btn-primary.active,
+		.btn-primary.disabled,
+		.btn-primary[disabled] {
+		  border-color: #0088CC #0088CC #bfbfbf;
+		  background-color: #0044CC;
+		}
+		hr{border-top:1px solid #EBEBEB;border-bottom:1px solid #FFFFFF;}
+		#documenter_sidebar, #documenter_sidebar ul a{background-color:#DDDDDD;color:#222222;}
+		#documenter_sidebar ul a{-webkit-text-shadow:1px 1px 0px #EEEEEE;-moz-text-shadow:1px 1px 0px #EEEEEE;text-shadow:1px 1px 0px #EEEEEE;}
+		#documenter_sidebar ul{border-top:1px solid #AAAAAA;}
+		#documenter_sidebar ul a{border-top:1px solid #EEEEEE;border-bottom:1px solid #AAAAAA;color:#444444;}
+		#documenter_sidebar ul a:hover{background:#444444;color:#DDDDDD;border-top:1px solid #444444;}
+		#documenter_sidebar ul a.current{background:#444444;color:#DDDDDD;border-top:1px solid #444444;}
+		#documenter_copyright{display:block !important;visibility:visible !important;}
+	</style>
+	
+</head>
+<body class="documenter-project-aelia-tax-display-by-currency-for-woocommerce">
+	<div id="documenter_sidebar">
+		<a href="#documenter_cover" id="documenter_logo"></a>
+		<ul id="documenter_nav">
+			<li><a class="current" href="#documenter_cover">Start</a></li>
+				
+			<li><a href="#product_description" title="Product description">Product description</a></li>
+			<li><a href="#installation_and_basic_configuration" title="Installation and basic configuration">Installation and basic configuration</a></li>
+			<li><a href="#optional_settings" title="Optional settings">Optional settings</a></li>
+			<li><a href="#sources_and_credits" title="Sources and Credits">Sources and Credits</a></li>
+			<li><a href="#support" title="Support">Support</a></li>
+
+		</ul>
+		<div id="documenter_copyright">Copyright Aelia 2014<br>
+		made with the <a href="http://rxa.li/documenter">Documenter v2.0</a> 
+		</div>
+	</div>
+	<div id="documenter_content">
+	<section id="documenter_cover">
+	<h1>Aelia Tax Display by Currency for WooCommerce</h1>
+	
+	<div id="documenter_buttons">
+		<a href="https://aelia.freshdesk.com/support/solutions/3000000265" class="btn btn-primary btn-large">Support Portal</a> 
+	</div>
+	<hr>
+	<ul>
+	<li>created: 03/10/2011</li>
+	<li>latest update: 07/14/2014</li>
+	<li>by: Aelia</li>
+	<li><a href=""></a></li>
+	<li>email: <a href="mailto:&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#64;&#97;&#101;&#108;&#105;&#97;&#46;&#99;&#111;">&#115;&#117;&#112;&#112;&#111;&#114;&#116;&#64;&#97;&#101;&#108;&#105;&#97;&#46;&#99;&#111;</a></li>
+	</ul>
+	<p>Thank you for purchasing our product. If you have any questions that are beyond the scope of this help file, please feel free to open a support request using our portal (see link below).</p>
+	</section>
+	
+	<section id="product_description">
+	<div class="page-header"><h3>Product description</h3><hr class="notop"></div>
+<p>
+	Tax Display by Country for WooCommerce 2.0.x/2.1 allows you to display your product prices with our without taxes, depending on your visitors&rsquo; country, and to pre-select checkout country automatically. When you sell internationally, customers can get confused by the prices, as they might contain VAT/Tax which doesn&rsquo;t apply to every sale.</p>
+<p>
+	Also, some customers overlook the &ldquo;country&rdquo; field at checkout and en up entering an incorrect address, or getting validation errors. Those factors combined can easily drive a potential customer away. <strong>Our product will remove those obstacles and help you increase sales</strong>.</p>
+</section>
+<section id="installation_and_basic_configuration">
+	<div class="page-header"><h3>Installation and basic configuration</h3><hr class="notop"></div>
+<p>	In the following paragraph, we show how to install and configure the Multi-currency Mijireh plugin. We are going to show how to configure the plugin as follows:</p>
+<ul>	<li>		Display prices <strong>inclusive</strong> of VAT for UK and Ireland.</li>
+	<li>		Display prices <strong>exclusive</strong> of tax for United States and Canada.</li>
+</ul>
+<h3>
+	0. Double check requirements</h3>
+<p>	The Tax Display by Country plugin requires the following:</p>
+<ul>	<li>		WordPress 3.6 or later</li>
+	<li>		PHP 5.3 or later</li>
+	<li>		WooCommerce 2.0.x/2.1.x. Plugin has been tested until WooCommerce 2.1.12.</li>
+	<li>		AFC plugin for WooCommerce 1.0.2 or later, available as a free download:&nbsp;<a href="http://dev.pathtoenlightenment.net/downloads/wc-aelia-foundation-classes.zip">http://dev.pathtoenlightenment.net/downloads/wc-aelia-foundation-classes.zip</a></li>
+</ul>
+<p>	<strong>Note</strong>: the plugin is fully compatible&nbsp;with the <a href="http://dev.pathtoenlightenment.net/shop/currency-switcher-woocommerce/">Currency Switcher for WooCommerce, our leading multi-currency solution</a>, but it does not require it.</p>
+<h3>
+	1. Install and activate the plugin</h3>
+<div>
+	Upload the plugin to your site and enabled it like you would do with any other. Ensure that the plugin is activated correctly. Upon correct activation, you should see a new menu in <em>WordPress Admin area &gt;&nbsp;</em><em>WooCommerce &gt; Tax Display by Country</em>.</div>
+<div>
+	&nbsp;</div>
+<div>
+	<img alt="Tax Display by Country menu item" src="assets/images/image_4.png" style="width: 758px; height: 453px;"></div>
+<div>
+	<h3>
+		2. Configure the plugin</h3>
+</div>
+<div>
+	By clicking on&nbsp;<em>WooCommerce &gt; Tax Display by Country</em>, you will open the plugin settings page, which will be empty.</div>
+<div>
+	&nbsp;</div>
+<div>
+	<img alt="Plugin settings page" src="assets/images/image_3.png" style="width: 1343px; height: 529px;"></div>
+<div>
+	&nbsp;</div>
+<div>
+	As per our example, we add United Kingdom and Ireland to the first row, and we tell the plugin to show cart prices and shop prices <strong>including tax</strong>. We also add a price suffix to clearly show clients from UK and Ireland that prices include tax, which is called VAT in Europe.</div>
+<div>
+	&nbsp;</div>
+<div>
+	<img alt="Settings for UK and Ireland" src="assets/images/image_6.png" style="width: 1343px; height: 533px;"></div>
+<div>
+	&nbsp;</div>
+<div>
+	The first row is configuered. We now add another row by clicking on &quot;Insert row&quot;. In the new row, we add United States and Canada, and we set that we want to display product <strong>excluding tax</strong>. No suffix is needed, in this case.</div>
+<div>
+	&nbsp;</div>
+<div>
+	<img alt="Settings for United States and Canada" src="assets/images/image_7.png" style="width: 1343px; height: 573px;"></div>
+<div>
+	&nbsp;</div>
+<div>
+	Finally, we click on the <strong>Save Changes</strong> button, at the bottom of the page, and the configuration will be saved.</div>
+<div>
+	&nbsp;</div>
+<div>
+	<strong>The plugin is now configured</strong> and will display prices including or excluding taxes, based on the country detected via Geolocation resolution.</div>
+<div>
+	&nbsp;</div>
+<div>
+	&nbsp;</div>
+</section>
+<section id="optional_settings">
+	<div class="page-header"><h3>Optional settings</h3><hr class="notop"></div>
+<p>	The Tax Display by Country plugin includes a convenient widget, which allows customers to manually pre-select their billing country, without having to reach the checkout. Such feature is invaluable for customers who travel frequently, as the country from which they connect may not match the billing country.</p>
+<p>	<strong>Also, pre-selecting the billing country can increase sales</strong>, by reducing the frequency in which customers abandon an order because they get validation errors when they enter a post code that doesn&#39;t match the billing country that WooCommerce displays by default.</p>
+<h2>
+	How to use the billing country selector widget</h2>
+<p>	You can display the billing country selector widget in two ways.</p>
+<h3>
+	1. Using WordPress widgets</h3>
+<p>	You can find the new widget by clicking on <em>WordPress Admin &gt; Appearance &gt; Widgets</em> menu.</p>
+<p>	<img alt="Widgets menu" src="assets/images/image_1.png" style="width: 331px; height: 248px;"></p>
+<p>	Unfortunately, due to the new layout used by WordPress to display the available widgets, the widget title is partially hidden. The following screenshot will help you finding it.</p>
+<p>	<img alt="Locating widget" src="assets/images/image_2.png" style="width: 649px; height: 395px;"></p>
+<p>	All you have to do is drag and drop the widget in any of the available widget areas, and it will appear automatically to your visitors.</p>
+<h3>
+	2. Using a shortcode</h3>
+<p>	You can display the country selector widget using the following shortcode anywhere in your pages:</p>
+<pre>
+[aelia_tdbc_billing_country_selector_widget title=&quot;Widget title (optional)&quot; widget_type=&quot;dropdown&quot;]</pre>
+<div>
+	&nbsp;</div>
+<div>
+	<div>
+		The shortcode accepts the following parameters:</div>
+	<ul>		<li>			<strong>title</strong><br>
+			The widget title (optional)</li>
+		<li>			<strong>widget_type</strong><br>
+			The widget type. Out of the box, the widget supports only dropdown. Further types can be added by implementing a filter in your theme for <em>wc_aelia_tdbc_billing_country_selector_widget_types</em> hook. If this parameter is not specified, dropdown widget type will be rendered by default.</li>
+	</ul>
+</div>
+<div>
+	In the following screenshot, you can see the shortcode used in a sample page we created:</div>
+<div>
+	&nbsp;</div>
+<div>
+	<img alt="Billing country widget shortcode used in a sample page" src="assets/images/image_5.png"  ></div>
+<div>
+	&nbsp;</div>
+<div>
+	No further configuration is required, your shop is now ready to go.</div>
+</section>
+<section id="sources_and_credits">
+	<div class="page-header"><h3>Sources and Credits</h3><hr class="notop"></div>
+<p>	I&#39;ve used the following images, icons or other files as listed.</p>
+<ul>	<li>		File name from file author</li>
+	<li>		File name from file author</li>
+	<li>		File name from file author</li>
+	<li>		File name from file author</li>
+</ul>
+<hr>
+<p>	Once again, thank you so much for purchasing this theme. As I said at the beginning, I&#39;d be glad to help you if you have any questions relating to this theme. No guarantees, but I&#39;ll do my best to assist. If you have a more general question relating to the themes on ThemeForest, you might consider visiting the forums and asking your question in the &quot;Item Discussion&quot; section.</p>
+<p>	<strong>Your Name</strong></p>
+</section>
+<section id="support">
+	<div class="page-header"><h3>Support</h3><hr class="notop"></div>
+<div>
+	We designed this plugin to be robust and effective, as well as intuitive and easy to use. However, we are aware that, despite all best efforts, issues can arise and that there is always room for improvement.</div>
+<div>
+	&nbsp;</div>
+<div>
+	Should you need assistance, or if you just would like to get in touch with us, please use one of the links below.</div>
+<ul>	<li>		<strong>To request support</strong>, <a href="https://aelia.freshdesk.com/support/solutions/3000000265">please use our Support portal</a>. The portal also contains a <a href="https://aelia.freshdesk.com/support/solutions/3000000265">Knowledge Base</a>, where you can find the answers to the most common questions related to our products.</li>
+	<li>		<strong>To send us general feedback</strong>, suggestions, or enquiries, <a href="http://dev.pathtoenlightenment.net/contact">please use the contact form on our website</a>.</li>
+</ul>
+<div>
+	&nbsp;</div>
+</section>
+
+	</div>
+</body>
+</html>

@@ -2,3 +2,5 @@
 index.php
 uploads
 upgrade
+plugins/woocommerce-pdf-invoices-packing-slips/lib/dompdf/lib/fonts/log.htm
+plugins/woocommerce/logs

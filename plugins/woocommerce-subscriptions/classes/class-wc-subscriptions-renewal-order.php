@@ -941,7 +941,8 @@ class WC_Subscriptions_Renewal_Order {
 					$variation      = get_product( $variation_id );
 
 					if ( false === $variation ) {
-						WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );							$variation_data = array();
+						WC_Subscriptions::add_notice( self::$product_deleted_error_message, 'error' );
+						$variation_data = array();
 					} else {
 						$variation_data = $variation->get_variation_attributes();
 					}
@@ -952,6 +953,15 @@ class WC_Subscriptions_Renewal_Order {
 					$variation_id   = $product->get_variation_id();
 					$variation_data = $product->get_variation_attributes();
 
+				}
+
+				// Make sure a value is set for each attribute - handles the "catch all" variations which do not have a value set for an attribute, but which will have been set on the cart item when the customer added the item
+				if ( ! empty( $variation_data ) ) {
+					foreach ( $variation_data as $attribute_name => $attribute_value ) {
+						if ( empty( $attribute_value ) && ! empty( $item[ str_replace( 'attribute_', '', $attribute_name ) ] ) ) {
+							$variation_data[ $attribute_name ] = $item[ str_replace( 'attribute_', '', $attribute_name ) ];
+						}
+					}
 				}
 
 				$cart_item_data = array(
@@ -1021,6 +1031,7 @@ class WC_Subscriptions_Renewal_Order {
 				$first_order_item = reset( $order_items );
 				$product_id       = WC_Subscriptions_Order::get_items_product_id( $first_order_item );
 				$product          = get_product( $product_id );
+				$item             = WC_Subscriptions_Order::get_item_by_product_id( $original_order, $product_id );
 
 				$variation_id   = '';
 				$variation_data = array();
@@ -1033,7 +1044,6 @@ class WC_Subscriptions_Renewal_Order {
 				// Make sure we don't actually need the variation ID (if the product was a variation, it will have a variation ID; however, if the product has changed from a simple subscription to a variable subscription, there will be no variation_id)
 				} elseif ( $product->is_type( array( 'variable-subscription' ) ) && ! empty( $item['variation_id'] ) ) {
 
-					$item           = WC_Subscriptions_Order::get_item_by_product_id( $original_order, $product_id );
 					$variation_id   = $item['variation_id'];
 					$variation      = get_product( $variation_id );
 
@@ -1050,6 +1060,15 @@ class WC_Subscriptions_Renewal_Order {
 					$variation_id   = $product->get_variation_id();
 					$variation_data = $product->get_variation_attributes();
 
+				}
+
+				// Make sure a value is set for each attribute - handles the "catch all" variations which do not have a value set for an attribute, but which will have been set on the cart item when the customer added the item
+				if ( ! empty( $variation_data ) ) {
+					foreach ( $variation_data as $attribute_name => $attribute_value ) {
+						if ( empty( $attribute_value ) && ! empty( $item[ str_replace( 'attribute_', '', $attribute_name ) ] ) ) {
+							$variation_data[ $attribute_name ] = $item[ str_replace( 'attribute_', '', $attribute_name ) ];
+						}
+					}
 				}
 
 				$woocommerce->cart->empty_cart( true );
@@ -1155,7 +1174,7 @@ class WC_Subscriptions_Renewal_Order {
 				$original_order = new WC_Order( $original_order_post[0]->ID );
 				printf(
 					'<p>%1$s <a href="%2$s">%3$s</a></p>',
-					__( 'Superseeded by Subscription Purchased in Order:', 'woocommerce-subscriptions' ),
+					__( 'Renewed by Subscription Purchased in Order:', 'woocommerce-subscriptions' ),
 					get_edit_post_link( $original_order->id ),
 					$original_order->get_order_number()
 				);
@@ -1201,7 +1220,7 @@ class WC_Subscriptions_Renewal_Order {
 	public static function is_purchasable( $is_purchasable, $product ) {
 		global $woocommerce;
 
-		if ( false === $is_purchasable && WC_Subscriptions_Product::is_subscription( $product->id ) && 'no' != $product->limit_subscriptions && ( ( 'active' == $product->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $product->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $product->id, $product->limit_subscriptions ) ) ) {
+		if ( false === $is_purchasable && WC_Subscriptions_Product::is_subscription( $product->id ) && 'no' != $product->limit_subscriptions && is_user_logged_in() && ( ( 'active' == $product->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $product->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $product->id, $product->limit_subscriptions ) ) ) {
 
 			// Adding to cart from the product page
 			if ( isset( $_GET['renew_subscription'] ) || isset( $_GET['manual_subscription_renewal'] ) ) {
