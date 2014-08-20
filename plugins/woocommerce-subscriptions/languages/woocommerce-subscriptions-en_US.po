@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce Subscriptions v1.5.9\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-08-20 11:27:55+0000\n"
+"PO-Revision-Date: 2014-08-20 11:28:59+0000\n"
 "Last-Translator: admin <bart@blendernation.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1751,7 +1751,7 @@ msgstr[1] ""
 #, php-format
 #@ woocommerce-subscriptions
 msgid "%s with %s free trial"
-msgstr "%s with %s initial period"
+msgstr "%s with %s minimum period"
 
 #: classes/class-wc-subscriptions-product.php:376
 #, php-format
