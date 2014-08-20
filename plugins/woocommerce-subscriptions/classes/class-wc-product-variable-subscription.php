@@ -415,26 +415,29 @@ class WC_Product_Variable_Subscription extends WC_Product_Variable {
 
 			if ( $this->is_on_sale() && isset( $this->min_variation_price ) && $this->min_variation_regular_price !== $this->get_price() ) {
 
-				if ( ! $this->min_variation_price || $this->min_variation_price !== $this->max_variation_price )
+				if ( ! $this->min_variation_price || $this->min_variation_price !== $this->max_variation_price ) {
 					$price .= $this->get_price_html_from_text();
+				}
 
-				$price .= $this->get_price_html_from_to( $this->min_variation_regular_price, $this->get_price() );
+				$price .= $this->get_price_html_from_to( $this->get_variation_price( 'min', true ), $this->get_variation_price( 'max', true ) );
 
 			} else {
 
-				if ( $this->min_variation_price !== $this->max_variation_price )
+				if ( $this->min_variation_price !== $this->max_variation_price ) {
 					$price .= $this->get_price_html_from_text();
+				}
 
-				$price .= woocommerce_price( $this->get_price() );
+				$price .= wc_price( $this->get_variation_price( 'min', true ) );
 
 			}
 
 			// Make sure the price contains "From:" when billing schedule differs between variations
 			if ( false === strpos( $price, $this->get_price_html_from_text() ) ) {
-				if ( $this->subscription_period !== $this->max_variation_period )
+				if ( $this->subscription_period !== $this->max_variation_period ) {
 					$price = $this->get_price_html_from_text() . $price;
-				elseif ( $this->subscription_period_interval !== $this->max_variation_period_interval )
+				} elseif ( $this->subscription_period_interval !== $this->max_variation_period_interval ) {
 					$price = $this->get_price_html_from_text() . $price;
+				}
 			}
 
 			$price .= $this->get_price_suffix();
@@ -444,6 +447,49 @@ class WC_Product_Variable_Subscription extends WC_Product_Variable {
 		}
 
 		return apply_filters( 'woocommerce_variable_subscription_price_html', $price, $this );
+	}
+
+	/**
+	 * Returns the sign up fee (including tax) by filtering the products price used in
+	 * @see WC_Product::get_price_including_tax( $qty )
+	 *
+	 * @return string
+	 */
+	public function get_sign_up_fee_including_tax( $qty = 1 ) {
+
+		add_filter( 'woocommerce_get_price', array( &$this, 'get_sign_up_fee' ), 100, 0 );
+
+		$sign_up_fee_including_tax = parent::get_price_including_tax( $qty );
+
+		remove_filter( 'woocommerce_get_price', array( &$this, 'get_sign_up_fee' ), 100, 0 );
+
+		return $sign_up_fee_including_tax;
+	}
+
+	/**
+	 * Returns the sign up fee (excluding tax) by filtering the products price used in
+	 * @see WC_Product::get_price_excluding_tax( $qty )
+	 *
+	 * @return string
+	 */
+	public function get_sign_up_fee_excluding_tax( $qty = 1 ) {
+
+		add_filter( 'woocommerce_get_price', array( &$this, 'get_sign_up_fee' ), 100, 0 );
+
+		$sign_up_fee_excluding_tax = parent::get_price_excluding_tax( $qty );
+
+		remove_filter( 'woocommerce_get_price', array( &$this, 'get_sign_up_fee' ), 100, 0 );
+
+		return $sign_up_fee_excluding_tax;
+	}
+
+	/**
+	 * Return the sign-up fee for this product
+	 *
+	 * @return string
+	 */
+	public function get_sign_up_fee() {
+		return WC_Subscriptions_Product::get_sign_up_fee( $this );
 	}
 
 	/**
@@ -485,7 +531,7 @@ class WC_Product_Variable_Subscription extends WC_Product_Variable {
 
 		$purchasable = parent::is_purchasable();
 
-		if ( true === $purchasable && 'no' != $this->limit_subscriptions && ( ( 'active' == $this->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, $this->limit_subscriptions ) ) && false === strpos( $_SERVER['REQUEST_URI'], 'order-received' ) ) { // we can't use is_order_received_page() becuase get_cart_from_session() is called before the query vars are setup
+		if ( true === $purchasable && 'no' != $this->limit_subscriptions && is_user_logged_in() && ( ( 'active' == $this->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, $this->limit_subscriptions ) ) && false === strpos( $_SERVER['REQUEST_URI'], 'order-received' ) ) { // we can't use is_order_received_page() becuase get_cart_from_session() is called before the query vars are setup
 			$purchasable = false;
 		}
 

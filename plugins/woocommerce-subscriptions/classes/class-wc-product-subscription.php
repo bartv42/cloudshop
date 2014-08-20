@@ -158,7 +158,7 @@ class WC_Product_Subscription extends WC_Product_Simple {
 
 		$purchasable = parent::is_purchasable();
 
-		if ( true === $purchasable && 'no' != $this->limit_subscriptions && ( ( 'active' == $this->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, $this->limit_subscriptions ) ) && false === strpos( $_SERVER['REQUEST_URI'], 'order-received' ) ) { // we can't use is_order_received_page() becuase get_cart_from_session() is called before the query vars are setup
+		if ( true === $purchasable && 'no' != $this->limit_subscriptions && is_user_logged_in() && ( ( 'active' == $this->limit_subscriptions && WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, 'on-hold' ) ) || WC_Subscriptions_Manager::user_has_subscription( 0, $this->id, $this->limit_subscriptions ) ) && false === strpos( $_SERVER['REQUEST_URI'], 'order-received' ) ) { // we can't use is_order_received_page() becuase get_cart_from_session() is called before the query vars are setup
 			$purchasable = false;
 		}
 

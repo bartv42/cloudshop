@@ -289,8 +289,9 @@ class WC_Subscriptions_Order {
 		$period = self::get_item_meta( $order, '_subscription_trial_period', $product_id, '' );
 
 		// Backward compatibility
-		if ( empty( $period ) )
+		if ( empty( $period ) ) {
 			$period = self::get_subscription_period( $order, $product_id );
+		}
 
 		return $period;
 	}
@@ -316,20 +317,22 @@ class WC_Subscriptions_Order {
 	 */
 	public static function get_item_sign_up_fee( $order, $product_id = '' ) {
 
-		if ( ! is_object( $order ) )
+		if ( ! is_object( $order ) ) {
 			$order = new WC_Order( $order );
+		}
 
 		$item = self::get_item_by_product_id( $order, $product_id );
 
 		$line_subtotal           = $order->get_line_subtotal( $item );
 		$recurring_line_subtotal = self::get_item_recurring_amount( $order, $product_id );
 
-		if ( self::get_subscription_trial_length( $order, $product_id ) > 0 )
+		if ( self::get_subscription_trial_length( $order, $product_id ) > 0 ) {
 			$sign_up_fee = $line_subtotal;
-		else if ( $line_subtotal != $recurring_line_subtotal )
+		} else if ( $line_subtotal != $recurring_line_subtotal ) {
 			$sign_up_fee = max( $line_subtotal - self::get_item_recurring_amount( $order, $product_id ), 0 );
-		else
+		} else {
 			$sign_up_fee = 0;
+		}
 
 		return $sign_up_fee;
 	}
@@ -354,8 +357,9 @@ class WC_Subscriptions_Order {
 			$next_payment_timestamp = self::calculate_next_payment_date( $order, $product_id, 'timestamp', $deprecated );
 		} else {
 
-			if ( ! is_object( $order ) )
+			if ( ! is_object( $order ) ) {
 				$order = new WC_Order( $order );
+			}
 
 			$subscription_key       = WC_Subscriptions_Manager::get_subscription_key( $order->id, $product_id );
 			$next_payment_timestamp = WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $order->user_id, 'timestamp' );
@@ -384,8 +388,9 @@ class WC_Subscriptions_Order {
 			_deprecated_argument( __CLASS__ . '::' . __FUNCTION__, '1.2' );
 			$next_payment_date = self::calculate_next_payment_date( $order, $product_id, 'mysql', $deprecated );
 		} else {
-			if ( ! is_object( $order ) )
+			if ( ! is_object( $order ) ) {
 				$order = new WC_Order( $order );
+			}
 
 			$subscription_key  = WC_Subscriptions_Manager::get_subscription_key( $order->id, $product_id );
 			$next_payment_date = WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $order->user_id, 'mysql' );
@@ -410,8 +415,9 @@ class WC_Subscriptions_Order {
 	 */
 	public static function get_last_payment_date( $order, $product_id ) {
 
-		if ( ! is_object( $order ) )
+		if ( ! is_object( $order ) ) {
 			$order = new WC_Order( $order );
+		}
 
 		$subscription_key  = WC_Subscriptions_Manager::get_subscription_key( $order->id, $product_id );
 		$last_payment_date = WC_Subscriptions_Manager::get_last_payment_date( $subscription_key, $order->user_id );
@@ -436,8 +442,9 @@ class WC_Subscriptions_Order {
 	 */
 	public static function calculate_next_payment_date( $order, $product_id, $type = 'mysql', $from_date = '' ) {
 
-		if ( ! is_object( $order ) )
+		if ( ! is_object( $order ) ) {
 			$order = new WC_Order( $order );
+		}
 
 		$from_date_arg = $from_date;
 
@@ -448,8 +455,8 @@ class WC_Subscriptions_Order {
 		$subscription_trial_period = self::get_subscription_trial_period( $order, $product_id );
 		$subscription_length       = self::get_subscription_length( $order, $product_id );
 
-		$trial_end_time   = ( ! empty( $subscription['trial_expiry_date'] ) ) ? $subscription['trial_expiry_date'] : WC_Subscriptions_Product::get_trial_expiration_date( $product_id, get_gmt_from_date( $order->order_date ) );
-		$trial_end_time   = strtotime( $trial_end_time );
+		$trial_end_time = ( ! empty( $subscription['trial_expiry_date'] ) ) ? $subscription['trial_expiry_date'] : WC_Subscriptions_Product::get_trial_expiration_date( $product_id, get_gmt_from_date( $order->order_date ) );
+		$trial_end_time = strtotime( $trial_end_time );
 
 		// If the subscription is not active, there is no next payment date
 		if ( $subscription['status'] != 'active' || $subscription_interval == $subscription_length ) {
@@ -465,8 +472,9 @@ class WC_Subscriptions_Order {
 		} else {
 
 			// We have a timestamp
-			if ( ! empty( $from_date ) && is_numeric( $from_date ) )
+			if ( ! empty( $from_date ) && is_numeric( $from_date ) ) {
 				$from_date = date( 'Y-m-d H:i:s', $from_date );
+			}
 
 			if ( empty( $from_date ) ) {
 
@@ -488,19 +496,21 @@ class WC_Subscriptions_Order {
 					$failed_payment_periods = $failed_payment_count * $subscription_interval;
 					$from_timestamp = strtotime( $from_date );
 
-					if ( 'month' == $subscription_period )
+					if ( 'month' == $subscription_period ) {
 						$from_date = date( 'Y-m-d H:i:s', WC_Subscriptions::add_months( $from_timestamp, $failed_payment_periods ) );
-					else // Safe to just add the billing periods
+					} else { // Safe to just add the billing periods
 						$from_date = date( 'Y-m-d H:i:s', strtotime( "+ {$failed_payment_periods} {$subscription_period}", $from_timestamp ) );
+					}
 				}
 			}
 
 			$from_timestamp = strtotime( $from_date );
 
-			if ( 'month' == $subscription_period ) // Workaround potential PHP issue
+			if ( 'month' == $subscription_period ) { // Workaround potential PHP issue
 				$next_payment_timestamp = WC_Subscriptions::add_months( $from_timestamp, $subscription_interval );
-			else
+			} else {
 				$next_payment_timestamp = strtotime( "+ {$subscription_interval} {$subscription_period}", $from_timestamp );
+			}
 
 			// Make sure the next payment is in the future
 			$i = 1;
@@ -516,8 +526,9 @@ class WC_Subscriptions_Order {
 		}
 
 		// If the subscription has an expiry date and the next billing period comes after the expiration, return 0
-		if ( isset( $subscription['expiry_date'] ) && 0 != $subscription['expiry_date'] && ( $next_payment_timestamp + 120 ) > strtotime( $subscription['expiry_date'] ) )
+		if ( isset( $subscription['expiry_date'] ) && 0 != $subscription['expiry_date'] && ( $next_payment_timestamp + 120 ) > strtotime( $subscription['expiry_date'] ) ) {
 			$next_payment_timestamp =  0;
+		}
 
 		$next_payment = ( 'mysql' == $type && 0 != $next_payment_timestamp ) ? date( 'Y-m-d H:i:s', $next_payment_timestamp ) : $next_payment_timestamp;
 
@@ -546,13 +557,15 @@ class WC_Subscriptions_Order {
 	 */
 	public static function get_item_by_product_id( $order, $product_id = '' ) {
 
-		if ( ! is_object( $order ) )
+		if ( ! is_object( $order ) ) {
 			$order = new WC_Order( $order );
+		}
 
-		foreach ( $order->get_items() as $item )
+		foreach ( $order->get_items() as $item ) {
 			if ( ( self::get_items_product_id( $item ) == $product_id || empty( $product_id ) ) && self::is_item_subscription( $order, $item ) ) {
 				return $item;
 			}
+		}
 
 		return array();
 	}
@@ -842,8 +855,9 @@ class WC_Subscriptions_Order {
 
 				// Remove non-compound taxes
 				foreach ( self::get_recurring_taxes( $order ) as $tax ) {
-					if ( isset( $tax['compound'] ) && $tax['compound'] )
+					if ( isset( $tax['compound'] ) && $tax['compound'] ) {
 						continue;
+					}
 
 					$recurring_subtotal = $recurring_subtotal + $tax['cart_tax'] + $tax['shipping_tax'];
 				}
@@ -895,16 +909,17 @@ class WC_Subscriptions_Order {
 			$sign_up_fee  = self::get_sign_up_fee( $order );
 			$trial_length = self::get_subscription_trial_length( $order );
 
-			if ( self::$recurring_only_price_strings )
+			if ( self::$recurring_only_price_strings ) {
 				$subscription_details['initial_amount'] = '';
-			elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != self::get_subscription_length( $order ) )
+			} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != self::get_subscription_length( $order ) ) {
 				$subscription_details['initial_amount'] = $discount;
-			elseif ( $sign_up_fee > 0 && $trial_length > 0 )
+			} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
 				$subscription_details['initial_amount'] = $discount;
-			elseif ( $discount !== woocommerce_price( $subscription_details['recurring_amount'] ) ) // Applying initial payment only discount
+			} elseif ( $discount !== woocommerce_price( $subscription_details['recurring_amount'] ) ) { // Applying initial payment only discount
 				$subscription_details['initial_amount'] = $discount;
-			else
+			} else {
 				$subscription_details['initial_amount'] = '';
+			}
 
 			$discount = WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details );
 			$discount = sprintf( __( '%s discount', 'woocommerce-subscriptions' ), $discount );
@@ -1070,150 +1085,161 @@ class WC_Subscriptions_Order {
 
 			if ( count( $order_taxes ) > 0 || count( $recurring_taxes ) > 0 ) {
 
-				foreach ( $recurring_taxes as $index => $tax ) {
+				if ( 'itemized' == get_option( 'woocommerce_tax_total_display' ) ) {
 
-					if ( $tax['compound'] )
-						continue;
+					foreach ( $recurring_taxes as $index => $tax ) {
 
-					$tax_key      = sanitize_title( $tax['name'] );
-					$tax_name     = $tax['name'];
-					$tax_amount   = $tax['tax_amount'];
-					$shipping_tax = $tax['shipping_tax_amount'];
+						if ( $tax['compound'] ) {
+							continue;
+						}
 
-					if ( $tax['tax_amount'] > 0 ) {
+						$tax_key      = sanitize_title( $tax['name'] );
+						$tax_name     = $tax['name'];
+						$tax_amount   = $tax['tax_amount'];
+						$shipping_tax = $tax['shipping_tax_amount'];
 
-						foreach ( $order_taxes as $order_tax )
-							if ( $tax_name == $order_tax['name'] )
-								$order_tax_amount = isset( $order_tax['tax_amount'] ) ? $order_tax['tax_amount'] + $order_tax['shipping_tax_amount'] : '';
+						if ( $tax['tax_amount'] > 0 ) {
 
-						$recurring_tax = isset( $tax['tax_amount'] ) ? $tax['tax_amount'] + $tax['shipping_tax_amount'] : '';
+							foreach ( $order_taxes as $order_tax ) {
+								if ( $tax_name == $order_tax['name'] ) {
+									$order_tax_amount = isset( $order_tax['tax_amount'] ) ? $order_tax['tax_amount'] + $order_tax['shipping_tax_amount'] : '';
+								}
+							}
+
+							$recurring_tax = isset( $tax['tax_amount'] ) ? $tax['tax_amount'] + $tax['shipping_tax_amount'] : '';
+						}
+
+						if ( $tax_amount > 0 ) {
+
+							$subscription_details['recurring_amount'] = $recurring_tax;
+
+							if ( self::$recurring_only_price_strings ) {
+								$subscription_details['initial_amount'] = '';
+							} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length ) {
+								$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
+							} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
+								$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
+							} elseif ( $order_tax_amount !== $subscription_details['recurring_amount'] ) { // Applying initial payment only discount
+								$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
+							} else {
+								$subscription_details['initial_amount'] = '';
+							}
+
+							$total_rows[ $tax_key ]['value'] = WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details );
+
+						} elseif ( $shipping_tax > 0  ) { // Just a recurring shipping tax
+
+							$subscription_details['recurring_amount'] = $shipping_tax;
+
+							if ( self::$recurring_only_price_strings ) {
+								$subscription_details['initial_amount'] = '';
+							} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length ) {
+								$subscription_details['initial_amount'] = $shipping_tax;
+							} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
+								$subscription_details['initial_amount'] = $shipping_tax;
+							} elseif ( $shipping_tax !== $subscription_details['recurring_amount'] ) { // Applying initial payment only discount
+								$subscription_details['initial_amount'] = $shipping_tax;
+							} else {
+								$subscription_details['initial_amount'] = '';
+							}
+
+							$shipping_tax_row = array(
+								$tax_key . '_shipping' => array(
+									'label' => $tax_name,
+									'value' => WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details )
+								)
+							);
+
+							// Insert the tax just before the order total
+							$total_rows = array_splice( $total_rows, 0, -1 ) + $shipping_tax_row + array_splice( $total_rows, -1 );
+						}
+
 					}
 
-					if ( $tax_amount > 0 ) {
+					foreach ( $recurring_taxes as $index => $tax ) {
 
-						$subscription_details['recurring_amount'] = $recurring_tax;
+						if ( ! $tax['compound'] ) {
+							continue;
+						}
 
-						if ( self::$recurring_only_price_strings )
-							$subscription_details['initial_amount'] = '';
-						elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length )
-							$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
-						elseif ( $sign_up_fee > 0 && $trial_length > 0 )
-							$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
-						elseif ( $order_tax_amount !== $subscription_details['recurring_amount'] ) // Applying initial payment only discount
-							$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
-						else
-							$subscription_details['initial_amount'] = '';
+						$tax_key      = sanitize_title( $tax['label'] );
+						$tax_name     = $tax['label'];
+						$tax_amount   = $tax['cart_tax'];
+						$shipping_tax = $tax['shipping_tax'];
 
-						$total_rows[ $tax_key ]['value'] = WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details );
+						if ( $tax_amount > 0 ) {
 
-					} elseif ( $shipping_tax > 0  ) { // Just a recurring shipping tax
+							foreach ( $order_taxes as $order_tax ) {
+								if ( $tax_name == $order_tax['label'] ) {
+									$order_tax_amount = isset( $order_tax['cart_tax'] ) ? $order_tax['cart_tax'] + $order_tax['shipping_tax'] : '';
+								}
+							}
 
-						$subscription_details['recurring_amount'] = $shipping_tax;
+							$recurring_tax = isset( $tax['cart_tax'] ) ? $tax['cart_tax'] + $tax['shipping_tax'] : '';
+						}
 
-						if ( self::$recurring_only_price_strings )
-							$subscription_details['initial_amount'] = '';
-						elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length )
-							$subscription_details['initial_amount'] = $shipping_tax;
-						elseif ( $sign_up_fee > 0 && $trial_length > 0 )
-							$subscription_details['initial_amount'] = $shipping_tax;
-						elseif ( $shipping_tax !== $subscription_details['recurring_amount'] ) // Applying initial payment only discount
-							$subscription_details['initial_amount'] = $shipping_tax;
-						else
-							$subscription_details['initial_amount'] = '';
+						if ( $tax_amount > 0 ) {
 
-						$shipping_tax_row = array(
-							$tax_key . '_shipping' => array(
-								'label' => $tax_name,
-								'value' => WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details )
-							)
-						);
+							if ( self::$recurring_only_price_strings ) {
+								$subscription_details['initial_amount'] = '';
+							} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length ) {
+								$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
+							} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
+								$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
+							} elseif ( $order_tax_amount !== woocommerce_price( $subscription_details['recurring_amount'] ) ) { // Applying initial payment only discount
+								$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
+							} else {
+								$subscription_details['initial_amount'] = '';
+							}
 
-						// Insert the tax just before the order total
-						$total_rows = array_splice( $total_rows, 0, -1 ) + $shipping_tax_row + array_splice( $total_rows, -1 );
+							$subscription_details['recurring_amount'] = $recurring_tax;
+
+							$total_rows[ $tax_key ]['value'] = WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details );
+
+						} elseif ( $shipping_tax > 0  ) { // Just a recurring shipping tax
+
+							$subscription_details['recurring_amount'] = $shipping_tax;
+
+							if ( self::$recurring_only_price_strings ) {
+								$subscription_details['initial_amount'] = '';
+							} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length ) {
+								$subscription_details['initial_amount'] = $shipping_tax;
+							} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
+								$subscription_details['initial_amount'] = $shipping_tax;
+							} elseif ( $shipping_tax !== woocommerce_price( $subscription_details['recurring_amount'] ) ) { // Applying initial payment only discount
+								$subscription_details['initial_amount'] = $shipping_tax;
+							} else {
+								$subscription_details['initial_amount'] = '';
+							}
+
+							$shipping_tax_row = array(
+								$tax_key . '_shipping' => array(
+									'label' => $tax_name,
+									'value' => WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details )
+								)
+							);
+
+							// Insert the tax just before the order total
+							$total_rows = array_splice( $total_rows, 0, -1 ) + $shipping_tax_row + array_splice( $total_rows, -1, 0 );
+						}
 					}
 
-				}
-
-				foreach ( $recurring_taxes as $index => $tax ) {
-
-					if ( ! $tax['compound'] )
-						continue;
-
-					$tax_key      = sanitize_title( $tax['label'] );
-					$tax_name     = $tax['label'];
-					$tax_amount   = $tax['cart_tax'];
-					$shipping_tax = $tax['shipping_tax'];
-
-					if ( $tax_amount > 0 ) {
-
-						foreach ( $order_taxes as $order_tax )
-							if ( $tax_name == $order_tax['label'] )
-								$order_tax_amount = isset( $order_tax['cart_tax'] ) ? $order_tax['cart_tax'] + $order_tax['shipping_tax'] : '';
-
-						$recurring_tax = isset( $tax['cart_tax'] ) ? $tax['cart_tax'] + $tax['shipping_tax'] : '';
-					}
-
-					if ( $tax_amount > 0 ) {
-
-						if ( self::$recurring_only_price_strings )
-							$subscription_details['initial_amount'] = '';
-						elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length )
-							$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
-						elseif ( $sign_up_fee > 0 && $trial_length > 0 )
-							$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
-						elseif ( $order_tax_amount !== woocommerce_price( $subscription_details['recurring_amount'] ) ) // Applying initial payment only discount
-							$subscription_details['initial_amount'] = $total_rows[ $tax_key ]['value'];
-						else
-							$subscription_details['initial_amount'] = '';
-
-						$subscription_details['recurring_amount'] = $recurring_tax;
-
-						$total_rows[ $tax_key ]['value'] = WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details );
-
-					} elseif ( $shipping_tax > 0  ) { // Just a recurring shipping tax
-
-						$subscription_details['recurring_amount'] = $shipping_tax;
-
-						if ( self::$recurring_only_price_strings )
-							$subscription_details['initial_amount'] = '';
-						elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length )
-							$subscription_details['initial_amount'] = $shipping_tax;
-						elseif ( $sign_up_fee > 0 && $trial_length > 0 )
-							$subscription_details['initial_amount'] = $shipping_tax;
-						elseif ( $shipping_tax !== woocommerce_price( $subscription_details['recurring_amount'] ) ) // Applying initial payment only discount
-							$subscription_details['initial_amount'] = $shipping_tax;
-						else
-							$subscription_details['initial_amount'] = '';
-
-						$shipping_tax_row = array(
-							$tax_key . '_shipping' => array(
-								'label' => $tax_name,
-								'value' => WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details )
-							)
-						);
-
-						// Insert the tax just before the order total
-						$total_rows = array_splice( $total_rows, 0, -1 ) + $shipping_tax_row + array_splice( $total_rows, -1, 0 );
-					}
-				}
-
-			} else {
-
-				if ( isset( $total_rows['tax'] ) ) {
+				} elseif ( isset( $total_rows['tax'] ) ) { // this will be set even if the initial tax is $0 but there is a recurring tax
 
 					$subscription_details['recurring_amount'] = self::get_recurring_total_tax( $order );
 					$order_total_tax = woocommerce_price( $order->get_total_tax() );
 
-					if ( self::$recurring_only_price_strings )
+					if ( self::$recurring_only_price_strings ) {
 						$subscription_details['initial_amount'] = '';
-					elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length )
+					} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length ) {
 						$subscription_details['initial_amount'] = $order_total_tax;
-					elseif ( $sign_up_fee > 0 && $trial_length > 0 )
+					} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
 						$subscription_details['initial_amount'] = $order_total_tax;
-					elseif ( $order_total_tax !== woocommerce_price( $subscription_details['recurring_amount'] ) ) // Applying initial payment only discount
+					} elseif ( $order_total_tax !== woocommerce_price( $subscription_details['recurring_amount'] ) ) { // Applying initial payment only discount
 						$subscription_details['initial_amount'] = $order_total_tax;
-					else
+					} else {
 						$subscription_details['initial_amount'] = '';
+					}
 
 					$total_rows['tax']['value'] = WC_Subscriptions_Manager::get_subscription_price_string( $subscription_details );
 				}
@@ -1243,16 +1269,17 @@ class WC_Subscriptions_Order {
 					$subscription_details['recurring_amount'] = woocommerce_price( $subscription_details['recurring_amount'], array( 'currency'=> $subscription_details['currency'] ) );
 					$initial_amount = woocommerce_price( $initial_amount, array( 'currency'=> $subscription_details['currency'] ) );
 
-					if ( self::$recurring_only_price_strings )
+					if ( self::$recurring_only_price_strings ) {
 						$subscription_details['initial_amount'] = '';
-					elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length )
+					} elseif ( $sign_up_fee > 0 && $trial_length == 0 && $subscription_details['subscription_interval'] != $subscription_length ) {
 						$subscription_details['initial_amount'] = $initial_amount;
-					elseif ( $sign_up_fee > 0 && $trial_length > 0 )
+					} elseif ( $sign_up_fee > 0 && $trial_length > 0 ) {
 						$subscription_details['initial_amount'] = $initial_amount;
-					elseif ( $initial_amount !== $subscription_details['recurring_amount'] )
+					} elseif ( $initial_amount !== $subscription_details['recurring_amount'] ) {
 						$subscription_details['initial_amount'] = $initial_amount;
-					else
+					} else {
 						$subscription_details['initial_amount'] = '';
+					}
 
 					// if the fees have no initial amount (i.e. there is a free trial) the order will be out so we need to insert them after shipping manually
 					if ( ! isset( $total_rows[ 'fee_' . $id ] ) ) {
@@ -1272,11 +1299,13 @@ class WC_Subscriptions_Order {
 			// Now, if we're displaying recurring totals only, make sure we're not showing any $0 / period discounts
 			if ( self::$recurring_only_price_strings ) {
 
-				if ( isset( $total_rows['cart_discount'] ) && 0 == self::get_recurring_discount_cart( $order ) )
+				if ( isset( $total_rows['cart_discount'] ) && 0 == self::get_recurring_discount_cart( $order ) ) {
 					unset( $total_rows['cart_discount'] );
+				}
 
-				if ( isset( $total_rows['order_discount'] ) && 0 == self::get_recurring_discount_total( $order ) )
+				if ( isset( $total_rows['order_discount'] ) && 0 == self::get_recurring_discount_total( $order ) ) {
 					unset( $total_rows['order_discount'] );
+				}
 
 			}
 
@@ -1386,8 +1415,9 @@ class WC_Subscriptions_Order {
 
 		$existing_product_ids = array();
 
-		foreach ( $order->get_items() as $existing_item )
+		foreach ( $order->get_items() as $existing_item ) {
 			$existing_product_ids[] = self::get_items_product_id( $existing_item );
+		}
 
 		$product_ids = array();
 
@@ -1402,20 +1432,24 @@ class WC_Subscriptions_Order {
 
 			$is_existing_item = false;
 
-			if ( in_array( $product_id, $existing_product_ids ) )
+			if ( in_array( $product_id, $existing_product_ids ) ) {
 				$is_existing_item = true;
+			}
 
 			// If this is a new item and it's a subscription product, we have a subscription
-			if ( ! $is_existing_item && WC_Subscriptions_Product::is_subscription( $product_id ) )
+			if ( ! $is_existing_item && WC_Subscriptions_Product::is_subscription( $product_id ) ) {
 				$order_contains_subscription = true;
+			}
 
 			// If this is an existing item and it's a subscription item, we have a subscription
-			if ( $is_existing_item && self::is_item_subscription( $order, $product_id ) )
+			if ( $is_existing_item && self::is_item_subscription( $order, $product_id ) ) {
 				$order_contains_subscription = true;
+			}
 		}
 
-		if ( ! $order_contains_subscription )
+		if ( ! $order_contains_subscription ) {
 			return $post_id;
+		}
 
 		$existing_payment_method = get_post_meta( $post_id, '_recurring_payment_method', true );
 		$chosen_payment_method   = ( isset( $_POST['_recurring_payment_method'] ) ) ? stripslashes( $_POST['_recurring_payment_method'] ) : '';
@@ -1492,8 +1526,9 @@ class WC_Subscriptions_Order {
 
 			$tax_keys = array( 'recurring_order_taxes_id', 'recurring_order_taxes_rate_id', 'recurring_order_taxes_amount', 'recurring_order_taxes_shipping_amount' );
 
-			foreach( $tax_keys as $tax_key )
+			foreach( $tax_keys as $tax_key ) {
 				$$tax_key = isset( $_POST[ $tax_key ] ) ? $_POST[ $tax_key ] : array();
+			}
 
 			foreach( $recurring_order_taxes_id as $item_id => $value ) {
 
@@ -1646,12 +1681,14 @@ class WC_Subscriptions_Order {
 				$is_existing_item = true;
 
 			// If this is a new item and it's not a subscription product, ignore it
-			if ( ! $is_existing_item && ! WC_Subscriptions_Product::is_subscription( $product_id ) )
+			if ( ! $is_existing_item && ! WC_Subscriptions_Product::is_subscription( $product_id ) ) {
 				continue;
+			}
 
 			// If this is an existing item and it's not a subscription, ignore it
-			if ( $is_existing_item && ! self::is_item_subscription( $order, $product_id ) )
+			if ( $is_existing_item && ! self::is_item_subscription( $order, $product_id ) ) {
 				continue;
+			}
 
 			$subscription_key = WC_Subscriptions_Manager::get_subscription_key( $post_id, $product_id );
 
@@ -1686,10 +1723,11 @@ class WC_Subscriptions_Order {
 					add_post_meta( $post_id, '_order_key', $order->order_key, true );
 				}
 
-				if ( empty( $_POST['order_date'] ) )
+				if ( empty( $_POST['order_date'] ) ) {
 					$start_date = gmdate( 'Y-m-d H:i:s' );
-				else
+				} else {
 					$start_date = get_gmt_from_date( $_POST['order_date'] . ' ' . (int) $_POST['order_date_hour'] . ':' . (int) $_POST['order_date_minute'] . ':00' );
+				}
 
 				WC_Subscriptions_Manager::create_pending_subscription_for_order( $order, $product_id, array( 'start_date' => $start_date ) );
 
@@ -1813,14 +1851,17 @@ class WC_Subscriptions_Order {
 				$subscription_key = WC_Subscriptions_Manager::get_subscription_key( $post_id, $product_id );
 
 				// Order is important here, expiration date takes into account trial expriation date and next payment date takes into account expiration date
-				if ( in_array( $product_id, self::$requires_update['trial_expiration'] ) )
+				if ( in_array( $product_id, self::$requires_update['trial_expiration'] ) ) {
 					WC_Subscriptions_Manager::set_trial_expiration_date( $subscription_key, $user_id );
+				}
 
-				if ( in_array( $product_id, self::$requires_update['expiration_date'] ) )
+				if ( in_array( $product_id, self::$requires_update['expiration_date'] ) ) {
 					WC_Subscriptions_Manager::set_expiration_date( $subscription_key, $user_id );
+				}
 
-				if ( in_array( $product_id, self::$requires_update['next_billing_date'] ) )
+				if ( in_array( $product_id, self::$requires_update['next_billing_date'] ) ) {
 					WC_Subscriptions_Manager::set_next_payment_date( $subscription_key, $user_id );
+				}
 			}
 		}
 	}
@@ -2149,8 +2190,9 @@ class WC_Subscriptions_Order {
 					}
 				}
 
-				foreach( $line_total_keys as $line_total_key )
-					$item[ $line_total_key ] = number_format( $item[ $line_total_key ], 2 );
+				foreach( $line_total_keys as $line_total_key ) {
+					$item[ $line_total_key ] = WC_Subscriptions::format_total( $item[ $line_total_key ], 2 );
+				}
 
 			} else {
 
@@ -2228,11 +2270,13 @@ class WC_Subscriptions_Order {
 				$line_subtotal_tax = $tax->round( array_sum( $line_subtotal_taxes ) );
 				$line_tax = $tax->round( array_sum( $line_taxes ) );
 
-				if ( $line_subtotal_tax < 0 )
+				if ( $line_subtotal_tax < 0 ) {
 					$line_subtotal_tax = 0;
+				}
 
-				if ( $line_tax < 0 )
+				if ( $line_tax < 0 ) {
 					$line_tax = 0;
+				}
 
 				$return = array(
 					'recurring_line_subtotal_tax' => $line_subtotal_tax,
@@ -2240,10 +2284,10 @@ class WC_Subscriptions_Order {
 				);
 
 				// Sum the item taxes
-				foreach ( array_keys( $taxes + $line_taxes ) as $key )
+				foreach ( array_keys( $taxes + $line_taxes ) as $key ) {
 					$taxes[ $key ] = ( isset( $line_taxes[ $key ] ) ? $line_taxes[ $key ] : 0 ) + ( isset( $taxes[ $key ] ) ? $taxes[ $key ] : 0 );
+				}
 			}
-
 
 			// Now calculate shipping tax
 			$matched_tax_rates = array();
@@ -2256,10 +2300,13 @@ class WC_Subscriptions_Order {
 				'tax_class' => ''
 			) );
 
-			if ( $tax_rates )
-				foreach ( $tax_rates as $key => $rate )
-					if ( isset( $rate['shipping'] ) && $rate['shipping'] == 'yes' )
+			if ( $tax_rates ) {
+				foreach ( $tax_rates as $key => $rate ) {
+					if ( isset( $rate['shipping'] ) && $rate['shipping'] == 'yes' ) {
 						$matched_tax_rates[ $key ] = $rate;
+					}
+				}
+			}
 
 			$shipping_taxes = $tax->calc_shipping_tax( $shipping, $matched_tax_rates );
 			$shipping_tax = $tax->round( array_sum( $shipping_taxes ) );

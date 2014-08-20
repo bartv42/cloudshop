@@ -1,11 +1,13 @@
 jQuery(document).ready(function($){
 
-	if(arePointersEnabled())
-		showSubscriptionPointers();
+	if(arePointersEnabled()){
+		setTimeout(showSubscriptionPointers, 800); // give TinyMCE a chance to finish loading
+	}
 
 	$('select#product-type').change(function(){
-		if(arePointersEnabled())
+		if(arePointersEnabled()){
 			$('#product-type').pointer('close');
+		}
 	});
 
 	$('#_subscription_price, #_subscription_period, #_subscription_length').change(function(){
@@ -16,19 +18,23 @@ jQuery(document).ready(function($){
 	});
 
 	function arePointersEnabled(){
-		if($.getParameterByName('subscription_pointers')=='true')
+		if($.getParameterByName('subscription_pointers')=='true'){
 			return true;
-		else
+		} else {
 			return false;
+		}
 	}
 
 	function showSubscriptionPointers(){
 		$('#product-type').pointer({
 			content: WCSPointers.typePointerContent,
-			position: 'bottom',
+			position: {
+				edge: 'left',
+				align: 'center'
+			},
 			close: function() {
 				if ($('select#product-type').val()==WCSubscriptions.productType){
-					$('.options_group.subscription_pricing').pointer({
+					$('.options_group.subscription_pricing:not(".subscription_sync")').pointer({
 						content: WCSPointers.pricePointerContent,
 						position: 'bottom',
 						close: function() {

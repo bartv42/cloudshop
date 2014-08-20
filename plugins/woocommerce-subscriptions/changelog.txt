@@ -1,5 +1,34 @@
 *** WooCommerce Subscriptions Changelog ***
 
+2014.08.14 - version 1.5.9
+ * Tweak: allow switching from one catch all variation to another, as long as the chosen attributes differ between the old subscription and the new one
+ * Tweak: when renewing an expired/cancelled subscription, do not apply original discounts and coupons - require new coupons to be applied if a discount is being offered
+ * Fix: show $0 initial amount on cart totals when applying a product, cart or sign-up fee coupon to a subscription that does not have a free trial
+ * Fix: only apply subscription total calculations to parent renewal orders, not child renewal orders. This prevents a free trial being added to manual renewal orders.
+ * Fix: copy the attributes of a catch all variation (i.e. attribute = "any") to renewal orders
+ * Fix: extra tax rows displayed by the order details template when tax totals are displayed as a single total
+ * Fix: do not allow a new subscription and subscription renewal to be purchased in the cart at the same time (until 2.0 where multiple subscriptions are supported)
+ * Fix: synchronise subscriptions manually added to an order and make sure line total accounts for whether the subscription is synchronised
+
+2014.08.01 - version 1.5.8
+ * Tweak: improve pointers for new installations
+ * Tweak: display product/subscription removed notices with blue informational style instead of red error style
+ * Tweak: when Mixed Checkout is enabled, honour WooCommerce's "Redirect to cart page" setting when adding a subscription to a cart which already contains a subscription (and therefore, is removed)
+ * Tweak: if a store manager has manually created a subscription to a limited product but not set a user account on that subscription, make sure other non-logged in users can still purchase it (i.e. don't limit "Guest" users)
+ * Tweak: display an admin notice if PayPal Credentials seem incorrect - PayPal provide no way to verify credentials but if an API request fails due to "Security header is not valid" it's most likely due to incorrect credentials
+ * Tweak: display an admin notice if PayPal Profile ID's are using the pre-2009 S- prefix (and therefore, will not work with the new API)
+ * Fix: incorrect line totals with non-period decimal separator when manually adding a subscription with a sign-up fee
+ * Fix: display correct order totals when purchasing a subscription synchronised to every n weeks
+ * Fix: do not include up-front shipping on shipping option price strings when the cart only contains a synchronised subscription with a first payment date other than the day of sign-up
+ * Fix: display sign up fee with tax when the shop's base country is a taxable country, prices are entered excluding tax but prices should be displayed including tax
+ * Fix: the "From:" price on a variable subscription when using tax inclusive pricing and prices in the shop are displayed including tax
+ * Fix: display Action Scheduler's admin page when WP_DEBUG is set
+ * Fix: pre-tax recurring % coupon and sign-up fee % coupon discount amounts displayed on cart and checkout totals when purchasing more than one of the same subscription
+ * Fix: only trigger gateway scheduled subscription payment hook when a recurring amount needs to be charged - avoids duplicate renewal orders with some gateways like Stripe which generate a failed renewal order when the amount to charge is $0.
+ * Fix: do not display switch messages on order received page when paying with PayPal
+ * Fix: subscriptions synchronised to a week day on a site using a non-English locale
+ * Fix: display of price string for subscriptions synchronised to Sunday each week
+
 2014.07.15 - version 1.5.7
  * Tweak: do not display "product deleted" error message when manually renewing a simple subscription that has since been changed to a variable subscription
  * Tweak: when an order to switch a subscription also contains non-subscription items, do not automatically transition it to completed as those items may need shipping

@@ -76,6 +76,12 @@ class WC_Subscriptions_Synchroniser {
 
 		// Make sure the sign-up fee for a synchronised subscription is correct
 		add_filter( 'woocommerce_subscriptions_sign_up_fee', __CLASS__ . '::get_sign_up_fee', 1, 4 );
+
+		// Make sure shipping isn't displayed with an up-front charge
+		add_filter( 'woocommerce_subscriptions_cart_shipping_up_front', __CLASS__ . '::charge_shipping_up_front', 10, 4 );
+
+		// When manually adding a synchronised subscription product to an order, make sure it is synchronised and line totals are correct
+		add_action( 'woocommerce_ajax_order_item', __CLASS__ . '::prefill_order_item_meta', 11, 2 );
 	}
 
 	/**
@@ -446,8 +452,8 @@ class WC_Subscriptions_Synchroniser {
 	}
 
 	/**
-	 * Make sure anything requesting the first payment date for a synced subscription receives a date which
-	 * takes into account the day on which payments should be processed.
+	 * Make sure anything requesting the first payment date for a synced subscription on the front-end receives
+	 * a date which takes into account the day on which payments should be processed.
 	 *
 	 * This is necessary as the self::calculate_first_payment_date() is not called when the subscription is active
 	 * (which it isn't until the first payment is completed and the subscription is activated).
@@ -461,12 +467,17 @@ class WC_Subscriptions_Synchroniser {
 		if ( self::order_contains_synced_subscription( $order->id ) && 1 >= WC_Subscriptions_Manager::get_subscriptions_completed_payment_count( $subscription_key ) ) {
 
 			$subscription = WC_Subscriptions_Manager::get_subscription( $subscription_key );
-			$id_for_calculation = ! empty( $subscription['variation_id'] ) ? $subscription['variation_id'] : $subscription['product_id'];
 
-			$first_payment_timestamp = self::calculate_first_payment_date( $id_for_calculation, 'timestamp', $order->order_date );
+			// Don't prematurely set the first payment date when manually adding a subscription from the admin
+			if ( ! is_admin() || 'active' == $subscription['status'] ) {
 
-			if ( 0 != $first_payment_timestamp ) {
-				$first_payment_date = ( 'mysql' == $type ) ? date( 'Y-m-d H:i:s', $first_payment_timestamp ) : $first_payment_timestamp;
+				$id_for_calculation = ! empty( $subscription['variation_id'] ) ? $subscription['variation_id'] : $subscription['product_id'];
+
+				$first_payment_timestamp = self::calculate_first_payment_date( $id_for_calculation, 'timestamp', $order->order_date );
+
+				if ( 0 != $first_payment_timestamp ) {
+					$first_payment_date = ( 'mysql' == $type ) ? date( 'Y-m-d H:i:s', $first_payment_timestamp ) : $first_payment_timestamp;
+				}
 			}
 		}
 
@@ -518,8 +529,19 @@ class WC_Subscriptions_Synchroniser {
 
 		if ( 'week' == $period ) {
 
+			// strtotime() only handles English, so can't use $wp_locale->weekday here
+			$weekdays = array(
+				1 => 'Monday',
+				2 => 'Tuesday',
+				3 => 'Wednesday',
+				4 => 'Thursday',
+				5 => 'Friday',
+				6 => 'Saturday',
+				7 => 'Sunday',
+			);
+
 			// strtotime() will figure out if the day is in the future or today (see: https://gist.github.com/thenbrent/9698083)
-			$first_payment_timestamp = strtotime( $wp_locale->weekday[ $payment_day ], $from_timestamp );
+			$first_payment_timestamp = strtotime( $weekdays[ $payment_day ], $from_timestamp );
 
 		} elseif ( 'month' == $period ) {
 
@@ -751,6 +773,39 @@ class WC_Subscriptions_Synchroniser {
 	}
 
 	/**
+	 * If the subscription being generated is synced, set the syncing related meta data correctly.
+	 *
+	 * @since 1.5
+	 */
+	public static function prefill_order_item_meta( $item, $item_id ) {
+
+		$product_id = $item['variation_id'] ? $item['variation_id'] : $item['product_id'];
+
+		if ( self::is_product_synced( $product_id ) ) {
+
+			$order_id = $_POST['order_id'];
+
+			// If the date the subscription is being added is not the sync date, make sure the line total is only equal to the sign up fee (or $0 if no sign up fee)
+			if ( ! self::is_today( self::calculate_first_payment_date( $product_id, 'timestamp' ) ) ) {
+
+				$line_total_keys = array(
+					'line_subtotal',
+					'line_total',
+				);
+
+				foreach( $line_total_keys as $line_total_key ){
+					$item[ $line_total_key ] = WC_Subscriptions_Product::get_sign_up_fee( $product_id );
+					woocommerce_update_order_item_meta( $item_id, '_' . $line_total_key, $item[ $line_total_key ] );
+				}
+			}
+
+			update_post_meta( $order_id, '_order_contains_synced_subscription', 'true' );
+		}
+
+		return $item;
+	}
+
+	/**
 	 * Make sure a synchronised subscription's price includes a free trial, unless it's first payment is today.
 	 *
 	 * @since 1.5
@@ -834,6 +889,73 @@ class WC_Subscriptions_Synchroniser {
 		}
 
 		return $sign_up_fee;
+	}
+
+
+	/**
+	 * Let other functions know shipping should not be charged on the initial order when
+	 * the cart contains a synchronised subscription and no other items which need shipping.
+	 *
+	 * @since 1.5.8
+	 */
+	public static function charge_shipping_up_front( $charge_shipping_up_front ) {
+
+		// the cart contains only the synchronised subscription
+		if ( true === $charge_shipping_up_front && self::cart_contains_synced_subscription() ) {
+
+			// the cart contains only a subscription, see if the payment date is today and if not, then it doesn't need shipping
+			if ( 1 == count( WC()->cart->cart_contents ) ) {
+
+				foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+					if ( self::is_product_synced( $cart_item['data'] ) && ! self::is_today( self::calculate_first_payment_date( $cart_item['data'], 'timestamp' ) ) ) {
+						$charge_shipping_up_front = false;
+						break;
+					}
+				}
+
+			// cart contains other items, see if any require shipping
+			} else {
+
+				$other_items_need_shipping = false;
+
+				foreach ( WC()->cart->cart_contents as $cart_item_key => $cart_item ) {
+					if ( ! WC_Subscriptions_Product::is_subscription( $cart_item['data'] ) && $cart_item['data']->needs_shipping() ) {
+						$other_items_need_shipping = true;
+					}
+				}
+
+				if ( false === $other_items_need_shipping ) {
+					$charge_shipping_up_front = false;
+				}
+			}
+		}
+
+		return $charge_shipping_up_front;
+	}
+
+	/**
+	 * Retrieve the full translated weekday word.
+	 *
+	 * Week starts on translated Monday and can be fetched
+	 * by using 1 (one). So the week starts with 1 (one)
+	 * and ends on Sunday with is fetched by using 7 (seven).
+	 *
+	 * @since 1.5.8
+	 * @access public
+	 *
+	 * @param int $weekday_number 1 for Monday through 7 Sunday
+	 * @return string Full translated weekday
+	 */
+	public static function get_weekday( $weekday_number ) {
+		global $wp_locale;
+
+		if ( 7 == $weekday_number ) {
+			$weekday = $wp_locale->get_weekday( 0 );
+		} else {
+			$weekday = $wp_locale->get_weekday( $weekday_number );
+		}
+
+		return $weekday;
 	}
 }
 WC_Subscriptions_Synchroniser::init();

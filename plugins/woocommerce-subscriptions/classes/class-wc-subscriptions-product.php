@@ -107,8 +107,9 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_price_html( $price, $product ) {
 
-		if ( self::is_subscription( $product ) )
+		if ( self::is_subscription( $product ) ) {
 			$price = self::get_price_string( $product, array( 'price' => $price ) );
+		}
 
 		return $price;
 	}
@@ -122,8 +123,9 @@ class WC_Subscriptions_Product {
 	public static function get_free_price_html( $price, $product ) {
 
 		// Check if it has a sign-up fee (we already know it has no recurring fee)
-		if ( self::is_subscription( $product ) && self::get_sign_up_fee( $product ) > 0 )
-			$price = self::get_price_string( $product );
+		if ( self::is_subscription( $product ) && self::get_sign_up_fee( $product ) > 0 ) {
+			$price = self::get_price_string( $product, array( 'price' => $price ) );
+		}
 
 		return $price;
 	}
@@ -193,8 +195,9 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_gravity_form_prices( $price, $product ) {
 
-		if ( self::is_subscription( $product ) )
+		if ( self::is_subscription( $product ) ) {
 			$price = self::get_price_string( $product, array( 'price' => $price, 'subscription_length' => false, 'sign_up_fee' => false, 'trial_length' => false ) );
+		}
 
 		return $price;
 	}
@@ -215,14 +218,16 @@ class WC_Subscriptions_Product {
 	public static function get_price_string( $product, $include = array() ) {
 		global $wp_locale;
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) )
+		if ( ! self::is_subscription( $product ) ) {
 			return;
+		}
 
 		$include = wp_parse_args( $include, array(
-				'tax_calculation'     => 'exclude_tax',
+				'tax_calculation'     => get_option( 'woocommerce_tax_display_shop' ),
 				'subscription_price'  => true,
 				'subscription_period' => true,
 				'subscription_length' => true,
@@ -235,42 +240,38 @@ class WC_Subscriptions_Product {
 
 		$base_price = self::get_price( $product );
 
-		if ( true === $include['sign_up_fee'] )
+		if ( true === $include['sign_up_fee'] ) {
 			$sign_up_fee = self::get_sign_up_fee( $product );
-		elseif ( false !== $include['sign_up_fee'] ) // Allow override of product's sign-up fee
+		} elseif ( false !== $include['sign_up_fee'] ) { // Allow override of product's sign-up fee
 			$sign_up_fee = $include['sign_up_fee'];
-		else
+		} else {
 			$sign_up_fee = 0;
+		}
 
 		if ( $include['tax_calculation'] != false ) {
 
-			if ( $include['tax_calculation'] == 'exclude_tax' ) { // Subtract Tax
-
-				$tax_per_period = self::calculate_tax_for_subscription( $base_price, $product );
-
-				if ( isset( $include['price'] ) )
-					$price = $include['price'];
-				else
-					$price = woocommerce_price( $base_price - $tax_per_period );
-
-				if ( $sign_up_fee > 0 ) {
-					$sign_up_tax = self::calculate_tax_for_subscription( $sign_up_fee, $product );
-					$sign_up_fee = $sign_up_fee - $sign_up_tax;
-				}
-
-			} else { // Add Tax
-
-				$tax_per_period = self::calculate_tax_for_subscription( $base_price, $product, true );
+			if ( in_array( $include['tax_calculation'], array( 'exclude_tax', 'excl' ) ) ) { // Subtract Tax
 
 				if ( isset( $include['price'] ) ) {
 					$price = $include['price'];
 				} else {
-					$price = woocommerce_price( $base_price + $tax_per_period );
+					$price = $product->get_price_excluding_tax( 1, $include['price'] );
 				}
 
-				if ( $sign_up_fee > 0 ) {
-					$sign_up_tax = self::calculate_tax_for_subscription( $sign_up_fee, $product, true );
-					$sign_up_fee = $sign_up_fee - $sign_up_tax;
+				if ( true === $include['sign_up_fee'] ) {
+					$sign_up_fee = $product->get_sign_up_fee_excluding_tax();
+				}
+
+			} else { // Add Tax
+
+				if ( isset( $include['price'] ) ) {
+					$price = $include['price'];
+				} else {
+					$price = $product->get_price_including_tax();
+				}
+
+				if ( true === $include['sign_up_fee'] ) {
+					$sign_up_fee = $product->get_sign_up_fee_including_tax();
 				}
 
 			}
@@ -316,7 +317,7 @@ class WC_Subscriptions_Product {
 				$payment_day = WC_Subscriptions_Synchroniser::get_products_payment_day( $product );
 				switch ( $billing_period ) {
 					case 'week':
-						$payment_day_of_week = $wp_locale->weekday[ $payment_day ];
+						$payment_day_of_week = WC_Subscriptions_Synchroniser::get_weekday( $payment_day );
 						if ( 1 == $billing_interval ) {
 							 // e.g. $5 every Wednesday
 							$subscription_string = sprintf( __( '%s every %s', 'woocommerce-subscriptions' ), $price, $payment_day_of_week );
@@ -389,13 +390,15 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_price( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) || empty( $product->product_custom_fields['_subscription_price'][0] ) )
+		if ( ! self::is_subscription( $product ) || empty( $product->product_custom_fields['_subscription_price'][0] ) ) {
 			$subscription_price = '';
-		else
+		} else {
 			$subscription_price = $product->product_custom_fields['_subscription_price'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_price', $subscription_price, $product );
 	}
@@ -409,13 +412,15 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_period( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) || ( empty( $product->product_custom_fields['_subscription_period'][0] ) && ! isset( $product->subscription_period ) ) )
+		if ( ! self::is_subscription( $product ) || ( empty( $product->product_custom_fields['_subscription_period'][0] ) && ! isset( $product->subscription_period ) ) ) {
 			$subscription_period = '';
-		else
+		} else {
 			$subscription_period = isset( $product->subscription_period ) ? $product->subscription_period : $product->product_custom_fields['_subscription_period'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_period', $subscription_period, $product );
 	}
@@ -429,13 +434,15 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_interval( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) || ( empty( $product->product_custom_fields['_subscription_period_interval'][0] ) && ! isset( $product->subscription_period_interval ) ) )
+		if ( ! self::is_subscription( $product ) || ( empty( $product->product_custom_fields['_subscription_period_interval'][0] ) && ! isset( $product->subscription_period_interval ) ) ) {
 			$subscription_period_interval = 1;
-		else
+		} else {
 			$subscription_period_interval = isset( $product->subscription_period_interval ) ? $product->subscription_period_interval : $product->product_custom_fields['_subscription_period_interval'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_period_interval', $subscription_period_interval, $product );
 	}
@@ -449,13 +456,15 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_length( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) || ( 0 == $product->product_custom_fields['_subscription_length'][0] && ! isset( $product->subscription_length ) ) )
+		if ( ! self::is_subscription( $product ) || ( 0 == $product->product_custom_fields['_subscription_length'][0] && ! isset( $product->subscription_length ) ) ) {
 			$subscription_length = '';
-		else
+		} else {
 			$subscription_length = isset( $product->subscription_length ) ? $product->subscription_length : $product->product_custom_fields['_subscription_length'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_length', $subscription_length, $product );
 	}
@@ -469,13 +478,15 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_trial_length( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) || ( ! isset( $product->product_custom_fields['_subscription_trial_length'][0] ) && ! isset( $product->subscription_trial_length ) ) )
+		if ( ! self::is_subscription( $product ) || ( ! isset( $product->product_custom_fields['_subscription_trial_length'][0] ) && ! isset( $product->subscription_trial_length ) ) ) {
 			$subscription_trial_length = '';
-		else
+		} else {
 			$subscription_trial_length = isset( $product->subscription_trial_length ) ? $product->subscription_trial_length : $product->product_custom_fields['_subscription_trial_length'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_trial_length', $subscription_trial_length, $product );
 	}
@@ -489,15 +500,17 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_trial_period( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) )
+		if ( ! self::is_subscription( $product ) ) {
 			$subscription_trial_period = '';
-		elseif ( ! isset( $product->subscription_trial_period ) && ! isset( $product->product_custom_fields['_subscription_trial_period'][0] ) ) // Backward compatibility
+		} elseif ( ! isset( $product->subscription_trial_period ) && ! isset( $product->product_custom_fields['_subscription_trial_period'][0] ) ) { // Backward compatibility
 			$subscription_trial_period = self::get_period( $product );
-		else
+		} else {
 			$subscription_trial_period = isset( $product->subscription_trial_period ) ? $product->subscription_trial_period : $product->product_custom_fields['_subscription_trial_period'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_trial_period', $subscription_trial_period, $product );
 	}
@@ -511,13 +524,15 @@ class WC_Subscriptions_Product {
 	 */
 	public static function get_sign_up_fee( $product ) {
 
-		if ( ! is_object( $product ) )
+		if ( ! is_object( $product ) ) {
 			$product = WC_Subscriptions::get_product( $product );
+		}
 
-		if ( ! self::is_subscription( $product ) || ( empty( $product->product_custom_fields['_subscription_sign_up_fee'][0] ) && ! isset( $product->subscription_sign_up_fee ) ) )
+		if ( ! self::is_subscription( $product ) || ( empty( $product->product_custom_fields['_subscription_sign_up_fee'][0] ) && ! isset( $product->subscription_sign_up_fee ) ) ) {
 			$subscription_sign_up_fee = 0;
-		else
+		} else {
 			$subscription_sign_up_fee = isset( $product->subscription_sign_up_fee ) ? $product->subscription_sign_up_fee : $product->product_custom_fields['_subscription_sign_up_fee'][0];
+		}
 
 		return apply_filters( 'woocommerce_subscriptions_product_sign_up_fee', $subscription_sign_up_fee, $product );
 	}
@@ -612,51 +627,6 @@ class WC_Subscriptions_Product {
 		endif;
 
 		return $price;
-	}
-
-	/**
-	 * Calculates a price (could be per period price or sign-up fee) for a subscription less tax
-	 * if the subscription is taxable and the prices in the store include tax.
-	 *
-	 * Based on the WC_Product::get_price_excluding_tax() function.
-	 *
-	 * @param float $price The price to adjust based on taxes
-	 * @param WC_Product $product The product the price belongs too (needed to determine tax class)
-	 * @since 1.0
-	 */
-	public static function calculate_tax_for_subscription( $price, $product, $deduct_base_taxes = false ) {
-
-		if ( $product->is_taxable() ) {
-
-			$tax = new WC_Tax();
-
-			$base_tax_rates = $tax->get_shop_base_rate( $product->tax_class );
-			$tax_rates      = $tax->get_rates( $product->get_tax_class() ); // This will get the base rate unless we're on the checkout page
-
-			if ( $deduct_base_taxes && get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {
-
-				$base_taxes = $tax->calc_tax( $price, $base_tax_rates, true );
-				$taxes      = $tax->calc_tax( $price - array_sum( $base_taxes ), $tax_rates, false );
-
-			} elseif ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {
-
-				$taxes = $tax->calc_tax( $price, $base_tax_rates, true );
-
-			} else {
-
-				$taxes = $tax->calc_tax( $price, $base_tax_rates, false );
-
-			}
-
-			$tax_amount = $tax->get_tax_total( $taxes );
-
-		} else {
-
-			$tax_amount = 0;
-
-		}
-
-		return $tax_amount;
 	}
 
 	/**
@@ -842,6 +812,52 @@ class WC_Subscriptions_Product {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Calculates a price (could be per period price or sign-up fee) for a subscription less tax
+	 * if the subscription is taxable and the prices in the store include tax.
+	 *
+	 * Based on the WC_Product::get_price_excluding_tax() function.
+	 *
+	 * @param float $price The price to adjust based on taxes
+	 * @param WC_Product $product The product the price belongs too (needed to determine tax class)
+	 * @since 1.0
+	 */
+	public static function calculate_tax_for_subscription( $price, $product, $deduct_base_taxes = false ) {
+		_deprecated_function( __CLASS__ . '::' . __FUNCTION__, '1.5.8', 'WC_Product::get_price_including_tax()' );
+
+		if ( $product->is_taxable() ) {
+
+			$tax = new WC_Tax();
+
+			$base_tax_rates = $tax->get_shop_base_rate( $product->tax_class );
+			$tax_rates      = $tax->get_rates( $product->get_tax_class() ); // This will get the base rate unless we're on the checkout page
+
+			if ( $deduct_base_taxes && get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {
+
+				$base_taxes = $tax->calc_tax( $price, $base_tax_rates, true );
+				$taxes      = $tax->calc_tax( $price - array_sum( $base_taxes ), $tax_rates, false );
+
+			} elseif ( get_option( 'woocommerce_prices_include_tax' ) == 'yes' ) {
+
+				$taxes = $tax->calc_tax( $price, $base_tax_rates, true );
+
+			} else {
+
+				$taxes = $tax->calc_tax( $price, $base_tax_rates, false );
+
+			}
+
+			$tax_amount = $tax->get_tax_total( $taxes );
+
+		} else {
+
+			$tax_amount = 0;
+
+		}
+
+		return $tax_amount;
 	}
 }
 

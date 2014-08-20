@@ -735,8 +735,9 @@ class WC_Subscriptions_Manager {
 
 		// Adding a new subscription so set the start date/time to now
 		if ( ! empty( $args['start_date'] ) ){
-			if ( is_numeric( $args['start_date'] ) )
+			if ( is_numeric( $args['start_date'] ) ) {
 				$args['start_date'] = date( 'Y-m-d H:i:s', $args['start_date'] );
+			}
 
 			$start_date = $args['start_date'];
 		} else {
@@ -745,8 +746,9 @@ class WC_Subscriptions_Manager {
 
 		// Adding a new subscription so set the expiry date/time from the order date
 		if ( ! empty( $args['expiry_date'] ) ){
-			if ( is_numeric( $args['expiry_date'] ) )
+			if ( is_numeric( $args['expiry_date'] ) ) {
 				$args['expiry_date'] = date( 'Y-m-d H:i:s', $args['expiry_date'] );
+			}
 
 			$expiration = $args['expiry_date'];
 		} else {
@@ -1076,7 +1078,7 @@ class WC_Subscriptions_Manager {
 					}
 					break;
 				case 'trash' :
-					if ( in_array( $subscription['status'], array( 'cancelled', 'expired' ) ) || self::can_subscription_be_changed_to( 'cancelled', $subscription_key, $user_id ) ) {
+					if ( in_array( $subscription['status'], array( 'cancelled', 'switched', 'expired' ) ) || self::can_subscription_be_changed_to( 'cancelled', $subscription_key, $user_id ) ) {
 						$subscription_can_be_changed = true;
 					} else {
 						$subscription_can_be_changed = false;
@@ -1662,13 +1664,15 @@ class WC_Subscriptions_Manager {
 
 		$is_set = false;
 
-		if ( empty( $user_id ) )
+		if ( empty( $user_id ) ) {
 			$user_id = self::get_user_id_from_subscription_key( $subscription_key );
+		}
 
-		if ( empty( $next_payment ) )
+		if ( empty( $next_payment ) ) {
 			$next_payment = self::calculate_next_payment_date( $subscription_key, $user_id, 'timestamp' );
-		elseif ( is_string( $next_payment ) )
+		} elseif ( is_string( $next_payment ) ) {
 			$next_payment = strtotime( $next_payment );
+		}
 
 		$hook_args = array( 'user_id' => (int)$user_id, 'subscription_key' => $subscription_key );
 
@@ -2666,7 +2670,7 @@ class WC_Subscriptions_Manager {
 			$payment_day = $subscription_details['synchronised_payment_day'];
 			switch ( $subscription_details['subscription_period'] ) {
 				case 'week':
-					$payment_day_of_week = $wp_locale->weekday[ $payment_day ];
+					$payment_day_of_week = WC_Subscriptions_Synchroniser::get_weekday( $payment_day );
 					if ( 1 == $subscription_details['subscription_interval'] ) {
 						 // e.g. $5 every Wednesday
 						if ( ! empty( $subscription_details['initial_amount'] ) ) {
@@ -2677,7 +2681,7 @@ class WC_Subscriptions_Manager {
 					} else {
 						 // e.g. $5 every 2 weeks on Wednesday
 						if ( ! empty( $subscription_details['initial_amount'] ) ) {
-							$subscription_string = sprintf( __( '%s %s then %s every %s on %s', $initial_amount_string, $subscription_details['initial_description'], $subscription_details['subscription_interval'], 'woocommerce-subscriptions' ), $recurring_amount_string, WC_Subscriptions_Manager::get_subscription_period_strings( $subscription_details['subscription_interval'], $subscription_details['subscription_period'] ), $payment_day_of_week );
+							$subscription_string = sprintf( __( '%s %s then %s every %s on %s', 'woocommerce-subscriptions' ), $initial_amount_string, $subscription_details['initial_description'], $recurring_amount_string, WC_Subscriptions_Manager::get_subscription_period_strings( $subscription_details['subscription_interval'], $subscription_details['subscription_period'] ), $payment_day_of_week );
 						} else {
 							$subscription_string = sprintf( __( '%s every %s on %s', 'woocommerce-subscriptions' ), $recurring_amount_string, WC_Subscriptions_Manager::get_subscription_period_strings( $subscription_details['subscription_interval'], $subscription_details['subscription_period'] ), $payment_day_of_week );
 						}

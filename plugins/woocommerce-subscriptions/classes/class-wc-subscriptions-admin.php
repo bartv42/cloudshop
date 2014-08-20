@@ -777,8 +777,8 @@ class WC_Subscriptions_Admin {
 				$dependencies[] = 'wp-pointer';
 
 				$pointer_script_params = array(
-					'typePointerContent'  => sprintf( __( '%sChoose Subscription%sThe WooCommerce Subscriptions extension adds a new %sSubscription%s product type.%s', 'woocommerce-subscriptions' ), '<h3>', '</h3><p>', '<em>', '</em>', '</p>' ),
-					'pricePointerContent' => sprintf( __( '%sSet a Price%sSubscription prices are a little different to product prices. You also have to set a billing period and length for a subscription.%s', 'woocommerce-subscriptions' ), '<h3>', '</h3><p>', '</p>' ),
+					'typePointerContent'  => sprintf( __( '%sChoose Subscription%sThe WooCommerce Subscriptions extension adds two new subscription product types - %sSimple subscription%s and %sVariable subscription%s.%s', 'woocommerce-subscriptions' ), '<h3>', '</h3><p>', '<em>', '</em>', '<em>', '</em>', '</p>' ),
+					'pricePointerContent' => sprintf( __( '%sSet a Price%sSubscription prices are a little different to other product prices. For a subscription, you can set a billing period, length, sign-up fee and free trial.%s', 'woocommerce-subscriptions' ), '<h3>', '</h3><p>', '</p>' ),
 				);
 
 				wp_enqueue_script( 'woocommerce_subscriptions_admin_pointers', plugin_dir_url( WC_Subscriptions::$plugin_file ) . 'js/admin-pointers.js', $dependencies, WC_Subscriptions::$version );
@@ -1262,8 +1262,8 @@ class WC_Subscriptions_Admin {
 		<h4><?php printf( __( '%sWooCommerce Subscriptions Installed%s &#8211; %sYou\'re ready to start selling subscriptions!%s', 'woocommerce-subscriptions' ), '<strong>', '</strong>', '<em>', '</em>' ); ?></h4>
 
 		<p class="submit">
-			<a href="<?php echo self::add_subscription_url(); ?>" class="button-primary"><?php _e( 'Add a Subscription Product &raquo;', 'woocommerce-subscriptions' ); ?></a>
-			<a href="<?php echo self::settings_tab_url(); ?>" class="docs button-primary"><?php _e( 'Settings', 'woocommerce-subscriptions' ); ?></a>
+			<a href="<?php echo self::add_subscription_url(); ?>" class="button button-primary"><?php _e( 'Add a Subscription Product', 'woocommerce-subscriptions' ); ?></a>
+			<a href="<?php echo self::settings_tab_url(); ?>" class="docs button button-primary"><?php _e( 'Settings', 'woocommerce-subscriptions' ); ?></a>
 			<a href="https://twitter.com/share" class="twitter-share-button" data-url="http://www.woothemes.com/products/woocommerce-subscriptions/" data-text="Woot! I can sell subscriptions with #WooCommerce" data-via="WooThemes" data-size="large">Tweet</a>
 			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 		</p>

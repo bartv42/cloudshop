@@ -57,7 +57,7 @@ if ( ! $product->is_in_stock() ) : ?>
 		) );
 		?>
 
-		<button type="submit" class="button alt"><?php echo $product->single_add_to_cart_text(); ?></button>
+		<button type="submit" class="single_add_to_cart_button button alt"><?php echo $product->single_add_to_cart_text(); ?></button>
 
 		<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
 

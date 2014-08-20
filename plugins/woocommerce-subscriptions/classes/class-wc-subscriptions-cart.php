@@ -76,6 +76,9 @@ class WC_Subscriptions_Cart {
 
 		// Sometimes, even if the order total is $0, the cart still needs payment
 		add_filter( 'woocommerce_cart_needs_payment', __CLASS__ . '::cart_needs_payment' , 10, 2 );
+
+		// Make sure cart product prices correctly include/exclude taxes
+		add_filter( 'woocommerce_cart_product_price', __CLASS__ . '::cart_product_price' , 10, 2 );
 	}
 
 	/**
@@ -137,10 +140,11 @@ class WC_Subscriptions_Cart {
 			if ( 'combined_total' == self::$calculation_type ) {
 
 				if ( $sign_up_fee > 0 ) {
-					if ( WC_Subscriptions_Product::get_trial_length( $product ) > 0 )
+					if ( WC_Subscriptions_Product::get_trial_length( $product ) > 0 ) {
 						$price = $sign_up_fee;
-					else
+					} else {
 						$price += $sign_up_fee;
+					}
 				}
 
 			} elseif ( 'sign_up_fee_total' == self::$calculation_type ) {
@@ -155,6 +159,7 @@ class WC_Subscriptions_Cart {
 
 			$price = apply_filters( 'woocommerce_subscriptions_cart_get_price', $price, $product );
 
+		// Make sure the recurring amount for any non-subscription products in the cart with a subscription is $0
 		} elseif ( self::cart_contains_subscription() && 'recurring_total' == self::$calculation_type ) {
 
 			$price = 0;
@@ -174,10 +179,11 @@ class WC_Subscriptions_Cart {
 	public static function calculate_subscription_totals( $total, $cart ) {
 		global $woocommerce;
 
-		if ( ! self::cart_contains_subscription() && ! self::cart_contains_subscription_renewal() ) // cart doesn't contain subscription
+		if ( ! self::cart_contains_subscription() && ! self::cart_contains_subscription_renewal( 'parent' ) ) { // cart doesn't contain subscription
 			return $total;
-		elseif ( 'none' != self::$calculation_type ) // We're in the middle of a recalculation, let it run
+		} elseif ( 'none' != self::$calculation_type ) { // We're in the middle of a recalculation, let it run
 			return $total;
+		}
 
 		$cart_sign_up_fee = self::get_cart_subscription_sign_up_fee();
 		$cart_has_trial   = self::cart_contains_free_trial();
@@ -354,7 +360,7 @@ class WC_Subscriptions_Cart {
 	public static function set_calculated_total( $total ) {
 		global $woocommerce;
 
-		if ( 'none' == self::$calculation_type || ( ! self::cart_contains_subscription() && ! self::cart_contains_subscription_renewal() ) )
+		if ( 'none' == self::$calculation_type || ( ! self::cart_contains_subscription() && ! self::cart_contains_subscription_renewal( 'parent' ) ) )
 			return $total;
 
 		// We've requested totals be recalculated with sign up fee only or free trial, we need to remove anything shipping related from the totals if there are no other items in the cart that require shipping
@@ -399,9 +405,8 @@ class WC_Subscriptions_Cart {
 
 				$other_items_need_shipping = false;
 
-				foreach ( WC()->cart->cart_contents as $cart_item_key => $values ) {
-					$_product = $values['data'];
-					if ( ! WC_Subscriptions_Product::is_subscription( $_product ) && $_product->needs_shipping() ) {
+				foreach ( WC()->cart->cart_contents as $cart_item_key => $cart_item ) {
+					if ( ! WC_Subscriptions_Product::is_subscription( $cart_item['data'] ) && $cart_item['data']->needs_shipping() ) {
 						$other_items_need_shipping = true;
 					}
 				}
@@ -412,7 +417,7 @@ class WC_Subscriptions_Cart {
 			}
 		}
 
-		return $charge_shipping_up_front;
+		return apply_filters( 'woocommerce_subscriptions_cart_shipping_up_front', $charge_shipping_up_front );
 	}
 
 	/**
@@ -433,7 +438,7 @@ class WC_Subscriptions_Cart {
 			}
 		}
 
-		return $cart_contains_subscriptions_needing_shipping;
+		return apply_filters( 'woocommerce_cart_contains_subscriptions_needing_shipping', $cart_contains_subscriptions_needing_shipping );
 	}
 
 	/* Formatted Totals Functions */
@@ -459,15 +464,18 @@ class WC_Subscriptions_Cart {
 			remove_filter( 'woocommerce_get_price', array( &$product, 'get_sign_up_fee' ), 100, 0 );
 
 			$product_subtotal = WC_Subscriptions_Product::get_price_string( $product, array(
-				'price'       => $product_subtotal,
-				'sign_up_fee' => $sign_up_fee_string
+				'price'           => $product_subtotal,
+				'sign_up_fee'     => $sign_up_fee_string,
+				'tax_calculation' => WC()->cart->tax_display_cart,
 				)
 			);
 
-			if ( false !== strpos( $product_subtotal, $woocommerce->countries->inc_tax_or_vat() ) )
+			if ( false !== strpos( $product_subtotal, $woocommerce->countries->inc_tax_or_vat() ) ) {
 				$product_subtotal = str_replace( $woocommerce->countries->inc_tax_or_vat(), '', $product_subtotal ) . ' <small class="tax_label">' . $woocommerce->countries->inc_tax_or_vat() . '</small>';
-			if ( false !== strpos( $product_subtotal, $woocommerce->countries->ex_tax_or_vat() ) )
+			}
+			if ( false !== strpos( $product_subtotal, $woocommerce->countries->ex_tax_or_vat() ) ) {
 				$product_subtotal = str_replace( $woocommerce->countries->ex_tax_or_vat(), '', $product_subtotal ) . ' <small class="tax_label">' .  $woocommerce->countries->ex_tax_or_vat() . '</small>';
+			}
 
 			$product_subtotal = '<span class="subscription-price">' . $product_subtotal . '</span>';
 		}
@@ -484,8 +492,9 @@ class WC_Subscriptions_Cart {
 	public static function get_formatted_discounts_before_tax( $discount, $cart ) {
 		global $woocommerce;
 
-		if ( self::cart_contains_subscription() && ( $discount !== false || self::get_recurring_discount_cart() > 0 ) )
+		if ( self::cart_contains_subscription() && ( $discount !== false || self::get_recurring_discount_cart() > 0 ) ) {
 			$discount = self::get_cart_subscription_string( $discount, self::get_recurring_discount_cart() );
+		}
 
 		return $discount;
 	}
@@ -498,8 +507,9 @@ class WC_Subscriptions_Cart {
 	 */
 	public static function get_formatted_discounts_after_tax( $discount, $cart ) {
 
-		if ( self::cart_contains_subscription() && ( $discount !== false || self::get_recurring_discount_total() > 0 ) )
+		if ( self::cart_contains_subscription() && ( $discount !== false || self::get_recurring_discount_total() > 0 ) ) {
 			$discount = self::get_cart_subscription_string( $discount, self::get_recurring_discount_total() );
+		}
 
 		return $discount;
 	}
@@ -789,7 +799,7 @@ class WC_Subscriptions_Cart {
 		// Don't show up front fees when there is no trial period and no sign up fee and they are the same as the recurring amount
 		if ( self::get_cart_subscription_trial_length() == 0 && self::get_cart_subscription_sign_up_fee() == 0 && $initial_amount_string == $recurring_amount_string ) {
 			$subscription_details['initial_amount'] = '';
-		} elseif ( wc_price( 0 ) == $initial_amount_string && false === $is_one_payment ) { // don't show $0.00 initial amount (i.e. a free trial with no non-subscription products in the cart) unless the recurring period is the same as the billing period
+		} elseif ( wc_price( 0 ) == $initial_amount_string && false === $is_one_payment && self::get_cart_subscription_trial_length() > 0 ) { // don't show $0.00 initial amount (i.e. a free trial with no non-subscription products in the cart) unless the recurring period is the same as the billing period
 			$subscription_details['initial_amount'] = '';
 		}
 
@@ -1349,7 +1359,7 @@ class WC_Subscriptions_Cart {
 	 */	
 	public static function before_calculate_totals( $cart ) {
 
-		$cart_item = WC_Subscriptions_Cart::cart_contains_subscription_renewal();
+		$cart_item = self::cart_contains_subscription_renewal( 'child' );
 
 		if ( $cart_item ) {
 
@@ -1370,8 +1380,9 @@ class WC_Subscriptions_Cart {
 	public static function increase_coupon_discount_amount( $code, $amount ) {
 		global $woocommerce;
 
-		if ( empty( $woocommerce->cart->coupon_discount_amounts[ $code ] ) )
+		if ( empty( $woocommerce->cart->coupon_discount_amounts[ $code ] ) ) {
 			$woocommerce->cart->coupon_discount_amounts[ $code ] = 0;
+		}
 
 		$woocommerce->cart->coupon_discount_amounts[ $code ] += $amount;
 	}
@@ -1446,7 +1457,7 @@ class WC_Subscriptions_Cart {
 	 */
 	public static function get_discounted_price_for_renewal( $price, $values, $cart ) {
 
-		$cart_item = self::cart_contains_subscription_renewal();
+		$cart_item = self::cart_contains_subscription_renewal( 'child' );
 
 		if ( $cart_item ) {
 			$original_order_id = $cart_item['subscription_renewal']['original_order'];
@@ -1522,6 +1533,20 @@ class WC_Subscriptions_Cart {
 	 */
 	public static function get_items_product_id( $cart_item ) {
 		return ( ! empty( $cart_item['variation_id'] ) ) ? $cart_item['variation_id'] : $cart_item['product_id'];
+	}
+
+	/**
+	 * Make sure cart product prices correctly include/exclude taxes.
+	 *
+	 * @since 1.5.8
+	 */
+	public static function cart_product_price( $price, $product ) {
+
+		if ( WC_Subscriptions_Product::is_subscription( $product ) ) {
+			$price = WC_Subscriptions_Product::get_price_string( $product, array( 'price' => $price, 'tax_calculation' => WC()->cart->tax_display_cart ) );
+		}
+
+		return $price;
 	}
 
 	/* Deprecated */

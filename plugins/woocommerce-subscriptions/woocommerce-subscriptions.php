@@ -5,9 +5,9 @@
  * Description: Sell products and services with recurring payments in your WooCommerce Store.
  * Author: Brent Shepherd
  * Author URI: http://find.brentshepherd.com/
- * Version: 1.5.7
+ * Version: 1.5.9
  *
- * Copyright 2013  Leonard's Ego Pty. Ltd.  (email : freedoms@leonardsego.com)
+ * Copyright 2014 Prospress, Inc.  (email : freedoms@prospress.com)
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -99,7 +99,7 @@ class WC_Subscriptions {
 
 	public static $text_domain = 'deprecated-use-woocommerce-subscriptions-string';
 
-	public static $version = '1.5.7';
+	public static $version = '1.5.9';
 
 	private static $total_subscription_count = null;
 
@@ -284,21 +284,27 @@ class WC_Subscriptions {
 	public static function maybe_empty_cart( $valid, $product_id, $quantity ) {
 		global $woocommerce;
 
-		if ( WC_Subscriptions_Product::is_subscription( $product_id ) && ( 'yes' != get_option( WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase', 'no' ) ) ) {
+		if ( WC_Subscriptions_Product::is_subscription( $product_id ) && 'yes' != get_option( WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase', 'no' ) ) {
 
 			$woocommerce->cart->empty_cart();
+
+		} elseif ( WC_Subscriptions_Product::is_subscription( $product_id ) && WC_Subscriptions_Cart::cart_contains_subscription_renewal( 'child' ) ) {
+
+			self::remove_subscriptions_from_cart();
+
+			self::add_notice( __( 'A subscription renewal has been removed from your cart. Multiple subscriptions can not be purchased at the same time.', 'woocommerce-subscriptions' ), 'notice' );
 
 		} elseif ( WC_Subscriptions_Product::is_subscription( $product_id ) && WC_Subscriptions_Cart::cart_contains_subscription() ) {
 
 			self::remove_subscriptions_from_cart();
 
-			self::add_notice( __( 'A subscription has been removed from your cart. Multiple subscriptions can not be purchased at the same time.', 'woocommerce-subscriptions' ), 'error' );
+			self::add_notice( __( 'A subscription has been removed from your cart. Multiple subscriptions can not be purchased at the same time.', 'woocommerce-subscriptions' ), 'notice' );
 
 		} elseif ( WC_Subscriptions_Cart::cart_contains_subscription() && 'yes' != get_option( WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase', 'no' ) ) {
 
 			self::remove_subscriptions_from_cart();
 
-			self::add_notice( __( 'A subscription has been removed from your cart. Due to payment gateway restrictions, products and subscriptions can not be purchased at the same time.', 'woocommerce-subscriptions' ), 'error' );
+			self::add_notice( __( 'A subscription has been removed from your cart. Products and subscriptions can not be purchased at the same time.', 'woocommerce-subscriptions' ), 'notice' );
 
 			// Redirect to cart page to remove subscription & notify shopper
 			add_filter( 'add_to_cart_fragments', __CLASS__ . '::redirect_ajax_add_to_cart' );
@@ -333,20 +339,14 @@ class WC_Subscriptions {
 	 * @since 1.0
 	 */
 	public static function add_to_cart_redirect( $url ) {
-		global $woocommerce;
 
 		// If product is of the subscription type
 		if ( is_numeric( $_REQUEST['add-to-cart'] ) && WC_Subscriptions_Product::is_subscription( (int) $_REQUEST['add-to-cart'] ) && 'yes' != get_option( WC_Subscriptions_Admin::$option_prefix . '_multiple_purchase', 'no' ) ) {
 
-			// Remove default cart message
-			if ( function_exists( 'wc_clear_notices' ) ) {
-				wc_clear_notices();
-			} else { // WC < 2.1
-				$woocommerce->clear_messages();
-			}
+			wc_clear_notices();
 
 			// Redirect to checkout
-			$url = $woocommerce->cart->get_checkout_url();
+			$url = WC()->cart->get_checkout_url();
 		}
 
 		return $url;
@@ -568,7 +568,7 @@ class WC_Subscriptions {
 <div id="message" class="error">
 <p><?php printf( __( 'It looks like this site has moved or is a duplicate site. %sWooCommerce Subscriptions%s has disabled automatic payments and subscription related emails on this site to prevent duplicate payments from a staging or test environment. %sLearn more%s', 'woocommerce-subscriptions' ), '<strong>', '</strong>', '<a href="http://docs.woothemes.com/document/subscriptions/faq/#section-39" target="_blank">', '&raquo;</a>' ); ?></p>
 <form action="" style="margin: 5px 0;" method="POST">
-	<button class="button-primary" name="wc_subscription_duplicate_site" value="ignore"><?php _e( 'Quit nagging me (but don\'t enable automatic payments)', 'woocommerce-subscriptions' ); ?></button>
+	<button class="button button-primary" name="wc_subscription_duplicate_site" value="ignore"><?php _e( 'Quit nagging me (but don\'t enable automatic payments)', 'woocommerce-subscriptions' ); ?></button>
 	<button class="button" name="wc_subscription_duplicate_site" value="update"><?php _e( 'Enable automatic payments', 'woocommerce-subscriptions' ); ?></button>
 </form>
 </div>
@@ -597,13 +597,13 @@ class WC_Subscriptions {
 	 * A general purpose function for grabbing an array of subscriptions in form of 'subscription_key' => 'subscription_details'.
 	 *
 	 * The $args param is based on the parameter of the same name used by the core WordPress @see get_posts() function.
-	 * It can be used to choose which subscriptions should be returned by the function, how many subscriptions shoudl be returned
+	 * It can be used to choose which subscriptions should be returned by the function, how many subscriptions should be returned
 	 * and in what order those subscriptions should be returned.
 	 *
 	 * @param array $args A set of name value pairs to determine the return value.
 	 *		'subscriptions_per_page' The number of subscriptions to return. Set to -1 for unlimited. Default 10.
 	 *		'offset' An optional number of subscription to displace or pass over. Default 0.
-	 *		'orderby' The field which the subscriptions should be orderd by. Can be 'start_date', 'expiry_date', 'end_date', 'status', 'name' or 'order_id'. Defaults to 'start_date'.
+	 *		'orderby' The field which the subscriptions should be ordered by. Can be 'start_date', 'expiry_date', 'end_date', 'status', 'name' or 'order_id'. Defaults to 'start_date'.
 	 *		'order' The order of the values returned. Can be 'ASC' or 'DESC'. Defaults to 'DESC'
 	 *		'customer_id' The user ID of a customer on the site.
 	 *		'product_id' The post ID of a WC_Product_Subscription, WC_Product_Variable_Subscription or WC_Product_Subscription_Variation object

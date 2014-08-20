@@ -84,10 +84,10 @@ class WC_Subscriptions_List_Table extends WP_List_Table {
 					}
 				}
 
-				if( $item['status'] == 'pending' ) {
+				if ( $item['status'] == 'pending' ) {
 					unset( $actions['active'] );
 					unset( $actions['trash'] );
-				} elseif( ! in_array( $item['status'], array( 'cancelled', 'expired', 'suspended' ) ) ) {
+				} elseif( ! in_array( $item['status'], array( 'cancelled', 'expired', 'switched', 'suspended' ) ) ) {
 					unset( $actions['trash'] );
 				}
 
@@ -105,8 +105,9 @@ class WC_Subscriptions_List_Table extends WP_List_Table {
 				$order_item = WC_Subscriptions_Order::get_item_by_product_id( $order, $item['product_id'] );
 				$product    = $order->get_product_from_item( $order_item );
 
-				if ( isset( $product->variation_data ) )
+				if ( isset( $product->variation_data ) ) {
 					$column_content .= '<br />' . woocommerce_get_formatted_variation( $product->variation_data, true );
+				}
 
 				break;
 
@@ -189,7 +190,7 @@ class WC_Subscriptions_List_Table extends WP_List_Table {
 
 					if ( WC_Subscriptions_Manager::can_subscription_be_changed_to( 'new-payment-date', $item['subscription_key'], $item['user_id'] ) ) {
 						$column_content .= '<div class="edit-date-div row-actions hide-if-no-js">';
-						$column_content .= '<img class="date-picker-icon" src="' . admin_url( 'images/date-button.gif' ) . '" title="Date Picker Icon"/>';
+						$column_content .= '<img class="date-picker-icon" src="' . admin_url( 'images/date-button.gif' ) . '" title="' . __( 'Date Picker Icon', 'woocommerce-subscriptions' ) . '" />';
 						$column_content .= '<a href="#edit_timestamp" class="edit-timestamp" tabindex="4">' . __( 'Change', 'woocommerce-subscriptions' ) . '</a>';
 						$column_content .= '<div class="date-picker-div hide-if-js">';
 						$column_content .= WC_Subscriptions_Manager::touch_time( array(
