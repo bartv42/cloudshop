@@ -181,6 +181,9 @@ function blendercloud_api( $atts ) {
 
 	} 
 	
+	// add one grace day to expiration
+	$last_expiration_date->add ( DateInterval::createfromdatestring('+1 day') );
+	
 	$user_data['expiration_date'] = $last_expiration_date->format('Y-m-d H:i:s');
 
 	$now = new DateTime("now");	
