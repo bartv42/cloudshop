@@ -29,10 +29,9 @@ function blendercloud_api( $atts ) {
 		$user_data['shop_id'] = $user_id;
 		
 		// process simple products (prepaid subscriptions)
-		$order_ids = bo_get_all_user_orders( $user_id, 'cloud_expiration_date' );
-
+		$order_ids = bo_get_all_user_orders( $user_id, 'completed' );
+						
 		foreach( $order_ids as $order_id ) {
-			
 			$order = new WC_Order( $order_id );
 			
 			$order_date = $order->order_date;
@@ -61,15 +60,6 @@ function blendercloud_api( $atts ) {
 						
 					default: 
 						continue 2;	// skip to next product
-				}
-
-				// override end_time with cloud_expiration_date meta?
-				$cloud_expiration_date_override = get_post_meta( $order_id, 'cloud_expiration_date', true );				
-				if( isset( $cloud_expiration_date_override )) {
-					$overrride = new DateTime( $cloud_expiration_date_override );
-					if( $override > $expiry_date ) {
-						$expiry_date = $override;
-					}
 				}
 
 				$tmp['expiration_date'] = $expiry_date->format('Y-m-d H:i:s');
@@ -101,18 +91,19 @@ function blendercloud_api( $atts ) {
 			foreach( $subscriptions as $subscription_details ) {
 
 				if( $subscription_details['status'] != 'trash' ) {
-					
-					// print_r($subscription_details);
-					
+								
 					$order_id			= $subscription_details['order_id'];
 					$product_id			= $subscription_details['product_id'];
 
-					$next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+					$order = new WC_Order($order_id);
 
+					// print_r($order);
+					// $next_payment_date	= WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
+
+					$subscription_key	= WC_Subscriptions_Manager::get_subscription_key( $order_id, $product_id );
 
 					if ( $subscription_details['expiry_date'] == 0 && ! in_array( $subscription_details['status'], array( 'cancelled', 'switched' ) ) ) {
 
-						$subscription_key	= WC_Subscriptions_Manager::get_subscription_key( $order_id, $product_id );
 						$end_time = WC_Subscriptions_Manager::get_next_payment_date( $subscription_key, $user_id, 'mysql' );
 						$end_timestamp = strtotime( $end_time );
 
@@ -125,11 +116,6 @@ function blendercloud_api( $atts ) {
 						} else {
 							$end_timestamp = $end_of_prepaid_term;
 						}
-						
-						if( $end_timestamp == '' ) {
-							$end_timestamp = strtotime( $subscription_details['trial_expiry_date'] );
-						}
-						
 					} else {
 
 						$end_timestamp = strtotime( $subscription_details['expiry_date'] );
@@ -137,14 +123,6 @@ function blendercloud_api( $atts ) {
 					}
 					
 					$end_time = date("Y-m-d H:i:s", $end_timestamp );
-					
-					// override end_time with cloud_expiration_date meta?
-					$cloud_expiration_date_override = get_post_meta( $order_id, 'cloud_expiration_date', true );
-					if( isset( $cloud_expiration_date_override )) {
-						if( $cloud_expiration_date_override > $end_time ) {
-							$end_time = $cloud_expiration_date_override;
-						}
-					}
 
 					$product = get_product( $product_id );
 					$sku = $product->get_sku();
@@ -162,9 +140,15 @@ function blendercloud_api( $atts ) {
 					$now = new DateTime("now");	
 
 					$tmp['cloud_access'] = ($expiry_date > $now)?'1':'0';
-
 					
 					$tmp['sku'] = $sku;
+					
+					// if order is refunded, stop access
+					if( $order->status == 'refunded' ) {
+						$tmp['expiration_date'] = $end_time;
+						$tmp['subscription_status'] = 'refunded';
+						$tmp['cloud_access'] = 0;
+					}
 
 					switch( $sku ) {
 						
