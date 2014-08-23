@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 if ( is_user_logged_in() ) 
 	return;
 ?>
-<form method="post" class="login" <?php if ( $hidden ) echo 'style="display:none;"'; ?>>
+<form method="post" class="login_bo" <?php if ( $hidden ) echo 'style="display:none;"'; ?>>
 
 	<?php do_action( 'woocommerce_login_form_start' ); ?>
 
