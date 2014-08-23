@@ -57,7 +57,6 @@
 			<?php wp_nav_menu( array( 
 				'theme_location' => 'primary', 
 				'menu_class' => 'nav-menu list-bullets-none content-align-right pull-right', 
-				//'exclude' => 55,
 				'items_wrap' => '<ul class="%2$s">%3$s'.$logout_item.'</ul>'
 			 ) ); ?>
 		</nav><!-- #site-navigation -->
