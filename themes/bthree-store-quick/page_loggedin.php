@@ -37,8 +37,6 @@ get_header(); ?>
 							'message'  => __( 'If you have shopped with us before, please enter your details in the boxes below. If you are a new customer please proceed to the Billing &amp; Shipping section.', 'woocommerce' ),
 							'redirect' => get_permalink( wc_get_page_id( 'checkout' ) ),
 							'hidden'   => false
-
-
 						)
 					);
 
