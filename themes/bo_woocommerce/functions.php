@@ -50,8 +50,6 @@ function bo_body_class( $classes ) {
 }
 add_filter( 'body_class', 'bo_body_class' );	
 
-
-
 /* http://wordpress.org/support/topic/add-to-cart-not-showing-for-variable-product
 function fix_woo_var_cart()
 {

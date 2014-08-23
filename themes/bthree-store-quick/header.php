@@ -46,7 +46,20 @@
 
 			<a class="logo pull-left absolute offset-top-2" href="/"></a>
 
-			<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_class' => 'nav-menu list-bullets-none content-align-right pull-right', 'exclude' => 55 ) ); ?>
+			<?php
+				$logout_item = '';
+			    if ( is_user_logged_in() ) {
+					$logout_url = wp_logout_url( '/' );
+					$logout_item = '<li id="menu-item-logout" class="page_item page-item-last"><a href="'.$logout_url.'">'.__('Logout', WPS_TEXT_DOMAIN).'</a></li>';
+			    }
+			?>
+
+			<?php wp_nav_menu( array( 
+				'theme_location' => 'primary', 
+				'menu_class' => 'nav-menu list-bullets-none content-align-right pull-right', 
+				//'exclude' => 55,
+				'items_wrap' => '<ul class="%2$s">%3$s'.$logout_item.'</ul>'
+			 ) ); ?>
 		</nav><!-- #site-navigation -->
 
 		<?php if ( get_header_image() ) : ?>
