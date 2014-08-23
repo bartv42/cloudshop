@@ -49,7 +49,7 @@
 			<?php
 				$logout_item = '';
 			    if ( is_user_logged_in() ) {
-					$logout_url = wp_logout_url( '/' );
+					$logout_url = wp_logout_url( home_url() );
 					$logout_item = '<li id="menu-item-logout" class="page_item page-item-last"><a href="'.$logout_url.'">'.__('Logout', WPS_TEXT_DOMAIN).'</a></li>';
 			    }
 			?>
