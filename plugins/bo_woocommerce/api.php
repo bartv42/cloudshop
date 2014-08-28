@@ -2,7 +2,6 @@
 		
 function blendercloud_api( $atts ) {
 
-	 
 	$user_data = array(	
 		'shop_id' => '0',
 		'cloud_access' => 0,
@@ -53,6 +52,7 @@ function blendercloud_api( $atts ) {
 				
 				switch( $sku ) {
 					case 'cloud-prepaid-3':
+					case 'cloud-prepaid-3-renewal':                    
 						$expiry_date->modify('+3 month');;
 						break;
 					
@@ -152,7 +152,8 @@ function blendercloud_api( $atts ) {
 					}
 
 					switch( $sku ) {
-						
+                        
+						case 'cloud-subscription-3-renewal':						
 						case 'cloud-subscription-3':
                             //$tmp['failed_payments'] = $subscription['failed_payments'];
 							break;
