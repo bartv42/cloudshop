@@ -24,7 +24,7 @@ function custom_pre_get_posts_query( $q ) {
 		$q->set( 'tax_query', array(array(
 			'taxonomy' => 'product_cat',
 			'field' => 'id',
-			'terms' => array( 23 ),
+			'terms' => array( 24 ),
 			'operator' => 'NOT IN'
 	    )));
 
