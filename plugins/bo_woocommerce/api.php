@@ -5,7 +5,7 @@ function blendercloud_api( $atts ) {
 	 
 	$user_data = array(	
 		'shop_id' => '0',
-		'cloud_access' => '0',
+		'cloud_access' => 0,
 		'expiration_date' => '1970-01-01 00:00:00',
 	);
 
@@ -24,6 +24,8 @@ function blendercloud_api( $atts ) {
 
 	if( !empty( $users ) ) {
 
+
+
 		$user_id = $users[0]->ID;
 	
 		$user_data['shop_id'] = $user_id;
@@ -40,7 +42,7 @@ function blendercloud_api( $atts ) {
 			foreach ( $items as $item ) {
 				
 				$tmp = bo_empty_subscription_line();
-				
+                			
 			    $product_id = $item['product_id'];
 				$product = get_product( $product_id );
 				$sku = $product->get_sku();
@@ -69,7 +71,7 @@ function blendercloud_api( $atts ) {
 				$now = new DateTime("now");	
 
 				if( $expiry_date > $now ) {
-					$tmp['cloud_access'] = '1';
+					$tmp['cloud_access'] = 1;
 				}
 				
 				if( $expiry_date > $last_expiration_date ) {
@@ -129,8 +131,7 @@ function blendercloud_api( $atts ) {
 
 					$tmp = bo_empty_subscription_line();
 					$tmp['expiration_date'] = $end_time;
-					$tmp['subscription_status'] = $subscription_details['status'];
-																				
+					$tmp['subscription_status'] = $subscription_details['status'];																				
 
 					$expiry_date = new DateTime( $end_time );
 					if( $expiry_date > $last_expiration_date ) {
@@ -139,7 +140,7 @@ function blendercloud_api( $atts ) {
 					
 					$now = new DateTime("now");	
 
-					$tmp['cloud_access'] = ($expiry_date > $now)?'1':'0';
+					$tmp['cloud_access'] = ($expiry_date > $now)? 1 : 0;
 					
 					$tmp['sku'] = $sku;
 					
@@ -153,7 +154,7 @@ function blendercloud_api( $atts ) {
 					switch( $sku ) {
 						
 						case 'cloud-subscription-3':
-
+                            //$tmp['failed_payments'] = $subscription['failed_payments'];
 							break;
 					
 						case 'cloud-subscription-team':
@@ -188,7 +189,7 @@ function blendercloud_api( $atts ) {
 
 	$now = new DateTime("now");	
 	if( $expiry_date > $now ) {
-		$user_data['cloud_access'] = '1';
+		$user_data['cloud_access'] = 1;
 	}
 	
 	//echo "<pre>";print_r($user_data);
@@ -242,7 +243,7 @@ function bo_empty_subscription_line() {
 		'sku' => '',
 		'subscription_status' => 'undefined',
 		'expiration_date' => '',
-		'cloud_access' => '0',
+		'cloud_access' => 0,
 	 );
 	 
 	 return $tmp;
