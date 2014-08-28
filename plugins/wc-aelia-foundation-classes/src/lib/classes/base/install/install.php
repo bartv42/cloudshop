@@ -10,8 +10,8 @@ if(!class_exists('Aelia\WC\Aelia_Install')) {
 		// @var string Prefix used to retrieve the methods to run sequentially to perform the updates.
 		const UPDATE_METHOD_PREFIX = 'update_to_';
 
-		// @var string The ID of the lock that will be used by the installer to prevent race conditions.
-		protected $lock_id = 'WC_AFC';
+		// @var string The name of the lock that will be used by the installer to prevent race conditions.
+		protected $lock_name = 'WC_AFC';
 
 		// @var array An array containing error messages returned by the class.
 		// TODO Use Aelia\WC\Messages class to handle messages
@@ -245,7 +245,7 @@ if(!class_exists('Aelia\WC\Aelia_Install')) {
 			}
 
 			// Initialize the semaphore that will be used to prevent race conditions
-			$this->semaphore = new Semaphore($this->lock_id);
+			$this->semaphore = new Semaphore($this->lock_name);
 			$this->semaphore->initialize();
 			if(!$this->semaphore->lock()) {
 				$this->log(sprintf(__('%s Plugin Autoupdate - Could not obtain semaphore lock. ' .

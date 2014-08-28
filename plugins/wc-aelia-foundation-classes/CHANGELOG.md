@@ -2,6 +2,12 @@ Aelia Foundation Classes for WooCommerce
 ===
 
 ###Version 1.x
+####1.0.11.140825
+* Fixed minor bug in `IP2Location` class that generated a notice message.
+
+####1.0.10.140819
+* Fixed logic used to check and load plugin dependencies in `Aelia_WC_RequirementsChecks` class.
+
 ####1.0.9.140717
 * Refactored semaphore class:
 	* Optimised logic used for auto-updates to improve performance.

@@ -3,7 +3,7 @@
 Plugin Name: Aelia Foundation Classes for WooCommerce
 Description: This plugin implements common classes for other WooCommerce plugins developed by Aelia.
 Author: Aelia (Diego Zanella)
-Version: 1.0.9.140717
+Version: 1.0.11.140825
 */
 
 require_once('src/lib/classes/install/aelia-wc-afc-requirementscheck.php');

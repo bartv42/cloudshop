@@ -75,7 +75,7 @@ class IP2Location {
 			}
 		}
 
-		return apply_filters('wc_aelia_ip2location_country_code', $country_code, $host);
+		return apply_filters('wc_aelia_ip2location_country_code', $country_code, $ip_address);
 	}
 
 	/**
