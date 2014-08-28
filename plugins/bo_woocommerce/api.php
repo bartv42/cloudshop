@@ -153,7 +153,7 @@ function blendercloud_api( $atts ) {
 
 					switch( $sku ) {
                         
-						case 'cloud-subscription-3-renewal':						
+						case 'cloud-subscription-1-renewal':						
 						case 'cloud-subscription-3':
                             //$tmp['failed_payments'] = $subscription['failed_payments'];
 							break;
