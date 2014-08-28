@@ -1,6 +1,17 @@
 # WooCommerce Currency Switcher - Subscriptions Integration
 
 ## Version 1.x
+####1.2.6.140820
+* Fixed minor bugs in user interface:
+	* Removed notice messages from pricing interface for simple and variable subscriptions.
+	* Fixed reference to text domain variable in variable subscriptions pricing interface.
+
+####1.2.5.140819
+* Updated logic used to for requirements checking.
+
+####1.2.4.140724
+* Removed deprecated method `WC_Aelia_CS_Subscriptions_Plugin::check_requirements()`.
+
 ####1.2.3.140715
 * Fixed bug that prevented currency prices for non-subscription products from being saved.
 

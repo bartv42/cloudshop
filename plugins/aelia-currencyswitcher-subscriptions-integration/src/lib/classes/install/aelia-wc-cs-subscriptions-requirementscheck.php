@@ -16,8 +16,9 @@ class Aelia_WC_CS_Subscriptions_RequirementsChecks extends Aelia_WC_Requirements
 	protected $required_plugins = array(
 		'WooCommerce' => '2.0.10',
 		'Aelia Foundation Classes for WooCommerce' => array(
-			'version' => '1.0.6.140619',
+			'version' => '1.0.10.140819',
 			'extra_info' => 'You can get the plugin <a href="http://dev.pathtoenlightenment.net/downloads/wc-aelia-foundation-classes.zip">from our site</a>, free of charge.',
+			'autoload' => true,
 		),
 		'Aelia Currency Switcher for WooCommerce' => array(
 			'version' => '3.3.11.140619',

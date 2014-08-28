@@ -17,6 +17,9 @@ if(!class_exists('Aelia_WC_RequirementsChecks')) {
 			//'curl',
 		);
 
+		// @var array A list of all the installed plugins.
+		protected static $_installed_plugins;
+
 		// @var array An array of WordPress plugins (name => version) required by the plugin.
 		protected $required_plugins = array(
 			'WooCommerce' => '2.0.10',
@@ -67,24 +70,31 @@ if(!class_exists('Aelia_WC_RequirementsChecks')) {
 		 * loaded automatically, if requirements checks pass.
 		 */
 		protected function check_required_plugins($autoload_plugins = true) {
-			foreach($this->required_plugins as $plugin_name => $plugin_details) {
+			foreach($this->required_plugins as $plugin_name => $plugin_requirements) {
 				$plugin_info = $this->is_plugin_active($plugin_name);
 
 				// If plugin_details is not an array, it's assumed to be a string containing
 				// the required plugin version
-				if(!is_array($plugin_details)) {
-					$plugin_details = array(
-						'version' => $plugin_details,
+				if(!is_array($plugin_requirements)) {
+					$plugin_requirements = array(
+						'version' => $plugin_requirements,
 					);
 				}
 
 				$error_message = '';
 				if(is_array($plugin_info)) {
-					if(version_compare($plugin_info['Version'], $plugin_details['version'], '<')) {
+					if(version_compare($plugin_info['Version'], $plugin_requirements['version'], '<')) {
 						$error_message = sprintf(__('Plugin "%s" must be version "%s" or later.', $this->text_domain),
 																		 $plugin_name,
-																		 $plugin_details['version']);
+																		 $plugin_requirements['version']);
+					}
+					else {
+						// If plugin must be loaded automatically, without waiting for WordPress to load it,
+						// add it to the autoload queue
+						if(isset($plugin_requirements['autoload']) && ($plugin_requirements['autoload'] == true)) {
+							$this->required_plugins_info[$plugin_name] = $plugin_info;
 						}
+					}
 				}
 				else {
 					$error_message = sprintf(__('Plugin "%s" must be installed and activated.', $this->text_domain),
@@ -92,8 +102,8 @@ if(!class_exists('Aelia_WC_RequirementsChecks')) {
 				}
 
 				if(!empty($error_message)) {
-					if(isset($plugin_details['extra_info'])) {
-						$error_message .= ' ' . $plugin_details['extra_info'];
+					if(isset($plugin_requirements['extra_info'])) {
+						$error_message .= ' ' . $plugin_requirements['extra_info'];
 					}
 					$this->requirements_errors[] = $error_message;
 				}
@@ -148,6 +158,19 @@ if(!class_exists('Aelia_WC_RequirementsChecks')) {
 		}
 
 		/**
+		 * Returns a list of the installed plugins.
+		 *
+		 * @return array
+		 */
+		protected function installed_plugins() {
+			if(empty(self::$_installed_plugins)) {
+				self::$_installed_plugins = get_plugins();
+			}
+
+			return self::$_installed_plugins;
+		}
+
+		/**
 		 * Checks if a plugin is active and returns a value to indicate it.
 		 *
 		 * @param string plugin_key The key of the plugin to check.
@@ -159,13 +182,9 @@ if(!class_exists('Aelia_WC_RequirementsChecks')) {
 				require_once(ABSPATH . 'wp-admin/includes/plugin.php');
 			}
 
-			$plugins = get_plugins();
-			foreach($plugins as $path => $plugin_info){
+			foreach($this->installed_plugins() as $path => $plugin_info){
 				if((strcasecmp($plugin_info['Name'], $plugin_name) === 0) && is_plugin_active($path)) {
 					$plugin_info['Path'] = $path;
-
-					$this->required_plugins_info[$plugin_name] = $plugin_info;
-
 					return $plugin_info;
 				}
 			}

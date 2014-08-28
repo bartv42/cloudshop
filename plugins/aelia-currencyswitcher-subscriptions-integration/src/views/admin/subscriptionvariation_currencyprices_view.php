@@ -18,6 +18,9 @@ if(!function_exists('woocommerce_wp_text_input')) {
 $currencyprices_manager = WC_Aelia_CurrencyPrices_Manager::instance();
 $enabled_currencies = WC_Aelia_CurrencySwitcher::settings()->get_enabled_currencies();
 $base_currency = WC_Aelia_CurrencySwitcher::settings()->base_currency();
+// The text domain for translations
+$text_domain = WC_Aelia_CS_Subscriptions_Plugin::$text_domain;
+
 
 $post_id = $currencyprices_manager->current_post->ID;
 $loop = $currencyprices_manager->loop_idx;
@@ -63,7 +66,7 @@ foreach($enabled_currencies as $currency) {
 	echo '<td class="SignupFee">';
 	woocommerce_wp_text_input(array('id' => Subscriptions_Integration::FIELD_VARIATION_SIGNUP_FEE_CURRENCY_PRICES . "[$loop][$currency]",
 																	'class' => 'wc_input_price short',
-																	//'label' => __('Sign-up fee', $text_domain) . ' (' . get_woocommerce_currency_symbol($currency) . ')',
+																	'label' => '',
 																	'type' => 'number',
 																	'value' => get_value($currency, $signup_prices, null),
 																	'placeholder' => __('Auto',
@@ -78,7 +81,7 @@ foreach($enabled_currencies as $currency) {
 	echo '<td class="Regular">';
 	woocommerce_wp_text_input(array('id' => Subscriptions_Integration::FIELD_VARIATION_REGULAR_CURRENCY_PRICES . "[$loop][$currency]",
 																	'class' => 'wc_input_price short',
-																	//'label' => __('Subscription Price', 'woocommerce-subscriptions') . ' (' . get_woocommerce_currency_symbol($currency) . ')',
+																	'label' => '',
 																	'type' => 'number',
 																	'value' => get_value($currency, $product_regular_prices, null),
 																	'placeholder' => __('Auto',
@@ -93,7 +96,7 @@ foreach($enabled_currencies as $currency) {
 	echo '<td class="Sale">';
 	woocommerce_wp_text_input(array('id' => Subscriptions_Integration::FIELD_VARIATION_SALE_CURRENCY_PRICES . "[$loop][$currency]",
 																	'class' => 'wc_input_price short',
-																	//'label' => __('Sale Price', 'woocommerce') . ' (' . get_woocommerce_currency_symbol($currency) . ')',
+																	'label' => '',
 																	'type' => 'number',
 																	'value' => get_value($currency, $product_sale_prices, null),
 																	'placeholder' => __('Auto',

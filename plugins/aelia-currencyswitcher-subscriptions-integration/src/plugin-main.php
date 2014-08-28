@@ -12,7 +12,7 @@ use Aelia\WC\Messages;
  * Aelia Currency Switcher Subscriptions Integration plugin.
  **/
 class WC_Aelia_CS_Subscriptions_Plugin extends Aelia_Plugin {
-	public static $version = '1.2.3.140715';
+	public static $version = '1.2.6.140820';
 
 	public static $plugin_slug = Definitions::PLUGIN_SLUG;
 	public static $text_domain = Definitions::TEXT_DOMAIN;
@@ -61,33 +61,6 @@ class WC_Aelia_CS_Subscriptions_Plugin extends Aelia_Plugin {
 		global $post, $woocommerce;
 
 		return isset($post) && ($post->post_type == 'product');
-	}
-
-	/**
-	 * Checks that plugin's requirements are satisfied.
-	 *
-	 * @return bool
-	 */
-	public static function check_requirements() {
-		parent::check_requirements();
-
-		$required_plugins = array(
-			'woocommerce-aelia-currencyswitcher/woocommerce-aelia-currencyswitcher.php' => 'Aelia Currency Switcher',
-			'woocommerce-subscriptions/woocommerce-subscriptions.php' => 'WooCommerce Subscriptions',
-		);
-
-		foreach($required_plugins as $plugin_key => $plugin_name) {
-			$result = self::is_plugin_active($plugin_key);
-			if(!$result) {
-				static::$requirements_errors[] = sprintf(__('Plugin "%s" is required, ' .
-																										'but it has not been found. Please install it ' .
-																										'and configure it before using this plugin.',
-																										self::$text_domain),
-																								 $plugin_name);
-			}
-		}
-
-		return empty(static::$requirements_errors);
 	}
 }
 

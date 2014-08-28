@@ -49,7 +49,7 @@ foreach($enabled_currencies as $currency) {
 	echo '<td class="Regular">';
 	woocommerce_wp_text_input(array('id' => Subscriptions_Integration::FIELD_REGULAR_CURRENCY_PRICES . "[$currency]",
 																	'class' => 'wc_input_price short',
-																	//'label' => __('Subscription Price', 'woocommerce-subscriptions') . ' (' . get_woocommerce_currency_symbol($currency) . ')',
+																	'label' => '',
 																	'type' => 'number',
 																	'value' => get_value($currency, $product_regular_prices, null),
 																	'placeholder' => __('Auto',
@@ -64,7 +64,7 @@ foreach($enabled_currencies as $currency) {
 	echo '<td class="Sale">';
 	woocommerce_wp_text_input(array('id' => Subscriptions_Integration::FIELD_SALE_CURRENCY_PRICES . "[$currency]",
 																	'class' => 'wc_input_price short',
-																	//'label' => __('Sale Price', 'woocommerce') . ' (' . get_woocommerce_currency_symbol($currency) . ')',
+																	'label' => '',
 																	'type' => 'number',
 																	'value' => get_value($currency, $product_sale_prices, null),
 																	'placeholder' => __('Auto',
@@ -79,7 +79,7 @@ foreach($enabled_currencies as $currency) {
 	echo '<td class="SignupFee">';
 	woocommerce_wp_text_input(array('id' => Subscriptions_Integration::FIELD_SIGNUP_FEE_CURRENCY_PRICES . "[$currency]",
 																	'class' => 'wc_input_price short',
-																	//'label' => __('Sign-up fee', $text_domain) . ' (' . get_woocommerce_currency_symbol($currency) . ')',
+																	'label' => '',
 																	'type' => 'number',
 																	'value' => get_value($currency, $signup_prices, null),
 																	'placeholder' => __('Auto',

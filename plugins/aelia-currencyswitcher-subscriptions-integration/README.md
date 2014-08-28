@@ -4,11 +4,11 @@ WooCommerce Currency Switcher - Subscriptions Integration
 **Requires at least**: 3.6
 **Tested up to**: 3.9
 
-Implements integration between [Aelia Currency Switcher](http://dev.pathtoenlightenment.net/shop/currency-switcher-woocommerce/) and [WooCommerce Subscriptions plugin](http://www.woothemes.com/products/woocommerce-subscriptions/).
+Implements integration between [Aelia Currency Switcher](http://aelia.co/shop/currency-switcher-woocommerce/) and [WooCommerce Subscriptions plugin](http://www.woothemes.com/products/woocommerce-subscriptions/).
 
 Description
 ---
-This plugin acts as a bridge between [Aelia Currency Switcher](http://dev.pathtoenlightenment.net/shop/currency-switcher-woocommerce/) and [WooCommerce Subscriptions plugin](http://www.woothemes.com/products/woocommerce-subscriptions/), ensuring that Subscriptions prices are converted correctly into the currency being used to place an order.
+This plugin acts as a bridge between [Aelia Currency Switcher](http://aelia.co/shop/currency-switcher-woocommerce/) and [WooCommerce Subscriptions plugin](http://www.woothemes.com/products/woocommerce-subscriptions/), ensuring that Subscriptions prices are converted correctly into the currency being used to place an order.
 
 **Requirements**
 
@@ -17,6 +17,7 @@ This plugin acts as a bridge between [Aelia Currency Switcher](http://dev.pathto
 * WooCommerce 2.0.x/2.1.x
 * Aelia Currency Switcher 3.3.11.140619 or later
 * WooCommerce Subscriptions (by Brent Shepherd) 1.4.3 or later
+* [AFC plugin for WooCommerce](http://aelia.co/downloads/wc-aelia-foundation-classes.zip) 1.0.10.140819 or later.
 
 Installation
 ---

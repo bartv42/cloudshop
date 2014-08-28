@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Currency Switcher - Subscriptions Integration
 Description: Subscriptions integration for Aelia Currency Switcher for WooCommerce
 Author: Diego Zanella
-Version: 1.2.3.140715
+Version: 1.2.6.140820
 */
 
 require_once('src/lib/classes/install/aelia-wc-cs-subscriptions-requirementscheck.php');
