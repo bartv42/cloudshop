@@ -8,8 +8,8 @@ Author: Bart Veldhuizen
 Author URI: http://www.blendernation.com
 */
 
-DEFINE( 'BO_BRAINTREE_MERCHANT_ID_EUR', 'BlenderInstituteEUR');
-DEFINE( 'BO_BRAINTREE_MERCHANT_ID_USD', '46njsqh7fdhyk3fc');
+DEFINE( 'BO_BRAINTREE_MERCHANT_ID_EUR', 'cloudblenderEUR');
+DEFINE( 'BO_BRAINTREE_MERCHANT_ID_USD', 'cloudblenderUSD');
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
