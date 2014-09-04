@@ -31,6 +31,31 @@ function custom_pre_get_posts_query( $q ) {
 	}
 }
 
+/***
+ * Hide products in the 'Hidden Products' category
+ */
+add_action( 'pre_get_posts', 'custom_pre_get_posts_query' );
+function custom_pre_get_posts_query( $q ) {
+
+	// not logged in --> filter
+	// no products from 'blender-cloud-memberships' category in order history --> filter
+
+	if( is_user_logged_in() && blendercloud_has_starter_product() ) { 
+		return;
+	}
+
+	if (!$q->is_main_query() || !is_shop()) return;
+	if ( ! is_admin() ) {
+		$q->set( 'tax_query', array(array(
+			'taxonomy' => 'product_cat',
+			'field' => 'id',
+			'terms' => array( 34 ),
+			'operator' => 'NOT IN'
+	    )));
+
+	}
+}
+
 /*** 
  * Does this user has a 'starter' subscription product in his order history?
  */
