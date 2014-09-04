@@ -4,3 +4,5 @@ uploads
 upgrade
 plugins/woocommerce-pdf-invoices-packing-slips/lib/dompdf/lib/fonts/log.htm
 plugins/woocommerce/logs
+plugins/codestyling-localization
+plugins/codestyling-localization-preserver
