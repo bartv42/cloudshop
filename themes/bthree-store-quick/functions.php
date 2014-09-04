@@ -9,8 +9,8 @@ add_action('wp_logout',create_function('','wp_redirect(home_url());exit();'));
  * Filter our Renewal products unless this user has specific products
  * in his order history 
  */
-add_action( 'pre_get_posts', 'custom_pre_get_posts_query' );
-function custom_pre_get_posts_query( $q ) {
+add_action( 'pre_get_posts', 'hidden_posts_pre_get_posts_query' );
+function hidden_posts_pre_get_posts_query( $q ) {
 
 	// not logged in --> filter
 	// no products from 'blender-cloud-memberships' category in order history --> filter
