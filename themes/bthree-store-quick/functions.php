@@ -36,6 +36,9 @@ function custom_pre_get_posts_query( $q ) {
  */
 function blendercloud_has_starter_product() {
 
+    // while we're updating the content
+    return false;
+
 	$user = wp_get_current_user();
 	$user_id = $user->ID;
 	$user_email = $user->email;
