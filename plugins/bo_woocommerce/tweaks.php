@@ -8,8 +8,19 @@ Author: Bart Veldhuizen
 Author URI: http://www.blendernation.com
 */
 
-DEFINE( 'BO_BRAINTREE_MERCHANT_ID_EUR', 'cloudblenderEUR');
-DEFINE( 'BO_BRAINTREE_MERCHANT_ID_USD', 'cloudblenderUSD');
+
+if( 'store.blender.org' == $_SERVER['SERVER_NAME'] ) {
+
+	// production
+	DEFINE( 'BO_BRAINTREE_MERCHANT_ID_EUR', 'cloudblenderEUR');
+	DEFINE( 'BO_BRAINTREE_MERCHANT_ID_USD', 'cloudblenderUSD');
+
+} else {
+
+	// development
+	DEFINE( 'BO_BRAINTREE_MERCHANT_ID_EUR', 'BlenderInstituteEUR');
+	DEFINE( 'BO_BRAINTREE_MERCHANT_ID_USD', '46njsqh7fdhyk3fc');
+}
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -129,4 +140,36 @@ function bo_login_error_message($error){
 include( 'api.php' );
 
 
+/*** 
+ * Allow manually renewing subscriptions for auto-renewing gateways
+ */
 
+add_action('woocommerce_checkout_update_order_meta','bo_update_order_meta');
+
+function bo_update_order_meta( $order_id ){
+
+	global $woocommerce;
+
+	// check if order contains a product with the _force_manual_renewal flag set
+	$order = new WC_Order( $order_id );
+	
+	$force_manual_renewal = false;
+		
+	$contents = $woocommerce->cart->cart_contents;
+	foreach( $contents as $item ) {
+		if( isset( $item['variation']['attribute_pa_renewal-type'] ) ) {
+			if( $item['variation']['attribute_pa_renewal-type'] == 'manual' ) {
+				$force_manual_renewal = true;
+			}
+		}
+	}
+		
+	if( !$force_manual_renewal ) return;
+	
+	// remove recurring payment information
+	delete_post_meta( $order_id, '_recurring_payment_method' );
+	delete_post_meta( $order_id, '_recurring_payment_method_title' );
+
+	// force manual renewal
+	update_post_meta( $order_id, '_wcs_requires_manual_renewal', 'true');
+}
