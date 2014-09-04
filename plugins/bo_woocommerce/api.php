@@ -189,7 +189,7 @@ function blendercloud_api( $atts ) {
 	$user_data['expiration_date'] = $last_expiration_date->format('Y-m-d H:i:s');
 
 	$now = new DateTime("now");	
-	if( $expiry_date > $now ) {
+	if( $last_expiration_date > $now ) {
 		$user_data['cloud_access'] = 1;
 	}
 	
