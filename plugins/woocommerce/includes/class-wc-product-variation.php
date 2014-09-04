@@ -305,7 +305,7 @@ class WC_Product_Variation extends WC_Product {
 
 				$price = wc_price( $display_price ) . $this->get_price_suffix();
 
-				$price = apply_filters( 'woocommerce_variation_price_html', $price, $this );
+				//$price = apply_filters( 'woocommerce_variation_price_html', $price, $this );
 
 			} else {
 
