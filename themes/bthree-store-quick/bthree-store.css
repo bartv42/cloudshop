@@ -439,3 +439,9 @@ footer a:hover{color:#109df0 !important}
 .horizontal_flip{-moz-transform:scaleX(-1);-o-transform:scaleX(-1);-webkit-transform:scaleX(-1);transform:scaleX(-1);filter:FlipH;-ms-filter:"FlipH"}
 @media (max-width:480px){.box{margin-bottom:14px}}@media (min-width:480px){.box{margin-bottom:14px}}@media (min-width:767px){.box{margin-bottom:20px}}@media (min-width:991px){}@media (min-width:1199px){}@media (min-width:1200px){}
 .navbar{font-family:'Open Sans Condensed','Lucida Sans','Lucida Grande',sans-serif}
+
+#bo_variation_pa_missed-months,
+#bo_variation_pa_is-renewal {background:#ff0;display:none;}
+
+#product-14 p.price,
+#product-537 p.price {display:none;}
