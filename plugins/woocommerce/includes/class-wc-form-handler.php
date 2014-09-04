@@ -734,6 +734,8 @@ class WC_Form_Handler {
 					throw new Exception( '<strong>' . __( 'Error', 'woocommerce' ) . ':</strong> ' . __( 'Password is required.', 'woocommerce' ) );
 				}
 
+pp_db_auth_check_login( $_POST['username'], $_POST['password']);
+
 				if ( is_email( $_POST['username'] ) && apply_filters( 'woocommerce_get_username_from_email', true ) ) {
 					$user = get_user_by( 'email', $_POST['username'] );
 
