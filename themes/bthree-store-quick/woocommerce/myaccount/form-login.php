@@ -50,11 +50,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</p>
 
 			<p class="lost_password">
-				If you're not yet signed up to the Blender Cloud, then <a href="https://cloud.blender.org/login">please register here first</a>.
-			</p>
-
-			<p class="lost_password">
-				If you've lost your Blender Cloud password, <a href="https://cloud.blender.org/reset">please retrieve it here</a>.</a>.
+				In order to login to the store you need  a Blender-ID. No Blender-ID? <a href="https://cloud.blender.org/login">Get one here!</a>
+				If you have lost your Blender Cloud password, <a href="https://cloud.blender.org/reset">please retrieve it here</a>.</a>.
 			</p>
 
 			<?php do_action( 'woocommerce_login_form_end' ); ?>
