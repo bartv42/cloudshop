@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<p class="lost_password">
 				In order to login to the store you need  a Blender-ID. No Blender-ID? <a href="https://cloud.blender.org/login">Get one here!</a>
-				If you have lost your Blender Cloud password, <a href="https://cloud.blender.org/reset">please retrieve it here</a>.</a>.
+				If you have lost your Blender Cloud password, <a href="https://cloud.blender.org/reset">please retrieve it here</a>.
 			</p>
 
 			<?php do_action( 'woocommerce_login_form_end' ); ?>
