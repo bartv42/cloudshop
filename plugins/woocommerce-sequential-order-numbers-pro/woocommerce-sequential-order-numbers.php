@@ -290,10 +290,9 @@ class WC_Seq_Order_Number_Pro extends SV_WC_Plugin {
 
 			$post_id = is_a( $post_id, 'WC_Order' ) ? $post_id->id : $post_id;
 			$order_number = get_post_meta( $post_id, '_order_number' );
-
+//print_r($order_number);die('0:' . $order_number);			
 			// if no order number has been assigned, this will be an empty array
 			if ( empty( $order_number ) ) {
-
 				if ( $this->skip_free_orders() && $this->is_free_order( $post_id ) ) {
 					// assign sequential free order number
 					if ( $this->generate_sequential_order_number( $post_id, '_order_number_free', $this->get_free_order_number_start(), $this->get_free_order_number_prefix() ) ) {
@@ -845,7 +844,7 @@ class WC_Seq_Order_Number_Pro extends SV_WC_Plugin {
 	 *
 	 * @return string formatted order number
 	 */
-	private function format_order_number( $order_number, $order_number_prefix = '', $order_number_suffix = '', $order_number_length = 1, $order_id = 0 ) {
+	public function format_order_number( $order_number, $order_number_prefix = '', $order_number_suffix = '', $order_number_length = 1, $order_id = 0 ) {
 
 		$order_number = (int) $order_number;
 
@@ -860,7 +859,15 @@ class WC_Seq_Order_Number_Pro extends SV_WC_Plugin {
 		// get email address for this order
 		if( $order_id != 0 ) {
 			$email = get_post_meta( $order_id, '_billing_email', true );
+
+			if( $email == '' ) {
+				$customer_user_id = $_POST['customer_user'];
+				$customer_data = get_userdata( $customer_user_id );
+				$email = $customer_data->data->user_email;
+			}
+
 			$email = strtoupper( substr( $email, 0, 3 ) );
+			
 		} else {
 			$email = 'XXX';
 		}

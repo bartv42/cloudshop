@@ -173,3 +173,50 @@ function bo_update_order_meta( $order_id ){
 	// force manual renewal
 	update_post_meta( $order_id, '_wcs_requires_manual_renewal', 'true');
 }
+
+/***
+ * Check if order needs updating after manual creation
+ */
+function bo_save_post( $post_id ) {
+		
+	// fire only when saving orders
+	if ( 'shop_order' != $_POST['post_type'] ) {
+		return;
+	}
+
+	// update invoice number
+	WC_Seq_Order_Number_Pro::set_sequential_order_number( $post_id );
+	$order_number_a = get_post_meta( $post_id, '_order_number' );
+	$order_number = $order_number_a[0];
+	
+	$order_number_prefix = '{YY}{MM}{DD}-{EMAIL}-';
+	$order_number_suffix = '';
+	$order_number_length = 0;
+				
+	update_post_meta( $post_id, '_order_number_formatted', WC_Seq_Order_Number_Pro::format_order_number( $order_number, $order_number_prefix, $order_number_suffix, $order_number_length, $post_id ) );
+
+	// is this order auto-renewing?
+	$order = new WC_Order( $post_id );
+	$items = $order->get_items();	
+
+	
+	$force_manual_renewal = false;
+	foreach( $items as $item ) {
+		if( $item['item_meta']['pa_renewal-type'][0] == 'manual' ) {
+			// insert automatic payment data in order
+			$force_manual_renewal = true;
+		}
+	}
+
+	// set up temporary recurring payment, forcing user to renew upon his first payment
+	if( $force_manual_renewal == false ) {
+		update_post_meta( $post_id, '_recurring_payment_method', 'braintree' );
+		update_post_meta( $post_id, '_recurring_payment_method_title', 'Creditcard (Braintree)' );
+
+		// force manual renewal
+		delete_post_meta( $post_id, '_wcs_requires_manual_renewal', 'true');
+	}
+}
+
+
+add_action( 'save_post', 'bo_save_post' );
