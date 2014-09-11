@@ -1047,6 +1047,14 @@ class WC_Subscriptions_Manager {
 
 			switch( $new_status_or_meta ) {
 				case 'active' :
+				
+					// test bart
+					if( is_admin() ) {
+						$subscription_can_be_changed = true;
+						break;
+					}
+					// test bart
+					
 					if ( ( $order_uses_manual_payments || $payment_gateway->supports( 'subscription_reactivation' ) ) && $subscription['status'] == 'on-hold' ) {
 						$subscription_can_be_changed = true;
 					} elseif ( $subscription['status'] == 'pending' ) {
@@ -1095,6 +1103,14 @@ class WC_Subscriptions_Manager {
 					$subscription_can_be_changed = false;
 					break;
 				case 'new-payment-date' :
+				
+					// test bart
+					if( is_admin() ) {
+						$subscription_can_be_changed = true;
+						break;
+					}
+					// test bart				
+				
 					$next_payment_timestamp = self::get_next_payment_date( $subscription_key, $user_id, 'timestamp' );
 					if ( 0 != $next_payment_timestamp && ( $order_uses_manual_payments || $payment_gateway->supports( 'subscription_date_changes' ) ) && ! in_array( $subscription['status'], array( 'cancelled', 'trash', 'expired' ) ) ) {
 						$subscription_can_be_changed = true;
