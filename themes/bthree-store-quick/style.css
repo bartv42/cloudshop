@@ -10,3 +10,86 @@ Version:        0.1.0
 
 @import url("../twentytwelve/style.css");
 @import url("bthree-store.css");
+
+.woocommerce-tabs .tabs {display: none}
+
+.entry-content h2, .comment-content h2, .mu_register h2 {
+font-size: 160%;
+}
+
+.entry-content h1, .comment-content h1 {
+font-size: 230% !important;
+}
+
+table.variations {
+margin-top: 20px;
+}
+
+.variations td.value {
+display: block;
+margin-top: 8px;
+}
+
+.quantity.buttons_added, .variation .variation-Isrenewal, span.sku_wrapper{
+display: none !important;
+}
+
+.variations_button button.single_add_to_cart_button.button.alt {
+font-size: 160%;
+}
+
+.single_variation {
+font-size: 90%;
+margin-bottom: 10px;
+}
+
+.button.checkout {
+box-shadow: none !important;
+text-shadow: none !important;
+background: initial !important;
+color: #fff !important;
+background-color: #428bca !important;
+border-color: #3a86c8 !important;
+-webkit-text-shadow: 1px 1px 1px rgba(0,0,0,0.5) !important;
+-moz-text-shadow: 1px 1px 1px rgba(0,0,0,0.5) !important;
+text-shadow: 1px 1px 1px rgba(0,0,0,0.5) !important;
+}
+
+.button.checkout:hover {
+	color: white !important;
+}
+
+dd.variation-Missedmonths {
+bottom: 2px !important;
+position: relative;
+}
+
+select.countries {
+width: 100%;
+}
+
+p.woocommerce-result-count {
+display: none;
+}
+
+.archive-title, .page-title, .widget-title, .entry-content th, .comment-content th {
+text-transform: initial;
+}
+
+.widget_shopping_cart_content p.buttons .button {
+font-size: 140%;
+}
+
+.widget_shopping_cart_content p.buttons {
+padding-top: 10px;
+border-top: thin solid lightgray;
+}
+
+a.button.checkout.wc-forward {
+color: white !important;
+}
+
+
+a.button.wc-forward {
+color: #555 !important;
+}
