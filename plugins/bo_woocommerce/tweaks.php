@@ -217,6 +217,18 @@ function bo_save_post( $post_id ) {
 		delete_post_meta( $post_id, '_wcs_requires_manual_renewal', 'true');
 	}
 }
-
-
 add_action( 'save_post', 'bo_save_post' );
+
+/*** 
+ * Remove phone field from checkout.
+ * 
+ * Documentation: http://docs.woothemes.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/
+ */
+// Hook in
+add_filter( 'woocommerce_checkout_fields' , 'bo_custom_override_checkout_fields' );
+
+// Our hooked in function - $fields is passed via the filter!
+function bo_custom_override_checkout_fields( $fields ) {
+     unset($fields['billing']['billing_phone']);
+     return $fields;
+}
