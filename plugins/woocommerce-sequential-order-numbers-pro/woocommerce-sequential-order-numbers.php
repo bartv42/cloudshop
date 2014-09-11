@@ -341,6 +341,7 @@ class WC_Seq_Order_Number_Pro extends SV_WC_Plugin {
 				SELECT %d,'{$order_number_meta_name}',IF(MAX(CAST(pm1.meta_value AS SIGNED)) IS NULL OR MAX(CAST(pm1.meta_value AS SIGNED)) < 1, 1, MAX(CAST(pm1.meta_value AS SIGNED))+1)
 					FROM {$wpdb->postmeta} pm1,  {$wpdb->postmeta} pm2
 					WHERE pm1.meta_key='{$order_number_meta_name}'
+					AND pm1.post_id = pm2.post_id
 					AND pm2.meta_key='_order_number_formatted' AND LEFT( pm2.meta_value, 6 ) = '%s'",
 				$post_id, $today );
 
