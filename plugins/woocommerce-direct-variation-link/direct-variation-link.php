@@ -74,7 +74,7 @@ function wpbo_get_variation_values() {
 *	@return array	start_vals
 *
 */	
-if( !defined( 'ENCRYPTION_KEY' ) {
+if( !defined( 'ENCRYPTION_KEY' ) ) {
 	define("ENCRYPTION_KEY", "dsaouh");
 }
 
