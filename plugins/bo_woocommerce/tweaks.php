@@ -178,12 +178,14 @@ function bo_update_order_meta( $order_id ){
  * Check if order needs updating after manual creation
  */
 function bo_save_post( $post_id ) {
-		
+	
+    $post = get_post( $post_id );
+
 	// fire only when saving orders
-	if ( 'shop_order' != $_POST['post_type'] ) {
+	if ( 'shop_order' != $post->post_type ) {
 		return;
 	}
-
+    
 	// update invoice number
 	WC_Seq_Order_Number_Pro::set_sequential_order_number( $post_id );
 	$order_number_a = get_post_meta( $post_id, '_order_number' );
@@ -199,7 +201,6 @@ function bo_save_post( $post_id ) {
 	$order = new WC_Order( $post_id );
 	$items = $order->get_items();	
 
-	
 	$force_manual_renewal = false;
 	foreach( $items as $item ) {
 		if( $item['item_meta']['pa_renewal-type'][0] == 'manual' ) {
