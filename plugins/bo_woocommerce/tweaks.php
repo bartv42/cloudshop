@@ -187,7 +187,8 @@ function bo_save_post( $post_id ) {
 	}
     
 	// update invoice number
-	WC_Seq_Order_Number_Pro::set_sequential_order_number( $post_id );
+	$o = new WC_Seq_Order_Number_Pro;
+	$o->set_sequential_order_number( $post_id );
 	$order_number_a = get_post_meta( $post_id, '_order_number' );
 	$order_number = $order_number_a[0];
 	
