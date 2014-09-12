@@ -159,18 +159,23 @@ function blendercloud_api( $atts ) {
 							break;
 					
 						case 'cloud-subscription-team':
-					
-							// use variation ID to get number of subscriptions
-							$variation_id = $subscription_details['variation_id'];
-							$variation_sku = strtoupper( get_post_meta( $variation_id, '_sku', true ));
-							$team_members=0;
-					
-							$sku_base_name = 'CLOUD-SUBSCRIPTION-TEAM-';
-					
-							if( strpos( $variation_sku, $sku_base_name ) === 0 ) {
-								$team_members = (int)substr( $variation_sku, strlen($sku_base_name), strlen($variation_sku) - strlen($sku_base_name) );
-							}
-										
+                        
+                            // purchased team size
+						    $variation_id = $subscription_details['variation_id'];            
+                        
+                            // find variation info from order to pass on # of seats
+                            $order = new WC_Order( $order_id );
+                			$items = $order->get_items();	
+                            $team_members=0;	
+
+                			foreach ( $items as $item ) {
+                                // does product variation id match the current subscription?		
+                			    if( $item['item_meta']['_variation_id'][0] == $variation_id ) {
+                			        
+                                    $team_members = $item['item_meta']['pa_team-size'][0];
+                			    }
+                            }
+													
 							$tmp['team_members'] = $team_members;
 							break;
 					}

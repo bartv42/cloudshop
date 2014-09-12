@@ -335,6 +335,9 @@ class WC_Seq_Order_Number_Pro extends SV_WC_Plugin {
 			// add $order_number_meta_name equal to $order_number_start if there are no existing orders with an $order_number_meta_name meta
 			//  or $order_number_start is larger than the max existing $order_number_meta_name meta.  Otherwise, $order_number_meta_name
 			//  will be set to the max $order_number_meta_name + 1
+			
+			// find order number formatted for today
+			
 			$query = $wpdb->prepare( "
 				INSERT INTO {$wpdb->postmeta} (post_id,meta_key,meta_value)
 				SELECT %d,'{$order_number_meta_name}',IF(MAX(CAST(pm1.meta_value AS SIGNED)) IS NULL OR MAX(CAST(pm1.meta_value AS SIGNED)) < 1, 1, MAX(CAST(pm1.meta_value AS SIGNED))+1)
