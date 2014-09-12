@@ -74,7 +74,9 @@ function wpbo_get_variation_values() {
 *	@return array	start_vals
 *
 */	
-define("ENCRYPTION_KEY", "dsaouh");
+if( !defined( 'ENCRYPTION_KEY' ) {
+	define("ENCRYPTION_KEY", "dsaouh");
+}
 
 function wpbo_get_variation_start_values( $varation_names ) {
 	global $product;
