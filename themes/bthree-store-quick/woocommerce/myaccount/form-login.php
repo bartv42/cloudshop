@@ -26,6 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<h2><?php _e( 'Login', 'woocommerce' ); ?></h2>
 
+		<p class="lost_password">
+			In order to login to the store you need  a Blender-ID. No Blender-ID? <a href="http://www.blender.org/id/register">Get one here!</a>
+			If you have lost your Blender Cloud password, <a href="http://www.blender.org/id/reset">please retrieve it here</a>.
+		</p>
+
 		<form method="post" class="login">
 
 			<?php do_action( 'woocommerce_login_form_start' ); ?>
@@ -47,11 +52,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<label for="rememberme" class="inline">
 					<input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <?php _e( 'Remember me', 'woocommerce' ); ?>
 				</label>
-			</p>
-
-			<p class="lost_password">
-				In order to login to the store you need  a Blender-ID. No Blender-ID? <a href="https://cloud.blender.org/login">Get one here!</a>
-				If you have lost your Blender Cloud password, <a href="https://cloud.blender.org/reset">please retrieve it here</a>.
 			</p>
 
 			<?php do_action( 'woocommerce_login_form_end' ); ?>
