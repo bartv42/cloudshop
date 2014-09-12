@@ -161,7 +161,7 @@ function blendercloud_api( $atts ) {
 						case 'cloud-subscription-team':
 					
 							// use variation ID to get number of subscriptions
-							$variation_id = $subscription['variation_id'];
+							$variation_id = $subscription_details['variation_id'];
 							$variation_sku = strtoupper( get_post_meta( $variation_id, '_sku', true ));
 							$team_members=0;
 					
