@@ -445,3 +445,12 @@ footer a:hover{color:#109df0 !important}
 
 #product-14 p.price,
 #product-537 p.price {display:none;}
+
+form.login_bo {
+	border: 1px solid #e0dadf;
+	padding: 20px;
+	margin: 2em 0 2em 0px;
+	text-align:left;
+	.border_radius(5px);
+}
+

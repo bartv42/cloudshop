@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			If you have lost your Blender Cloud password, <a href="http://www.blender.org/id/reset">please retrieve it here</a>.
 		</p>
 
-		<form method="post" class="login">
+		<form method="post" class="login_bo">
 
 			<?php do_action( 'woocommerce_login_form_start' ); ?>
 
