@@ -421,7 +421,7 @@ a img.thumbnail:hover{opacity:.9}
 .table-striped>tbody>tr:nth-child(2n+1):hover>td,.table-striped>tbody>tr:nth-child(2n+1):hover>th{background-color:#eee}
 .table-striped>tbody>tr:nth-child(2n):hover>td,.table-striped>tbody>tr:nth-child(2n):hover>th{background-color:#eee}
 .table .table-row-link:hover>tr,.table .table-row-link:hover>td{color:#109df0;cursor:pointer}
-header a.logo{display:block;position:relative;float:left;height:36px;font-family:'Open Sans Condensed','Lucida Sans','Lucida Grande',sans-serif;color:#515151;text-align:right;font-size:120%;background:url(http://www.blender.org/wp-content/themes/bthree/assets/images/logo.png) no-repeat;font-weight:lighter;line-height:180%;width:123px;opacity:1;margin-top:8px;background-size:123px 36px;-webkit-transition:opacity .2s ease-in;-moz-transition:opacity .2s ease-in;-o-transition:opacity .2s ease-in;-ms-transition:opacity .2s ease-in;transition:opacity .2s ease-in}
+header a.logo{display:block;position:relative;float:left;height:36px;font-family:'Open Sans Condensed','Lucida Sans','Lucida Grande',sans-serif;color:#515151;text-align:right;font-size:120%;background:url(https://www.blender.org/wp-content/themes/bthree/assets/images/logo.png) no-repeat;font-weight:lighter;line-height:180%;width:123px;opacity:1;margin-top:8px;background-size:123px 36px;-webkit-transition:opacity .2s ease-in;-moz-transition:opacity .2s ease-in;-o-transition:opacity .2s ease-in;-ms-transition:opacity .2s ease-in;transition:opacity .2s ease-in}
 a.logo:hover{color:#444;opacity:.8}
 footer{font-size:80%}
 footer a{color:#777 !important}
