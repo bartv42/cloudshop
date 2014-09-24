@@ -19,7 +19,7 @@ use Aelia\WC\Messages;
  * Tax Display by Country plugin.
  **/
 class WC_Aelia_Tax_Display_By_Country extends Aelia_Plugin {
-	public static $version = '1.5.8.140729';
+	public static $version = '1.5.12.140924';
 
 	public static $plugin_slug = Definitions::PLUGIN_SLUG;
 	public static $text_domain = Definitions::TEXT_DOMAIN;
@@ -75,6 +75,34 @@ class WC_Aelia_Tax_Display_By_Country extends Aelia_Plugin {
 		if(is_admin()) {
 			$this->run_updates();
 		}
+
+		// If billing country has been explicitly selected, override the information
+		// on customer details
+		if($this->billing_country_selected()) {
+			$this->set_customer_country($this->get_billing_country());
+		}
+	}
+
+	/**
+	 * Determines if user has selected a billing country using the widget.
+	 *
+	 * @return bool
+	 */
+	protected function billing_country_selected() {
+		return isset($_POST[Definitions::ARG_AELIA_BILLING_COUNTRY]);
+	}
+
+	/**
+	 * Sets the billing and shipping country on the user object.
+	 *
+	 * @param string country A country code.
+	 */
+	protected function set_customer_country($country) {
+		$woocommerce = $this->wc();
+		if(isset($woocommerce->customer)) {
+			$woocommerce->customer->set_location($country, '');
+			$woocommerce->customer->set_shipping_location($country);
+		}
 	}
 
 	/**
@@ -88,8 +116,8 @@ class WC_Aelia_Tax_Display_By_Country extends Aelia_Plugin {
 			add_filter('option_woocommerce_tax_display_shop', array($this, 'option_woocommerce_tax_display_shop'));
 			add_filter('option_woocommerce_tax_display_cart', array($this, 'option_woocommerce_tax_display_cart'));
 			add_filter('woocommerce_get_price_suffix', array($this, 'woocommerce_get_price_suffix'), 10, 2);
-			//add_filter('woocommerce_countries_ex_tax_or_vat', array($this, 'woocommerce_countries_ex_tax_or_vat'), 10, 1);
-			//add_filter('woocommerce_countries_inc_tax_or_vat', array($this, 'woocommerce_countries_inc_tax_or_vat'), 10, 1);
+			add_filter('woocommerce_countries_ex_tax_or_vat', array($this, 'woocommerce_countries_ex_tax_or_vat'), 10, 1);
+			add_filter('woocommerce_countries_inc_tax_or_vat', array($this, 'woocommerce_countries_inc_tax_or_vat'), 10, 1);
 		}
 
 		// Register Widgets
@@ -120,44 +148,43 @@ class WC_Aelia_Tax_Display_By_Country extends Aelia_Plugin {
 		}
 
 		$woocommerce = $this->wc();
-
-		$result = null;
+		$country = null;
 
 		if(self::doing_ajax() && isset($_POST['action']) && ($_POST['action'] === 'woocommerce_update_order_review')) {
 			// If user is on checkout page and changes the billing country, get the
 			// country code and store it in the session
 			check_ajax_referer('update-order-review', 'security');
 			if(isset($_POST[Definitions::ARG_BILLING_COUNTRY])) {
-				$result = $_POST[Definitions::ARG_BILLING_COUNTRY];
-				Aelia_SessionManager::set_value(Definitions::SESSION_BILLING_COUNTRY, $result);
+				$country = $_POST[Definitions::ARG_BILLING_COUNTRY];
+				Aelia_SessionManager::set_value(Definitions::SESSION_BILLING_COUNTRY, $country);
 			}
 		}
 
-		if(empty($result)) {
+		if(empty($country)) {
 			if(isset($_POST[Definitions::ARG_AELIA_BILLING_COUNTRY])) {
-				$result = $_POST[Definitions::ARG_AELIA_BILLING_COUNTRY];
-				Aelia_SessionManager::set_value(Definitions::SESSION_BILLING_COUNTRY, $result);
+				$country = $_POST[Definitions::ARG_AELIA_BILLING_COUNTRY];
+				Aelia_SessionManager::set_value(Definitions::SESSION_BILLING_COUNTRY, $country);
 			}
 		}
 
 		// If no billing country was posted, check if one was stored in the session
-		if(empty($result)) {
-			$result = Aelia_SessionManager::get_value(Definitions::SESSION_BILLING_COUNTRY);
+		if(empty($country)) {
+			$country = Aelia_SessionManager::get_value(Definitions::SESSION_BILLING_COUNTRY);
 		}
 
 		// If no valid currency could be retrieved from customer's details, detect
 		// it using visitor's IP address
-		if(empty($result)) {
-			$result = IP2Location::factory()->get_visitor_country();
+		if(empty($country)) {
+			$country = IP2Location::factory()->get_visitor_country();
 		}
 
 		// If everything fails, take WooCommerce customer country or base country
-		if(empty($result)) {
-			$result = isset($woocommerce->customer) ? $woocommerce->customer->get_country() : $woocommerce->countries->get_base_country();
+		if(empty($country)) {
+			$country = isset($woocommerce->customer) ? $woocommerce->customer->get_country() : $woocommerce->countries->get_base_country();
 		}
 
-		$this->billing_country = $result;
-		return $result;
+		$this->billing_country = $country;
+		return $country;
 	}
 
 	/**

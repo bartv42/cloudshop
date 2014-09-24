@@ -3,7 +3,7 @@
 Plugin Name: Aelia Tax Display by Country for WooCommerce
 Description: Allows to display prices including/excluding tax depending on customer's location.
 Author: Aelia (Diego Zanella)
-Version: 1.5.8.140729
+Version: 1.5.12.140924
 */
 
 require_once('src/lib/classes/install/aelia-wc-taxdisplaybycountry-requirementscheck.php');
