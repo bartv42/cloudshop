@@ -15,7 +15,7 @@ This plugin allows to specify how prices should be displayed (with or without ta
 * WordPress 3.4+ (plugin has been tested up to WordPress 3.9)
 * PHP 5.3+
 * WooCommerce 2.0.x/2.1.x
-* [AFC plugin for WooCommerce](http://dev.pathtoenlightenment.net/downloads/wc-aelia-foundation-classes.zip) 1.0.2+.
+* [AFC plugin for WooCommerce](http://aelia.co/downloads/wc-aelia-foundation-classes.zip) 1.0.10.140819 or later.
 
 Installation
 ---

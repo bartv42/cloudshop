@@ -51,6 +51,35 @@ if(!class_exists('Aelia\WC\Aelia_Plugin')) {
 		);
 
 		/**
+		 * Returns the URL to use to check for plugin updates.
+		 *
+		 * @param string plugin_slug The plugin slug.
+		 * @return string
+		 */
+		protected function get_update_url($plugin_slug) {
+			return 'http://wpupdate.aelia.co?action=get_metadata&slug=' . $plugin_slug;
+		}
+
+		/**
+		 * Checks for plugin updates.
+		 */
+		public function check_for_updates($plugin_file, $plugin_slug = null) {
+			if(empty($plugin_slug)) {
+				$plugin_slug = static::$plugin_slug;
+			}
+
+			// Debug
+			//var_dump($this->path('vendor') . '/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');die();
+
+			require_once($this->path('vendor') . '/yahnis-elsts/plugin-update-checker/plugin-update-checker.php');
+			$MyUpdateChecker = \PucFactory::buildUpdateChecker(
+					$this->get_update_url($plugin_slug),
+					$plugin_file,
+					$plugin_slug
+			);
+		}
+
+		/**
 		 * Returns global instance of WooCommerce.
 		 *
 		 * @return object The global instance of WC.

@@ -9,7 +9,7 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 	// @var string The URL to the support portal.
 	const SUPPORT_URL = 'http://aelia.freshdesk.com/support/home';
 	// @var string The URL to the contact form for general enquiries.
-	const CONTACT_URL = 'http://dev.pathtoenlightenment.net/contact/';
+	const CONTACT_URL = 'http://aelia.co/contact/';
 
 	/*** Settings Tabs ***/
 	const TAB_GENERAL = 'general';
@@ -920,8 +920,11 @@ class WC_Aelia_CurrencySwitcher_Settings_Renderer extends WC_Aelia_Settings_Rend
 		$html .= '<th class="decimals">';
 		$html .= __('Decimals', $this->_textdomain);
 		$html .= '<span class="help-icon" title="' .
-						 __('The number of decimals will be used to display and to round and the prices. '.
-								'Rounding will be mathematical, with halves rounded up', $this->_textdomain) .
+						 __('The number of decimals will be used to round ALL figures. '.
+								'Rounding will be mathematical, with halves rounded up. ' .
+								'IMPORTANT: this setting affects PRICES and TAXES, which will be rounded to ' .
+								'the specified amount of decimals. Do not set the value to zero unless you ' .
+								'have a good reason, as that could result in an incorrect rounding of taxes', $this->_textdomain) .
 						 '"></span>';
 		$html .= '</th>';
 

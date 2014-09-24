@@ -12,6 +12,7 @@ class WC_Aelia_Reporting_Manager implements IWC_Aelia_Reporting_Manager {
 	protected $reports_classes = array(
 		'2.0' => 'WC20',
 		'2.1' => 'WC21',
+		'2.2' => 'WC22',
 	);
 
 	/**

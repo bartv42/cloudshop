@@ -8,6 +8,15 @@ if(!class_exists('Aelia\WC\Aelia_SessionManager')) {
 	 */
 	class Aelia_SessionManager {
 		/**
+		 * Returns the instance of WooCommerce session.
+		 *
+		 * @return WC_Session
+		 */
+		protected static function session() {
+			return self::wc()->session;
+		}
+
+		/**
 		 * Returns global instance of WooCommerce.
 		 *
 		 * @return object The global instance of WC.

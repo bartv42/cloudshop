@@ -9,7 +9,7 @@ class Settings_Renderer extends \Aelia\WC\Settings_Renderer {
 	// @var string The URL to the support portal.
 	const SUPPORT_URL = 'http://aelia.freshdesk.com/support/home';
 	// @var string The URL to the contact form for general enquiries.
-	const CONTACT_URL = 'http://dev.pathtoenlightenment.net/contact/';
+	const CONTACT_URL = 'http://aelia.co/contact/';
 
 	/*** Settings Tabs ***/
 	const TAB_TAX_DISPLAY = 'tax_display';
@@ -400,6 +400,7 @@ class Settings_Renderer extends \Aelia\WC\Settings_Renderer {
 				'value' => '',
 				'attributes' => array(
 					'class' => 'input price_suffix',
+					'placeholder' => __('Use default', $this->_textdomain),
 				),
 			);
 			ob_start();
@@ -492,6 +493,7 @@ class Settings_Renderer extends \Aelia\WC\Settings_Renderer {
 						'title' => __('This price suffix will override the one configured by default in ' .
 													'WooCommerce settings. Leave it empty to use the default one.',
 													$this->_textdomain),
+						'placeholder' => __('Use default', $this->_textdomain),
 					),
 				);
 				ob_start();

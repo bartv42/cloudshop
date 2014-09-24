@@ -1,6 +1,6 @@
 # Httpful
 
-[![Build Status](https://secure.travis-ci.org/nategood/httpful.png?branch=master)](http://travis-ci.org/nategood/httpful)
+[![Build Status](https://secure.travis-ci.org/nategood/httpful.png?branch=master)](http://travis-ci.org/nategood/httpful) [![Total Downloads](https://poser.pugx.org/nategood/httpful/downloads.png)](https://packagist.org/packages/nategood/httpful)
 
 [Httpful](http://phphttpclient.com) is a simple Http Client library for PHP 5.3+.  There is an emphasis of readability, simplicity, and flexibility – basically provide the features and flexibility to get the job done and make those features really easy to use.
 
@@ -33,7 +33,7 @@ foreach ($response->body->results as $tweet) {
 
 ## Phar
 
-A [PHP Archive](http://php.net/manual/en/book.phar.php) (or .phar) file is available for [downloading](http://phphttpclient.com/httpful.phar).  Simply [download](http://phphttpclient.com/httpful.phar) the .phar, drop it into your project, and include it like you would any other php file.  _This method is ideal smaller projects, one off scripts, and quick API hacking_.
+A [PHP Archive](http://php.net/manual/en/book.phar.php) (or .phar) file is available for [downloading](http://phphttpclient.com/httpful.phar).  Simply [download](http://phphttpclient.com/httpful.phar) the .phar, drop it into your project, and include it like you would any other php file.  _This method is ideal for smaller projects, one off scripts, and quick API hacking_.
 
 ```php
 include('httpful.phar');
@@ -43,7 +43,7 @@ $r = \Httpful\Request::get($uri)->sendIt();
 
 ## Composer
 
-Httpful is PSR-0 compliant and can be installed using [composer](http://getcomposer.org/).  Simply add `nategood/httpful` to your composer.json file.  _Composer is the sane alternative to PEAR.  It is excellent for managing dependancies in larger projects_.
+Httpful is PSR-0 compliant and can be installed using [composer](http://getcomposer.org/).  Simply add `nategood/httpful` to your composer.json file.  _Composer is the sane alternative to PEAR.  It is excellent for managing dependencies in larger projects_.
 
     {
         "require": {
@@ -57,7 +57,7 @@ Because Httpful is PSR-0 compliant, you can also just clone the Httpful reposito
 
 # Show Me More!
 
-You can checkout the [Httpful Landing Page](http://phphttpclient.com) for more info including many examples and  [documentation](http:://phphttpclient.com/docs).
+You can checkout the [Httpful Landing Page](http://phphttpclient.com) for more info including many examples and  [documentation](http://phphttpclient.com/docs).
 
 # Contributing
 
@@ -71,6 +71,37 @@ Httpful highly encourages sending in pull requests.  When submitting a pull requ
  - Include commenting where appropriate and add a descriptive pull request message
 
 # Changelog
+
+## 0.2.17
+
+ - FEATURE [PR #144](https://github.com/nategood/httpful/pull/144) Adds additional parameter to the Response class to specify additional meta data about the request/response (e.g. number of redirect).
+
+## 0.2.16
+
+ - FEATURE Added support for whenError to define a custom callback to be fired upon error. Useful for logging or overriding the default error_log behavior.
+
+## 0.2.15
+
+ - FEATURE [I #131](https://github.com/nategood/httpful/pull/131) Support for SOCKS proxy
+
+## 0.2.14
+
+ - FEATURE [I #138](https://github.com/nategood/httpful/pull/138) Added alternative option for XML request construction. In the next major release this will likely supplant the older version.
+
+## 0.2.13
+
+ - REFACTOR [I #121](https://github.com/nategood/httpful/pull/121) Throw more descriptive exception on curl errors
+ - REFACTOR [I #122](https://github.com/nategood/httpful/issues/122) Better proxy scrubbing in Request
+ - REFACTOR [I #119](https://github.com/nategood/httpful/issues/119) Better document the mimeType param on Request::body
+ - Misc code and test cleanup
+
+## 0.2.12
+
+ - REFACTOR [I #123](https://github.com/nategood/httpful/pull/123) Support new curl file upload method
+ - FEATURE [I #118](https://github.com/nategood/httpful/pull/118) 5.4 HTTP Test Server
+ - FIX [I #109](https://github.com/nategood/httpful/pull/109) Typo
+ - FIX [I #103](https://github.com/nategood/httpful/pull/103)  Handle also CURLOPT_SSL_VERIFYHOST for strictSsl mode
+
 ## 0.2.11
 
  - FIX [I #99](https://github.com/nategood/httpful/pull/99) Prevent hanging on HEAD requests
@@ -170,3 +201,4 @@ Httpful highly encourages sending in pull requests.  When submitting a pull requ
   - Created AbstractMimeHandler type that all Mime Handlers must extend
   - Pulled out the parsing/serializing logic from the Request/Response classes into their own MimeHandler classes
   - Added ability to register new mime handlers for mime types
+

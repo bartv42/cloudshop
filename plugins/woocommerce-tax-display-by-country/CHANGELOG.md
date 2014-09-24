@@ -1,6 +1,21 @@
 # Aelia Tax Display by Country - Change Log
 
 ## Version 1.x
+####1.5.12.140924
+* Tweak to force WooCommerce cart to take customer's location into account for tax calculation.
+* The country selected using the widget is now stored agains the user object.
+
+####1.5.11.140825
+* Added processing of widget titles through localisation functions.
+
+####1.5.10.140819
+* Updated logic used to for requirements checking.
+
+####1.5.9.140805
+* Improved user interface:
+	* Added placeholder for price suffix field.
+	* Added filters to display price suffix for shipping on cart and checkout.
+
 ####1.5.8.140729
 * Fixed bug that caused the settings page to always be rendered empty.
 * Fixed bug that caused the tax display settings not to be applied correctly during ajax calls.

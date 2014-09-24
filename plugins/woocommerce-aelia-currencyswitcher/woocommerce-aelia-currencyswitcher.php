@@ -5,11 +5,11 @@
 
 /*
 Plugin Name: Aelia Currency Switcher for WooCommerce
-Plugin URI: http://dev.pathtoenlightenment.net/shop
+Plugin URI: http://aelia.co/shop
 Description: WooCommerce Currency Switcher. Allows to switch currency on the fly and perform all transactions in such currency.
 Author: Aelia (Diego Zanella)
-Author URI: http://dev.pathtoenlightenment.net
-Version: 3.4.5.140717
+Author URI: http://aelia.co
+Version: 3.5.0.140911
 License: GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
 */
 
@@ -54,7 +54,7 @@ interface IWC_Aelia_CurrencySwitcher {
  */
 class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	// @var string The plugin version
-	const VERSION = '3.4.5.140717';
+	const VERSION = '3.5.0.140911';
 
 	// @var string The plugin slug
 	public static $plugin_slug = AELIA_CS_PLUGIN_SLUG;
@@ -394,7 +394,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 */
 	protected function convert_product_prices($product) {
 		$selected_currency = $this->get_selected_currency();
-		$base_currency = self::settings()->base_currency();
+		$base_currency = $this->base_currency();
 
 		if(get_value('currency', $product) != $selected_currency) {
 			$product = $this->_currencyprices_manager->convert_product_prices($product, $selected_currency);
@@ -475,7 +475,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 *
 	 * @return bool
 	 */
-	protected function user_is_paying() {
+	protected function user_is_paying_existing_order() {
 		global $post;
 
 		$paying_for_order = get_value('pay_for_order', $_GET, false);
@@ -486,7 +486,23 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		// As of WooCommerce 2.0.14, checking if we are on the "pay" page is the only
 		// way to determine if the user is paying for an order
-		return ($paying_for_order != false) || ($current_page_id == $payment_page_id);
+		if(($paying_for_order != false) || ($current_page_id == $payment_page_id)) {
+			// Paying for existing order
+			if(version_compare($this->wc()->version, '2.1', '>=')) {
+				global $wp;
+				// WC 2.1 - Order ID is in "order-pay" query var
+				$order_id = $wp->query_vars['order-pay'];
+			}
+			else {
+				// WC 2.0 - Order ID is in $_GET['order_id']
+				$order_id = get_value('order_id', $_GET);
+			}
+			return $order_id;
+		}
+		else {
+			// NOT paying for existing order
+			return false;
+		}
 	}
 
 	/**
@@ -524,9 +540,9 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		// If user is paying for a previously placed, but unpaid, order, then we have
 		// to return the currency in which the order was placed
 		if(isset($this->wc()->session)) {
-			$order_id = $this->wc()->session->order_awaiting_payment;
-			if(is_numeric($order_id) &&
-				 $this->user_is_paying()) {
+			$order_id = $this->user_is_paying_existing_order();
+
+			if(is_numeric($order_id)) {
 				$order = new Aelia_Order($order_id);
 				$order_currency = $order->get_order_currency();
 
@@ -688,6 +704,15 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 */
 	public function woocommerce_variation_price_html($price_html, $product) {
 		//var_dump($product, $product->regular_price, $product->sale_price);
+
+		// With WC2.1, when we reach this point prices have already been converted
+		// and formatted to be displayed with/without tax. We can, therefore, return
+		// the price html as is.
+		if(version_compare($this->wc()->version, '2.1', '>=')) {
+			return $price_html;
+		}
+
+		// WooCommerce 2.0.x and earlier
 		$product = $this->convert_product_prices($product);
 		$regular_price_in_currency = $this->format_price($product->regular_price);
 
@@ -705,6 +730,15 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 */
 	public function woocommerce_variation_sale_price_html($sale_price_html, $product) {
 		//var_dump($product, $product->regular_price, $product->sale_price);
+
+		// With WC2.1, when we reach this point prices have already been converted
+		// and formatted to be displayed with/without tax. We can, therefore, return
+		// the price html as is.
+		if(version_compare($this->wc()->version, '2.1', '>=')) {
+			return $sale_price_html;
+		}
+
+		// WooCommerce 2.0.x and earlier
 		$product = $this->convert_product_prices($product);
 		$regular_price_in_currency = $this->format_price($product->regular_price);
 		$sale_price_in_currency = $product->sale_price;
@@ -823,7 +857,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		$order_currency = $order->get_order_currency();
 
 		// No need to re-format if if the currency in use is the base one
-		if($order_currency == self::settings()->base_currency()) {
+		if($order_currency == $this->base_currency()) {
 			return $tax_totals;
 		}
 
@@ -884,6 +918,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		);
 
 		$woocommerce_admin_params = array_merge($woocommerce_admin_params, $woocommerce_writepanel_params);
+
+		return $woocommerce_admin_params;
 	}
 
 	/**
@@ -1163,7 +1199,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		$payment_currency = null;
 		// If customer is paying for an existing order, take its currency
-		if($this->user_is_paying() && is_numeric($order_id = get_value('order-pay', $wp->query_vars))) {
+		$order_id = $this->user_is_paying_existing_order();
+		if(is_numeric($order_id)) {
 			// Debug
 			//var_dump("PAYING ORDER " . $order_id);
 			$order = new Aelia_Order($order_id);
@@ -1200,10 +1237,22 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	}
 
 	/**
+	 * Returns the base currency.
+	 *
+	 * @return string
+	 *
+	 */
+	public function base_currency() {
+		return self::settings()->base_currency();
+	}
+
+	/**
 	 * Returns a list of enabled currencies.
+	 *
+	 * @return array
 	 */
 	public function enabled_currencies() {
-		return $this->_settings_controller->get_enabled_currencies();
+		return self::settings()->get_enabled_currencies();
 	}
 
 	/**
@@ -1222,10 +1271,6 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		// called after all plugins have loaded
 		add_action('plugins_loaded', array($this, 'plugins_loaded'));
-
-		// WooCommerce 2.1 - Force setting of cart cookie, to ensure that session
-		// data is loaded
-		do_action('woocommerce_set_cart_cookies', true);
 
 		add_action('admin_enqueue_scripts', array($this, 'load_admin_scripts'));
 		add_action('wp_enqueue_scripts', array($this, 'load_frontend_scripts'));
@@ -1291,9 +1336,13 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		// Add hooks to filter payment gateways based on the selected currency
 		add_filter('woocommerce_available_payment_gateways', array($this, 'woocommerce_available_payment_gateways'), 20);
 
-		// Add a filter for 3rd parties to retrieve the list of enabled currencies
+		// Add a filter for 3rd parties
+		// Filter to retrieve the base currency
+		add_filter('wc_aelia_cs_base_currency', array($this, 'base_currency'));
+		// Filter to retrieve the list of enabled currencies
 		add_filter('wc_aelia_cs_enabled_currencies', array($this, 'enabled_currencies'));
-
+		// Filter to allow 3rd parties to convert a value from one currency to another
+		add_filter('wc_aelia_cs_convert', array($this, 'convert'), 10, 5);
 	}
 
 	/**
@@ -1423,7 +1472,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 		$user_id = get_current_user_id();
 		$user_currency = !empty($user_id) ? get_user_meta($user_id, AELIA_CS_USER_CURRENCY, true) : null;
 
-		$base_currency = self::settings()->base_currency();
+		$base_currency = $this->base_currency();
 		// Try to get the Currency that User selected manually
 		$selected_currency = coalesce(Aelia_SessionManager::get_value(AELIA_CS_USER_CURRENCY),
 																	$user_currency);
@@ -1604,7 +1653,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 */
 	public function woocommerce_available_shipping_methods($available_shipping_methods) {
 		$selected_currency = $this->get_selected_currency();
-		$base_currency = self::settings()->base_currency();
+		$base_currency = $this->base_currency();
 
 		// TODO Improve calculation of shipping taxes so that decimals are preserved
 		foreach($available_shipping_methods as $shipping_method) {
@@ -1749,6 +1798,10 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 * Performs operations when woocommerce has been loaded.
 	 */
 	public function woocommerce_loaded() {
+		// WooCommerce 2.1 - Force setting of cart cookie, to ensure that session
+		// data is loaded
+		do_action('woocommerce_set_cart_cookies', true);
+
 		// Load the class that will handle currency prices for current WooCommerce version
 		$this->load_currencyprices_manager();
 
@@ -1891,11 +1944,6 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 	 */
 	protected function register_plugin_admin_scripts() {
 		// Scripts
-		wp_register_script('jquery-ui',
-											 '//code.jquery.com/ui/1.10.3/jquery-ui.js',
-											 array('jquery'),
-											 null,
-											 true);
 		wp_register_script('chosen',
 											 '//cdnjs.cloudflare.com/ajax/libs/chosen/1.1.0/chosen.jquery.min.js',
 											 array('jquery'),
@@ -1908,6 +1956,8 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 												array(),
 												null,
 												'all');
+		// WordPress already includes jQuery UI script, but no CSS for it. Therefore,
+		// we need to load it from an external source
 		wp_register_style('jquery-ui',
 											'//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css',
 											array(),
@@ -1947,7 +1997,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 			// JavaScript
 			// Placeholder - Enable and pass the values to localise the Admin page script
-			wp_enqueue_script('jquery-ui');
+			wp_enqueue_script('jquery-ui-tabs');
 			wp_enqueue_script('chosen');
 			wp_enqueue_script('wc-aelia-currency-switcher-admin');
 		}
@@ -1959,7 +2009,7 @@ class WC_Aelia_CurrencySwitcher implements IWC_Aelia_CurrencySwitcher {
 
 		// Prepare parameters for common admin scripts
 		$woocommerce_admin_params = array(
-			'base_currency' => self::settings()->base_currency(),
+			'base_currency' => $this->base_currency(),
 			'enabled_currencies' => $this->enabled_currencies(),
 		);
 

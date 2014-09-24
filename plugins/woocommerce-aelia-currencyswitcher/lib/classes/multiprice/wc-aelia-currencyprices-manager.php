@@ -285,6 +285,8 @@ class WC_Aelia_CurrencyPrices_Manager implements IWC_Aelia_CurrencyPrices_Manage
 			$result = array();
 		}
 
+		$result = apply_filters('wc_aelia_currencyswitcher_product_currency_prices', $result, $post_id, $prices_type);
+
 		return $result;
 	}
 

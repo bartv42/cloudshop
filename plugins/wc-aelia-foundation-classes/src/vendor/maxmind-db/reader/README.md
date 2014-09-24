@@ -2,44 +2,41 @@
 
 ## Description ##
 
-This is the pure PHP API for reading MaxMind DB files. MaxMind DB is a binary
-file format that stores data indexed by IP address subnets (IPv4 or IPv6).
+This is the PHP API for reading MaxMind DB files. MaxMind DB is a binary file
+format that stores data indexed by IP address subnets (IPv4 or IPv6).
 
 ## Installation ##
 
-### Define Your Dependencies ###
-
 We recommend installing this package with [Composer](http://getcomposer.org/).
-To do this, add ```maxmind-db/reader``` to your ```composer.json``` file.
 
-```json
-{
-    "require": {
-        "maxmind-db/reader": "0.3.*"
-    }
-}
+### Download Composer ###
+
+To download Composer, run in the root directory of your project:
+
+```bash
+curl -sS https://getcomposer.org/installer | php
 ```
 
-### Install Composer ###
-
-Run in your project root:
-
-```
-curl -s http://getcomposer.org/installer | php
-```
+You should now have the file `composer.phar` in your project directory.
 
 ### Install Dependencies ###
 
 Run in your project root:
 
 ```
-php composer.phar install
+php composer.phar require maxmind-db/reader:~0.3.3
 ```
+
+You should now have the files `composer.json` and `composer.lock` as well as
+the directory `vendor` in your project directory. If you use a version control
+system, `composer.json` should be added to it.
 
 ### Require Autoloader ###
 
-You can autoload all dependencies by adding this to your code:
-```
+After installing the dependencies, you need to require the Composer autoloader
+from your code:
+
+```php
 require 'vendor/autoload.php';
 ```
 
@@ -94,7 +91,21 @@ following to your `php.ini` file:
 extension=maxminddb.so
 ```
 
-Note: You may need to install the PHP development package on your OS such as php5-dev for Debian-based systems or php-devel for RedHat/Fedora-based ones.
+Note: You may need to install the PHP development package on your OS such as
+php5-dev for Debian-based systems or php-devel for RedHat/Fedora-based ones.
+
+## 128-bit Integer Support ##
+
+The MaxMind DB format includes 128-bit unsigned integer as a type. Although
+no MaxMind-distributed database currently makes use of this type, both the
+pure PHP reader and the C extension support this type. The pure PHP reader
+requires gmp or bcmath to read databases with 128-bit unsigned integers.
+
+The integer is currently returned as a hexadecimal string (prefixed with "0x")
+by the C extension and a decimal string (no prefix) by the pure PHP reader.
+Any change to make the reader implementations always return either a
+hexadecimal or decimal representation of the integer will NOT be considered a
+breaking change.
 
 ## Support ##
 
