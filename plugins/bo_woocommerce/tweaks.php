@@ -228,9 +228,16 @@ add_action( 'save_post', 'bo_save_post' );
  */
 // Hook in
 add_filter( 'woocommerce_checkout_fields' , 'bo_custom_override_checkout_fields' );
-
-// Our hooked in function - $fields is passed via the filter!
 function bo_custom_override_checkout_fields( $fields ) {
      unset($fields['billing']['billing_phone']);
+     return $fields;
+}
+
+/***
+ * Remove phone field from billing address page
+ */
+add_filter( 'woocommerce_billing_fields', 'bo_custom_override_billing_fields' );
+function bo_custom_override_billing_fields( $fields ) {
+     unset($fields['billing_phone']);
      return $fields;
 }

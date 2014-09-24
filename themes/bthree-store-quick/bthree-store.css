@@ -454,3 +454,5 @@ form.login_bo {
 	.border_radius(5px);
 }
 
+/* fix submit button layout on edit billing page */
+p.validate-email + p {clear:left;}
