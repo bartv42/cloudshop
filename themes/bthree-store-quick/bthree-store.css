@@ -456,3 +456,14 @@ form.login_bo {
 
 /* fix submit button layout on edit billing page */
 p.validate-email + p {clear:left;}
+
+form.login_bo {
+	border: 1px solid #e0dadf;
+	padding: 20px;
+	margin: 2em 0 2em 0px;
+	text-align:left;
+	.border_radius(5px);
+}
+
+/* fix submit button layout on edit billing page */
+p.validate-email + p {clear:left;} 
