@@ -2,6 +2,21 @@ Aelia Foundation Classes for WooCommerce
 ===
 
 ###Version 1.x
+####1.1.3.140910
+* Updated reference to `plugin-update-checker` library.
+
+####1.1.2.140909
+* Updated `readme.txt`.
+
+####1.1.1.140909
+* Cleaned up build file.
+
+####1.1.0.140909
+* Added automatic update mechanism.
+
+####1.0.12.140908
+* Added `Aelia_SessionManager::session()` method, as a convenience to retrieve WC session
+
 ####1.0.11.140825
 * Fixed minor bug in `IP2Location` class that generated a notice message.
 

@@ -11,7 +11,7 @@ require_once('lib/classes/base/plugin/aelia-plugin.php');
  * Aelia Foundation Classes for WooCommerce.
  **/
 class WC_AeliaFoundationClasses extends Aelia_Plugin {
-	public static $version = '1.0.11.140825';
+	public static $version = '1.1.3.140910';
 
 	public static $plugin_slug = 'wc-aelia-foundation-classes';
 	public static $text_domain = 'wc-aelia-foundation-classes';

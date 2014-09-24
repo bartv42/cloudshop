@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+0.3.3 (2014-09-15)
+------------------
+
+* Clarified behavior of 128-bit type in documentation.
+* Updated phpunit and fixed some test breakage from the newer version.
+
+0.3.2 (2014-09-10)
+------------------
+
+* Fixed invalid reference to global class RuntimeException from namespaced
+  code. Fixed by Steven Don. GitHub issue #15.
+* Additional documentation of `Metadata` class as well as misc. documentation
+  cleanup.
+
 0.3.1 (2014-05-01)
 ------------------
 
