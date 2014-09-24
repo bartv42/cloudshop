@@ -124,6 +124,17 @@ function blendercloud_api( $atts ) {
 
 					}
 					
+//					if( $users[0]->data->user_email == 'perepausancho@gmail.com' ) {
+//						print_r($subscription_details);
+//					}
+
+					if( $subscription_details['status'] == 'cancelled' ) {
+						$end_timestamp = strtotime( $subscription_details['trial_expiry_date'] );
+					}
+					if( $subscription_details['status'] == 'on-hold' ) {
+						$end_timestamp = strtotime( $subscription_details['last_payment_date'] );
+					}
+					
 					$end_time = date("Y-m-d H:i:s", $end_timestamp );
 
 					$product = get_product( $product_id );
