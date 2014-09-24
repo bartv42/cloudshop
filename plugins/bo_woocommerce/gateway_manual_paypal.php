@@ -176,7 +176,7 @@ function bo_woocommerce_gateway_manual_paypal_init() {
 			get_currentuserinfo();
 		
 			$is_available = ( 'yes' === $this->enabled ) ? true : false;
-			echo "DEBUG: " . $this->get_option('debug');
+
 			if( $this->get_option('debug') == 'yes' ) {
 				$available_in_countries = $new_arr = array_map('trim', explode(',', $this->get_option( 'countries' )));
 				$available_to_customer_ids = $new_arr = array_map('trim', explode(',', $this->get_option( 'customer_ids' )));
