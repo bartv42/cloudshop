@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Aelia Currency Switcher for WooCommerce v3.3.7.140611\n"
+"Project-Id-Version: Aelia Currency Switcher for WooCommerce v3.4.8.140804\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-11 20:53:46+0000\n"
+"PO-Revision-Date: 2014-08-04 19:06:32+0000\n"
 "Last-Translator: Diego Zanella <support@pathtoenlightenment.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,7 +41,7 @@ msgid "Sample page description"
 msgstr "Sample page description"
 
 #: lib/classes/base/settings/wc-aelia-settings-renderer.php:265
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:534
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:543
 #@ woocommerce-aelia-currencyswitcher
 msgid "Save Changes"
 msgstr "Save Changes"
@@ -56,29 +56,29 @@ msgstr "Field ID must be specified."
 msgid "Argument \"options\" must be an array."
 msgstr "Argument \"options\" must be an array."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:117
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:209
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:116
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:208
 #@ woocommerce-aelia-currencyswitcher
 msgid "This usually occurs when the Currency Switcher plugin has not yet been configured and exchange rates have not been specified. Please configure the plugin and this message should disappear at next page load."
 msgstr "This usually occurs when the Currency Switcher plugin has not yet been configured and exchange rates have not been specified. Please configure the plugin and this message should disappear at next page load."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:122
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:214
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:121
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:213
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Exchange rate for Order Currency \"%s\" (Order ID: %s) could not be retrieved."
 msgstr "Exchange rate for Order Currency \"%s\" (Order ID: %s) could not be retrieved."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:132
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:224
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:131
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:223
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Exchange rate for Base Currency \"%s\" could not be retrieved."
 msgstr "Exchange rate for Base Currency \"%s\" could not be retrieved."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:246
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:406
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:506
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:245
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:405
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:505
 #, php-format
 #@ default
 msgid "Exception occurred updating base currency values for order %s. Error: %s."
@@ -86,7 +86,7 @@ msgstr "Exception occurred updating base currency values for order %s. Error: %s
 
 #: lib/classes/install/wc-aelia-install.php:52
 #: lib/classes/install/wc-aelia-install.php:55
-#: lib/classes/widgets/billing-country-selector-widget.php:135
+#: lib/classes/widgets/billing-country-selector-widget.php:136
 #: lib/classes/widgets/wc-aelia-currencyswitcher-widget.php:135
 #: views/currency-selector-widget-buttons.php:22
 #: views/currency-selector-widget-dropdown.php:22
@@ -142,10 +142,10 @@ msgid "<span class=\"wc_aelia important\">Update halted</span>. Please review di
 msgstr "<span class=\"wc_aelia important\">Update halted</span>. Please review displayed messages and correct any issue that was reported."
 
 #: lib/classes/integration/bundles-plugin/wc-aelia-cs-bundles-integration.php:96
-#: woocommerce-aelia-currencyswitcher.php:588
-#: woocommerce-aelia-currencyswitcher.php:631
-#: woocommerce-aelia-currencyswitcher.php:671
-#: woocommerce-aelia-currencyswitcher.php:754
+#: woocommerce-aelia-currencyswitcher.php:616
+#: woocommerce-aelia-currencyswitcher.php:659
+#: woocommerce-aelia-currencyswitcher.php:730
+#: woocommerce-aelia-currencyswitcher.php:813
 #@ woocommerce
 msgid "Free!"
 msgstr ""
@@ -220,7 +220,7 @@ msgstr ""
 msgid "SKU:"
 msgstr ""
 
-#: lib/classes/ip2location/wc-aelia-ip2location.php:43
+#: lib/classes/ip2location/wc-aelia-ip2location.php:44
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "\"%s\" is not a valid IP address or hostname."
@@ -238,13 +238,13 @@ msgstr "Error(s) occurred while retrieving Geolocation information for IP Addres
 msgid "Hook \"woocommerce_product_after_variable_attributes\". Unexpected condition: variation ID is empty. Variation data (JSON): \"%s\"."
 msgstr "Hook \"woocommerce_product_after_variable_attributes\". Unexpected condition: variation ID is empty. Variation data (JSON): \"%s\"."
 
-#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:404
+#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:407
 #, php-format
 #@ default
 msgid "Attempted to convert an unsupported product object. This usually happens when a 3rd party plugin adds custom product types, of which the Currency Switcher is not aware. Product prices will not be converted. Please report the issue to support as a compatibility request. Product type that triggered the message: \"%s\"."
 msgstr "Attempted to convert an unsupported product object. This usually happens when a 3rd party plugin adds custom product types, of which the Currency Switcher is not aware. Product prices will not be converted. Please report the issue to support as a compatibility request. Product type that triggered the message: \"%s\"."
 
-#: lib/classes/settings/wc-aelia-currencies-manager.php:300
+#: lib/classes/settings/wc-aelia-currencies-manager.php:309
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Could not retrieve Country Code for host \"%s\". Using default currency: %s. Error messages (JSON): %s."
@@ -389,185 +389,180 @@ msgstr "Select the currency to use by default when a visitor comes from a countr
 msgid "Set the payment gateways available when paying in each currency."
 msgstr "Set the payment gateways available when paying in each currency."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:509
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:518
 #@ woocommerce-aelia-currencyswitcher
 msgid "WooCommerce Currency Switcher"
 msgstr "WooCommerce Currency Switcher"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:517
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:526
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this page, you can configure the parameters for the WooCommerce Currency Switcher. To get started, please select the Currencies that you would like to enable on your website. Your Customers will then be able to select one of those Currencies to buy products from your shop."
 msgstr "In this page, you can configure the parameters for the WooCommerce Currency Switcher. To get started, please select the Currencies that you would like to enable on your website. Your Customers will then be able to select one of those Currencies to buy products from your shop."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:524
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:533
 #@ woocommerce-aelia-currencyswitcher
 msgid "<strong>Important</strong>: when Customers will place an order, the transaction will be completed <strong>using the currency they selected</strong>. Please make sure that your Payment Gateways are configured to accept the Currencies you enable."
 msgstr "<strong>Important</strong>: when Customers will place an order, the transaction will be completed <strong>using the currency they selected</strong>. Please make sure that your Payment Gateways are configured to accept the Currencies you enable."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:538
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:547
 #@ woocommerce-aelia-currencyswitcher
 msgid "Save and Update Exchange Rates"
 msgstr "Save and Update Exchange Rates"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:552
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:561
 #@ woocommerce-aelia-currencyswitcher
 msgid "Currency Switcher"
 msgstr "Currency Switcher"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:553
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:562
 #@ woocommerce-aelia-currencyswitcher
 msgid "Currency Switcher Options"
 msgstr "Currency Switcher Options"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:574
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:583
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this section you can enter the Exchange Rates which you would like to use to convert prices from your base Currency to other Currencies. If you enable Automatic Updates, Exchange Rates will be fetched on a regular basis from the Provider of your choice. If you wish to lock an Exchange Rate to a specific value, and not have it updated automatically, simply tick the corresponding box in the <strong>Set Manually</strong> column."
 msgstr "In this section you can enter the Exchange Rates which you would like to use to convert prices from your base Currency to other Currencies. If you enable Automatic Updates, Exchange Rates will be fetched on a regular basis from the Provider of your choice. If you wish to lock an Exchange Rate to a specific value, and not have it updated automatically, simply tick the corresponding box in the <strong>Set Manually</strong> column."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:590
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:599
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this section you can configure the frequency of automatic updates for Exchange Rates."
 msgstr "In this section you can configure the frequency of automatic updates for Exchange Rates."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:600
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:609
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this section you can configure the parameters to connect to Open Exchange Rates website."
 msgstr "In this section you can configure the parameters to connect to Open Exchange Rates website."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:611
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:620
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this section you can enable the GeoLocation feature, which tries to select a Currency automatically, depending on visitors' IP Address the first time they visit the shop. This feature uses GeoLite data created by MaxMind, available from <a href=\"http://www.maxmind.com\">http://www.maxmind.com</a>."
 msgstr "In this section you can enable the GeoLocation feature, which tries to select a Currency automatically, depending on visitors' IP Address the first time they visit the shop. This feature uses GeoLite data created by MaxMind, available from <a href=\"http://www.maxmind.com\">http://www.maxmind.com</a>."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:616
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:625
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "GeoLite database in use: <code>%s</code>."
 msgstr "GeoLite database in use: <code>%s</code>."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:629
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:638
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this section you can indicate which payment gateways can be used topay in each of the enabled currencies. This feature is useful when youhave one or more gateways that do not accept one of the currencies that you wish to accept, or that are restricted to transactions in a single currency (e.g. Mijireh)."
 msgstr "In this section you can indicate which payment gateways can be used topay in each of the enabled currencies. This feature is useful when youhave one or more gateways that do not accept one of the currencies that you wish to accept, or that are restricted to transactions in a single currency (e.g. Mijireh)."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:830
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:839
 #@ woocommerce-aelia-currencyswitcher
 msgid "We designed the Currency Switcher plugin to be robust and effective, as well as intuitive and easy to use. However, we are aware that, despite all best efforts, issues can arise and that there is always room for improvement."
 msgstr "We designed the Currency Switcher plugin to be robust and effective, as well as intuitive and easy to use. However, we are aware that, despite all best efforts, issues can arise and that there is always room for improvement."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:835
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:844
 #@ woocommerce-aelia-currencyswitcher
 msgid "Should you need assistance, or if you just would like to get in touch with us, please use one of the links below."
 msgstr "Should you need assistance, or if you just would like to get in touch with us, please use one of the links below."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:843
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:852
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "<span class=\"label\">To request support</span>, please use our <a href=\"%s\">Support portal</a>. The portal also contains a Knowledge Base, where you can find the answers to the most common questions related to our products."
 msgstr "<span class=\"label\">To request support</span>, please use our <a href=\"%s\">Support portal</a>. The portal also contains a Knowledge Base, where you can find the answers to the most common questions related to our products."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:847
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:856
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "<span class=\"label\">To send us general feedback</span>, suggestions, or enquiries, please use the <a href=\"%s\">contact form on our website.</a>"
 msgstr "<span class=\"label\">To send us general feedback</span>, suggestions, or enquiries, please use the <a href=\"%s\">contact form on our website.</a>"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:869
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:1036
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:878
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:1164
 #@ woocommerce-aelia-currencyswitcher
 msgid "Argument \"enabled_currencies\" must be an array."
 msgstr "Argument \"enabled_currencies\" must be an array."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:876
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:885
 #@ woocommerce-aelia-currencyswitcher
 msgid "Only the base WooCommerce currency has been enabled, therefore there are no Exchange Rates to be configured"
 msgstr "Only the base WooCommerce currency has been enabled, therefore there are no Exchange Rates to be configured"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:884
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:893
 #@ woocommerce-aelia-currencyswitcher
 msgid "Argument \"exchange_rates\" must be an array."
 msgstr "Argument \"exchange_rates\" must be an array."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:894
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:1046
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:903
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:1174
 #@ woocommerce-aelia-currencyswitcher
 msgid "Currency"
 msgstr "Currency"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:895
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:904
 #@ woocommerce-aelia-currencyswitcher
 msgid "Exchange Rate"
 msgstr "Exchange Rate"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:897
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:906
 #@ woocommerce-aelia-currencyswitcher
 msgid "Set Manually"
 msgstr "Set Manually"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:901
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:910
 #@ woocommerce-aelia-currencyswitcher
 msgid "Rate Markup"
 msgstr "Rate Markup"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:906
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:915
 #@ woocommerce-aelia-currencyswitcher
 msgid "If specified, this markup will be added to the standard exchange rate. Markup must be an absolute value. Example: if you have an exchange rate of 1.34 enter a markup of 0.05. The final exchange rate will then be (1.34 + 0.05) = 1.39"
 msgstr "If specified, this markup will be added to the standard exchange rate. Markup must be an absolute value. Example: if you have an exchange rate of 1.34 enter a markup of 0.05. The final exchange rate will then be (1.34 + 0.05) = 1.39"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:912
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:921
 #@ woocommerce-aelia-currencyswitcher
 msgid "Decimals"
 msgstr "Decimals"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:915
-#@ woocommerce-aelia-currencyswitcher
-msgid "The number of decimals will be used to display and to round and the prices. Rounding will be mathematical, with halves rounded up"
-msgstr "The number of decimals will be used to display and to round and the prices. Rounding will be mathematical, with halves rounded up"
-
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:1047
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:1175
 #@ woocommerce-aelia-currencyswitcher
 msgid "Enabled Gateways"
 msgstr "Enabled Gateways"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:64
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:67
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Attempted to register class \"%s\" as an Exchange Rates model, but the class does not exist, or does not implement IWC_Aelia_ExchangeRatesModel interface."
 msgstr "Attempted to register class \"%s\" as an Exchange Rates model, but the class does not exist, or does not implement IWC_Aelia_ExchangeRatesModel interface."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:78
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:81
 #@ woocommerce-aelia-currencyswitcher
 msgid "WebServiceX"
 msgstr "WebServiceX"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:79
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:82
 #@ woocommerce-aelia-currencyswitcher
 msgid "Open Exchange Rates"
 msgstr "Open Exchange Rates"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:655
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:688
 #@ woocommerce-aelia-currencyswitcher
 msgid "Settings saved. Exchange Rates have been updated."
 msgstr "Settings saved. Exchange Rates have been updated."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:781
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:816
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "You chose to manually set the exchange rate for currency %s, but the specified rate \"%s\" is not valid."
 msgstr "You chose to manually set the exchange rate for currency %s, but the specified rate \"%s\" is not valid."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:821
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:856
 #@ woocommerce-aelia-currencyswitcher
 msgid "You must specify an API Key to use Open Exchange Rates service."
 msgstr "You must specify an API Key to use Open Exchange Rates service."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:841
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:876
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "You have to enable at least one payment gateway for currency \"%s\"."
 msgstr "You have to enable at least one payment gateway for currency \"%s\"."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:859
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings.php:894
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "The following payment gateways, selected for currency \"%s\", are not valid: %s"
@@ -578,146 +573,11 @@ msgstr "The following payment gateways, selected for currency \"%s\", are not va
 msgid "Allow to switch currency on the fly and perform all transactions in such currency"
 msgstr "Allow to switch currency on the fly and perform all transactions in such currency"
 
-#: lib/classes/widgets/billing-country-selector-widget.php:155
+#: lib/classes/widgets/billing-country-selector-widget.php:156
 #: lib/classes/widgets/wc-aelia-currencyswitcher-widget.php:155
 #@ woocommerce-aelia-currencyswitcher
 msgid "Title:"
 msgstr "Title:"
-
-#: lib/woocommerce-core-aux-functions.php:20
-#@ woocommerce
-msgid "US Dollars (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:21
-#@ woocommerce
-msgid "Euros (&euro;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:22
-#@ woocommerce
-msgid "Pounds Sterling (&pound;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:23
-#@ woocommerce
-msgid "Australian Dollars (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:24
-#@ woocommerce
-msgid "Brazilian Real (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:25
-#@ woocommerce
-msgid "Canadian Dollars (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:26
-#@ woocommerce
-msgid "Czech Koruna (&#75;&#269;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:27
-#@ woocommerce
-msgid "Danish Krone"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:28
-#@ woocommerce
-msgid "Hong Kong Dollar (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:29
-#@ woocommerce
-msgid "Hungarian Forint"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:30
-#@ woocommerce
-msgid "Israeli Shekel"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:31
-#@ woocommerce
-msgid "Chinese Yuan (&yen;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:32
-#@ woocommerce
-msgid "Japanese Yen (&yen;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:33
-#@ woocommerce
-msgid "Malaysian Ringgits (RM)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:34
-#@ woocommerce
-msgid "Mexican Peso (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:35
-#@ woocommerce
-msgid "New Zealand Dollar (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:36
-#@ woocommerce
-msgid "Norwegian Krone"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:37
-#@ woocommerce
-msgid "Philippine Pesos"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:38
-#@ woocommerce
-msgid "Polish Zloty"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:39
-#@ woocommerce
-msgid "Singapore Dollar (&#36;)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:40
-#@ woocommerce
-msgid "Swedish Krona"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:41
-#@ woocommerce
-msgid "Swiss Franc"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:42
-#@ woocommerce
-msgid "Taiwan New Dollars"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:43
-#@ woocommerce
-msgid "Thai Baht"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:44
-#@ woocommerce
-msgid "Turkish Lira (TL)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:45
-#@ woocommerce
-msgid "South African rand (R)"
-msgstr ""
-
-#: lib/woocommerce-core-aux-functions.php:46
-#@ woocommerce
-msgid "Romanian Leu (RON)"
-msgstr ""
 
 #: views/admin/wc20/product_currencyprices_header.php:4
 #@ woocommerce-aelia-currencyswitcher
@@ -868,140 +728,134 @@ msgstr ""
 msgid "Change Currency"
 msgstr "Change Currency"
 
-#: woocommerce-aelia-currencyswitcher.php:272
+#: woocommerce-aelia-currencyswitcher.php:275
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "File not found: \"%s\"."
 msgstr "File not found: \"%s\"."
 
-#: woocommerce-aelia-currencyswitcher.php:273
+#: woocommerce-aelia-currencyswitcher.php:276
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Currency not valid: \"%s\"."
 msgstr "Currency not valid: \"%s\"."
 
-#: woocommerce-aelia-currencyswitcher.php:279
+#: woocommerce-aelia-currencyswitcher.php:282
 #@ woocommerce-aelia-currencyswitcher
 msgid "One or more Currencies are not configured correctly (e.g. Exchange Rates may be missing, or set to zero). Please check Currency Switcher Options and ensure that all enabled Currencies have been configured correctly. If the problem persists, please contact Support."
 msgstr "One or more Currencies are not configured correctly (e.g. Exchange Rates may be missing, or set to zero). Please check Currency Switcher Options and ensure that all enabled Currencies have been configured correctly. If the problem persists, please contact Support."
 
-#: woocommerce-aelia-currencyswitcher.php:285
-#, php-format
-#@ woocommerce-aelia-currencyswitcher
-msgid "Currency Conversion - Source Currency not valid or exchange ratenot found for: \"%s\". Please make sure that the Currency Switcher plugin is configured correctly and that an Exchange Rate has been specified for each of the enabled currencies."
-msgstr "Currency Conversion - Source Currency not valid or exchange ratenot found for: \"%s\". Please make sure that the Currency Switcher plugin is configured correctly and that an Exchange Rate has been specified for each of the enabled currencies."
-
-#: woocommerce-aelia-currencyswitcher.php:291
+#: woocommerce-aelia-currencyswitcher.php:294
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Currency Conversion - Destination Currency not valid: \"%s\" or exchange ratenot found for: \"%s\". Please make sure that the Currency Switcher plugin is configured correctly and that an Exchange Rate has been specified for each of the enabled currencies."
 msgstr "Currency Conversion - Destination Currency not valid: \"%s\" or exchange ratenot found for: \"%s\". Please make sure that the Currency Switcher plugin is configured correctly and that an Exchange Rate has been specified for each of the enabled currencies."
 
-#: woocommerce-aelia-currencyswitcher.php:462
+#: woocommerce-aelia-currencyswitcher.php:465
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Stack trace: %s"
 msgstr "Stack trace: %s"
 
-#: woocommerce-aelia-currencyswitcher.php:688
+#: woocommerce-aelia-currencyswitcher.php:747
 #@ woocommerce-aelia-currencyswitcher
 msgid "Weekly"
 msgstr "Weekly"
 
-#: woocommerce-aelia-currencyswitcher.php:693
+#: woocommerce-aelia-currencyswitcher.php:752
 #@ woocommerce-aelia-currencyswitcher
 msgid "Monthly (every 30 days)"
 msgstr "Monthly (every 30 days)"
 
-#: woocommerce-aelia-currencyswitcher.php:750
+#: woocommerce-aelia-currencyswitcher.php:809
 #, php-format
 #@ woocommerce
 msgid "&nbsp;<small>%svia %s</small>"
 msgstr ""
 
-#: woocommerce-aelia-currencyswitcher.php:2067
+#: woocommerce-aelia-currencyswitcher.php:2078
 #@ woocommerce-aelia-currencyswitcher
 msgid "Currency Switcher could not be loaded due to missing requirements"
 msgstr "Currency Switcher could not be loaded due to missing requirements"
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:94
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:113
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:103
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:122
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Semaphore lock \"%s\" failed (line %s)."
 msgstr "Semaphore lock \"%s\" failed (line %s)."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:127
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:136
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Semaphore \"%s\" reset to 1."
 msgstr "Semaphore \"%s\" reset to 1."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:142
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:151
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Set semaphore last lock \"%s\" time to %s."
 msgstr "Set semaphore last lock \"%s\" time to %s."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:145
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:154
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Set semaphore lock \"%s\" complete."
 msgstr "Set semaphore lock \"%s\" complete."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:176
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:185
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Incremented the semaphore \"%s\" by 1."
 msgstr "Incremented the semaphore \"%s\" by 1."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:199
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:208
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Decremented the semaphore \"%s\" by 1."
 msgstr "Decremented the semaphore \"%s\" by 1."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:224
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:233
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Semaphore \"%s\" unlocked."
 msgstr "Semaphore \"%s\" unlocked."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:229
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:238
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Semaphore \"%s\" still locked."
 msgstr "Semaphore \"%s\" still locked."
 
-#: lib/classes/base/semaphore/wc-aelia-semaphore.php:260
+#: lib/classes/base/semaphore/wc-aelia-semaphore.php:269
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Semaphore \"%s\" was stuck, set lock time to %s."
 msgstr "Semaphore \"%s\" was stuck, set lock time to %s."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:77
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:76
 #@ woocommerce-aelia-currencyswitcher
 msgid "Plugin Autoupdate - Could not obtain semaphore lock. This may mean that the process has already started, or that the lock is stuck. Update process will run again later."
 msgstr "Plugin Autoupdate - Could not obtain semaphore lock. This may mean that the process has already started, or that the lock is stuck. Update process will run again later."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:70
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:67
 #@ woocommerce-aelia-currencyswitcher
 msgid "No settings found. This means that the plugin has just been installed. Update will run as soon as the settings are saved."
 msgstr "No settings found. This means that the plugin has just been installed. Update will run as soon as the settings are saved."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:85
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:84
 #@ woocommerce-aelia-currencyswitcher
 msgid "Running plugin autoupdate..."
 msgstr "Running plugin autoupdate..."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:88
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:87
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Autoupdate complete. Result: %s."
 msgstr "Autoupdate complete. Result: %s."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:377
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:484
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:376
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:483
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Order %s does not have a currency associated, therefore it is not possible to determine its value in base currency (%s). This may lead to imprecise results in the reports."
@@ -1046,13 +900,13 @@ msgstr "Category Pricing rule set \"%s\" - \"rules\" attribute is not an array. 
 msgid "Pricing Adjustment set \"%s\" - \"pricing rules\" attribute is not an array. Skipping."
 msgstr "Pricing Adjustment set \"%s\" - \"pricing rules\" attribute is not an array. Skipping."
 
-#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:718
+#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:739
 #, php-format
 #@ default
 msgid "Invalid variation regular price type specified: \"%s\"."
 msgstr "Invalid variation regular price type specified: \"%s\"."
 
-#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:749
+#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:770
 #, php-format
 #@ default
 msgid "Invalid variation sale price type specified: \"%s\"."
@@ -1441,88 +1295,88 @@ msgstr ""
 msgid "Documentation"
 msgstr "Documentation"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:480
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:485
 #@ woocommerce-aelia-currencyswitcher
 msgid "Enable debug mode"
 msgstr "Enable debug mode"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:483
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:488
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "When debug mode is enabled, the plugin will log events to file <code>woocommerce/logs/%s-%s.txt</code>"
 msgstr "When debug mode is enabled, the plugin will log events to file <code>woocommerce/logs/%s-%s.txt</code>"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:582
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:591
 #@ woocommerce-aelia-currencyswitcher
 msgid "<strong>Important</strong>: you must enter an exchange rate for every enabled currency, even if you plan to only use prices entered manually. The exchange rates are also used to calculate an estimate of order amounts in base currency, for reporting purposes, therefore it is important that they sensible values. "
 msgstr "<strong>Important</strong>: you must enter an exchange rate for every enabled currency, even if you plan to only use prices entered manually. The exchange rates are also used to calculate an estimate of order amounts in base currency, for reporting purposes, therefore it is important that they sensible values. "
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:645
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:654
 #@ woocommerce-aelia-currencyswitcher
 msgid "How to display the currency selector widget"
 msgstr "How to display the currency selector widget"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:650
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:659
 #@ woocommerce-aelia-currencyswitcher
 msgid "The currency selector widget allows your visitors to choose the currency they prefer to browse your site and place an order. To display the widget, you have the following options:"
 msgstr "The currency selector widget allows your visitors to choose the currency they prefer to browse your site and place an order. To display the widget, you have the following options:"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:655
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:751
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:664
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:760
 #@ woocommerce-aelia-currencyswitcher
 msgid "Using WordPress Widgets"
 msgstr "Using WordPress Widgets"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:662
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:671
 #@ woocommerce-aelia-currencyswitcher
 msgid "Go to <i>Appearance > Widgets</i>. There you will see a widget named \"<strong>WooCommerce Currency Switcher - Currency Selector</strong>\". Drag and drop it in a widget area, select a title and a widget type and click on \"Save\". The widget will now appear on the frontend of your shop, in the area where you dropped it."
 msgstr "Go to <i>Appearance > Widgets</i>. There you will see a widget named \"<strong>WooCommerce Currency Switcher - Currency Selector</strong>\". Drag and drop it in a widget area, select a title and a widget type and click on \"Save\". The widget will now appear on the frontend of your shop, in the area where you dropped it."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:667
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:764
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:676
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:773
 #@ woocommerce-aelia-currencyswitcher
 msgid "Using a shortcode"
 msgstr "Using a shortcode"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:671
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:680
 #@ woocommerce-aelia-currencyswitcher
 msgid "You can display the currency selector widget using the following shortcode anywhere in your pages: "
 msgstr "You can display the currency selector widget using the following shortcode anywhere in your pages: "
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:675
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:772
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:684
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:781
 #@ woocommerce-aelia-currencyswitcher
 msgid "The shortcode accepts the following parameters:"
 msgstr "The shortcode accepts the following parameters:"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:682
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:779
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:691
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:788
 #@ woocommerce-aelia-currencyswitcher
 msgid "The widget title (optional)"
 msgstr "The widget title (optional)"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:690
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:699
 #@ woocommerce-aelia-currencyswitcher
 msgid "The widget type. The Currency Switcher supports either <code>dropdown</code> or <code>buttons</code>. Further types can be added by implementing a filter in your theme for <code>wc_aelia_cs_currency_selector_widget_types</code> hook. If this parameter is not specified, <code>dropdown</code> widget type will be rendered by default."
 msgstr "The widget type. The Currency Switcher supports either <code>dropdown</code> or <code>buttons</code>. Further types can be added by implementing a filter in your theme for <code>wc_aelia_cs_currency_selector_widget_types</code> hook. If this parameter is not specified, <code>dropdown</code> widget type will be rendered by default."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:698
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:707
 #@ woocommerce-aelia-currencyswitcher
 msgid "How to customise the look and feel of the currency selector widget"
 msgstr "How to customise the look and feel of the currency selector widget"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:709
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:805
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:718
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:814
 #@ woocommerce-aelia-currencyswitcher
 msgid "displays \"dropdown\" style selector."
 msgstr "displays \"dropdown\" style selector."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:712
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:721
 #@ woocommerce-aelia-currencyswitcher
 msgid "displays \"buttons\" style selector."
 msgstr "displays \"buttons\" style selector."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:726
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:735
 #@ woocommerce-aelia-currencyswitcher
 msgid "The CSS styles that apply to the standard layouts for the currency selector widget can be found in our knowledge base: <a href=\"https://aelia.freshdesk.com/support/solutions/articles/121622-how-can-i-customise-the-look-and-feel-of-the-currency-selector\">How can I customise the look and feel of the Currency Selector widget?</a>."
 msgstr "The CSS styles that apply to the standard layouts for the currency selector widget can be found in our knowledge base: <a href=\"https://aelia.freshdesk.com/support/solutions/articles/121622-how-can-i-customise-the-look-and-feel-of-the-currency-selector\">How can I customise the look and feel of the Currency Selector widget?</a>."
@@ -1554,40 +1408,40 @@ msgstr "Displays one button for each currency"
 msgid "The currency selector widget has not been configured properly. A template for wiget type \"%s\" could not be found. Please review the widget settings and ensure that a valid widget type has been selected. If the issue persists, please <a href=\"https://aelia.freshdesk.com/helpdesk/tickets/new\" title=\"Contact support\">contact support</a>."
 msgstr "The currency selector widget has not been configured properly. A template for wiget type \"%s\" could not be found. Please review the widget settings and ensure that a valid widget type has been selected. If the issue persists, please <a href=\"https://aelia.freshdesk.com/helpdesk/tickets/new\" title=\"Contact support\">contact support</a>."
 
-#: lib/classes/widgets/billing-country-selector-widget.php:165
+#: lib/classes/widgets/billing-country-selector-widget.php:166
 #: lib/classes/widgets/wc-aelia-currencyswitcher-widget.php:165
 #@ woocommerce-aelia-currencyswitcher
 msgid "Widget type:"
 msgstr "Widget type:"
 
-#: woocommerce-aelia-currencyswitcher.php:1137
+#: woocommerce-aelia-currencyswitcher.php:1127
 #, php-format
 #@ default
 msgid "Order not found for order item id %s. Calculation of metadata \"%s\" in base currency skipped."
 msgstr "Order not found for order item id %s. Calculation of metadata \"%s\" in base currency skipped."
 
-#: woocommerce-aelia-currencyswitcher.php:2018
+#: woocommerce-aelia-currencyswitcher.php:2029
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "Plugin requires \"%s\" PHP extension. Please install such extension, or ask your hosting provider to install it for you."
 msgstr "Plugin requires \"%s\" PHP extension. Please install such extension, or ask your hosting provider to install it for you."
 
-#: woocommerce-aelia-currencyswitcher.php:2040
+#: woocommerce-aelia-currencyswitcher.php:2051
 #@ woocommerce-aelia-currencyswitcher
 msgid "Plugin requires PHP 5.3 or greater. Please upgrade PHP to version 5.3 or higher, or ask your hosting provider to do so. Of course, please make sure that you make a backup of your site(s) before proceeding. The upgrade to PHP 5.3 is fairly safe, but it is always better to keep backups before performing any important operation."
 msgstr "Plugin requires PHP 5.3 or greater. Please upgrade PHP to version 5.3 or higher, or ask your hosting provider to do so. Of course, please make sure that you make a backup of your site(s) before proceeding. The upgrade to PHP 5.3 is fairly safe, but it is always better to keep backups before performing any important operation."
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:602
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:601
 #@ default
 msgid "Recalculating line totals in base currency..."
 msgstr ""
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:610
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:609
 #@ default
 msgid "Failed. Please check PHP error log for error messages related to the operation."
 msgstr ""
 
-#: lib/classes/install/wc-aelia-currencyswitcher-install.php:615
+#: lib/classes/install/wc-aelia-currencyswitcher-install.php:614
 #, php-format
 #@ default
 msgid "Done. %s rows affected."
@@ -1613,52 +1467,52 @@ msgstr "Allow currency selection by billing country"
 msgid "When enabled, it sets the shop currency based on the billing country selected by the customer. This option also adds a new widget that allows customers to choose the billing country before reaching the checkout page, showing them the prices in the appropriate currency while they browse the site "
 msgstr "When enabled, it sets the shop currency based on the billing country selected by the customer. This option also adds a new widget that allows customers to choose the billing country before reaching the checkout page, showing them the prices in the appropriate currency while they browse the site "
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:638
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:647
 #@ woocommerce-aelia-currencyswitcher
 msgid "In this section you can specify how your visitors will be able to select the currency in which they will see prices and complete orders."
 msgstr "In this section you can specify how your visitors will be able to select the currency in which they will see prices and complete orders."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:733
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:742
 #@ woocommerce-aelia-currencyswitcher
 msgid "How to display the billing country selector widget"
 msgstr "How to display the billing country selector widget"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:735
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:744
 #@ woocommerce-aelia-currencyswitcher
 msgid "Important"
 msgstr "Important"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:739
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:748
 #@ woocommerce-aelia-currencyswitcher
 msgid "To use the billing country selector, you must tick the <i>Allow currency selection by billing country</i> box, which you can find in the <i>Currency selection tab</i>, above."
 msgstr "To use the billing country selector, you must tick the <i>Allow currency selection by billing country</i> box, which you can find in the <i>Currency selection tab</i>, above."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:746
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:755
 #@ woocommerce-aelia-currencyswitcher
 msgid "The billing country selector widget allows your visitors to choose the billing country before they reach the checkout. The Tax Display by Country plugin will detect the choice and display the prices with our without tax, depending on the setting you entered. To display the widget, you have the following options:"
 msgstr "The billing country selector widget allows your visitors to choose the billing country before they reach the checkout. The Tax Display by Country plugin will detect the choice and display the prices with our without tax, depending on the setting you entered. To display the widget, you have the following options:"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:759
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:768
 #@ woocommerce-aelia-currencyswitcher
 msgid "Go to <i>Appearance > Widgets</i>. There you will see a widget named \"<strong>WooCommerce Tax Display by Country - Billing Country Selector</strong>\". Drag and drop it in a widget area, select a title and a widget type and click on \"Save\". The widget will now appear on the frontend of your shop, in the area where you dropped it."
 msgstr "Go to <i>Appearance > Widgets</i>. There you will see a widget named \"<strong>WooCommerce Tax Display by Country - Billing Country Selector</strong>\". Drag and drop it in a widget area, select a title and a widget type and click on \"Save\". The widget will now appear on the frontend of your shop, in the area where you dropped it."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:768
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:777
 #@ woocommerce-aelia-currencyswitcher
 msgid "You can display the country selector widget using the following shortcode anywhere in your pages: "
 msgstr "You can display the country selector widget using the following shortcode anywhere in your pages: "
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:787
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:796
 #@ woocommerce-aelia-currencyswitcher
 msgid "The widget type. Out of the box, the widget supports only <code>dropdown</code>. Further types can be added by implementing a filter in your theme for <code>wc_aelia_cs_billing_country_selector_widget_types</code> hook. If this parameter is not specified, <code>dropdown</code> widget type will be rendered by default."
 msgstr "The widget type. Out of the box, the widget supports only <code>dropdown</code>. Further types can be added by implementing a filter in your theme for <code>wc_aelia_cs_billing_country_selector_widget_types</code> hook. If this parameter is not specified, <code>dropdown</code> widget type will be rendered by default."
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:795
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:804
 #@ woocommerce-aelia-currencyswitcher
 msgid "How to customise the look and feel of the billing country selector widget"
 msgstr "How to customise the look and feel of the billing country selector widget"
 
-#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:819
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:828
 #@ woocommerce-aelia-currencyswitcher
 msgid "The CSS styles that apply to the standard layouts for the Country Selector widget can be found in our knowledge base: <a href=\"https://aelia.freshdesk.com/solution/categories/120257/folders/197723/articles/3000010678-how-can-i-customise-the-look-and-feel-of-the-billing-country-selector-widget-\">How can I customise the look and feel of the Billing Country Selector widget?</a>."
 msgstr "The CSS styles that apply to the standard layouts for the Country Selector widget can be found in our knowledge base: <a href=\"https://aelia.freshdesk.com/solution/categories/120257/folders/197723/articles/3000010678-how-can-i-customise-the-look-and-feel-of-the-billing-country-selector-widget-\">How can I customise the look and feel of the Billing Country Selector widget?</a>."
@@ -1673,7 +1527,7 @@ msgstr "Displays a dropdown with all enabled countries"
 msgid "Allow to switch billing country on the fly and set the active currency accordingly."
 msgstr "Allow to switch billing country on the fly and set the active currency accordingly."
 
-#: lib/classes/widgets/billing-country-selector-widget.php:140
+#: lib/classes/widgets/billing-country-selector-widget.php:141
 #, php-format
 #@ woocommerce-aelia-currencyswitcher
 msgid "The billing country selector widget has not been configured properly. A template for wiget type \"%s\" could not be found. Please review the widget settings and ensure that a valid widget type has been selected. If the issue persists, please <a href=\"https://aelia.freshdesk.com/helpdesk/tickets/new\" title=\"Contact support\">contact support</a>."
@@ -1683,4 +1537,47 @@ msgstr "The billing country selector widget has not been configured properly. A 
 #@ woocommerce-aelia-currencyswitcher
 msgid "Change Country"
 msgstr "Change Country"
+
+#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:791
+#@ woocommerce-aelia-currencyswitcher
+msgid "Currency prices"
+msgstr "Currency prices"
+
+#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:800
+#, php-format
+#@ woocommerce-aelia-currencyswitcher
+msgid "Regular prices (%s)"
+msgstr "Regular prices (%s)"
+
+#: lib/classes/multiprice/wc-aelia-currencyprices-manager.php:806
+#, php-format
+#@ woocommerce-aelia-currencyswitcher
+msgid "Sale prices (%s)"
+msgstr "Sale prices (%s)"
+
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:460
+#@ woocommerce-aelia-currencyswitcher
+msgid "<strong>Important</strong>: if you enable this option, <strong>do not use the currency selector widget</strong>, as any currency selected by the customer will be ignored and overridden by this feature."
+msgstr "<strong>Important</strong>: if you enable this option, <strong>do not use the currency selector widget</strong>, as any currency selected by the customer will be ignored and overridden by this feature."
+
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:927
+#@ woocommerce-aelia-currencyswitcher
+msgid "The number of decimals will be used to round ALL figures. Rounding will be mathematical, with halves rounded up. IMPORTANT: this setting affects PRICES and TAXES, which will be rounded to the specified amount of decimals. Do not set the value to zero unless you have a good reason, as that could result in an incorrect rounding of taxes"
+msgstr "The number of decimals will be used to round ALL figures. Rounding will be mathematical, with halves rounded up. IMPORTANT: this setting affects PRICES and TAXES, which will be rounded to the specified amount of decimals. Do not set the value to zero unless you have a good reason, as that could result in an incorrect rounding of taxes"
+
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:932
+#@ woocommerce-aelia-currencyswitcher
+msgid "Symbol"
+msgstr "Symbol"
+
+#: lib/classes/settings/wc-aelia-currencyswitcher-settings-renderer.php:936
+#@ woocommerce-aelia-currencyswitcher
+msgid "The symbol that will be used to represent the currency. You can use this settings to distinguish currencies more easily, for example by displaying US$, AU$, NZ$ and so on."
+msgstr "The symbol that will be used to represent the currency. You can use this settings to distinguish currencies more easily, for example by displaying US$, AU$, NZ$ and so on."
+
+#: woocommerce-aelia-currencyswitcher.php:288
+#, php-format
+#@ woocommerce-aelia-currencyswitcher
+msgid "Currency Conversion - Source Currency not valid or exchange rate not found for: \"%s\". Please make sure that the Currency Switcher plugin is configured correctly and that an Exchange Rate has been specified for each of the enabled currencies."
+msgstr "Currency Conversion - Source Currency not valid or exchange rate not found for: \"%s\". Please make sure that the Currency Switcher plugin is configured correctly and that an Exchange Rate has been specified for each of the enabled currencies."
 

@@ -111,14 +111,15 @@ class WC_Aelia_CurrencySwitcher_Install extends WC_Aelia_Install {
 		// again at next page load
 		$exchange_rate_msg_details = __('This usually occurs when the Currency Switcher ' .
 																		'plugin has not yet been configured and exchange ' .
-																		'rates have not been specified. Please configure ' .
-																		'the plugin and this message should disappear at ' .
-																		'next page load.', AELIA_CS_PLUGIN_TEXTDOMAIN);
+																		'rates have not been specified. <strong>Please refer to ' .
+																		'our knowledge base to learn how to fix it</strong>: ' .
+																		'<a href="https://aelia.freshdesk.com/solution/articles/3000017311-i-get-a-warning-saying-that-exchange-rate-could-not-be-retrieved-">I get a warning saying that "Exchange rate could not be retrieved" </a>.',
+																		AELIA_CS_PLUGIN_TEXTDOMAIN);
 
 		if($this->settings->get_exchange_rate($from_currency) == false) {
 			$this->add_message(E_USER_WARNING,
 												 sprintf(__('Exchange rate for Order Currency "%s" (Order ID: %s) ' .
-																		'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) .
+																		'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) . ' ' .
 																 $exchange_rate_msg_details,
 																 $order->currency,
 																 $order->order_id));
@@ -128,7 +129,7 @@ class WC_Aelia_CurrencySwitcher_Install extends WC_Aelia_Install {
 		if($this->settings->get_exchange_rate($to_currency) == false) {
 			$this->add_message(E_USER_WARNING,
 												 sprintf(__('Exchange rate for Base Currency "%s" ' .
-																		'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) .
+																		'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) . ' ' .
 																 $exchange_rate_msg_details,
 																 $this->settings->base_currency()));
 
@@ -203,14 +204,15 @@ class WC_Aelia_CurrencySwitcher_Install extends WC_Aelia_Install {
 			// again at next page load
 			$exchange_rate_msg_details = __('This usually occurs when the Currency Switcher ' .
 																			'plugin has not yet been configured and exchange ' .
-																			'rates have not been specified. Please configure ' .
-																			'the plugin and this message should disappear at ' .
-																			'next page load.', AELIA_CS_PLUGIN_TEXTDOMAIN);
+																			'rates have not been specified. <strong>Please refer to ' .
+																			'our knowledge base to learn how to fix it</strong>: ' .
+																			'<a href="https://aelia.freshdesk.com/solution/articles/3000017311-i-get-a-warning-saying-that-exchange-rate-could-not-be-retrieved-">I get a warning saying that "Exchange rate could not be retrieved" </a>.',
+																			AELIA_CS_PLUGIN_TEXTDOMAIN);
 
 			if($this->settings->get_exchange_rate($order->currency) == false) {
 				$this->add_message(E_USER_WARNING,
 													 sprintf(__('Exchange rate for Order Currency "%s" (Order ID: %s) ' .
-																			'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) .
+																			'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) . ' ' .
 																	 $exchange_rate_msg_details,
 																	 $order->currency,
 																	 $order->order_id));
@@ -220,7 +222,7 @@ class WC_Aelia_CurrencySwitcher_Install extends WC_Aelia_Install {
 			if($this->settings->get_exchange_rate($this->settings->base_currency()) == false) {
 				$this->add_message(E_USER_WARNING,
 													 sprintf(__('Exchange rate for Base Currency "%s" ' .
-																			'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) .
+																			'could not be retrieved.', AELIA_CS_PLUGIN_TEXTDOMAIN) . ' ' .
 																	 $exchange_rate_msg_details,
 																	 $this->settings->base_currency()));
 

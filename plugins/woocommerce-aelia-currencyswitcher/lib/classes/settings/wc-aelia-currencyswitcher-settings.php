@@ -427,7 +427,7 @@ class WC_Aelia_CurrencySwitcher_Settings extends WC_Aelia_Settings {
 			$enabled_currencies	= array();
 		}
 
-		return $enabled_currencies;
+		return array_unique($enabled_currencies);
 	}
 
 	/**

@@ -10,7 +10,7 @@ echo '<div class="widget_wc_aelia_currencyswitcher_widget">';
 $currency_switcher_widget_title = get_value('title', $widget_args);
 if(!empty($currency_switcher_widget_title)) {
 	echo get_value('before_title', $widget_args);
-	echo $currency_switcher_widget_title;
+	echo apply_filters('widget_title', __($currency_switcher_widget_title, $this->text_domain));
 	echo get_value('after_title', $widget_args);
 }
 

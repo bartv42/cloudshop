@@ -1,6 +1,53 @@
 # Aelia Currency Switcher - Change Log
 
 ## Version 3.x
+####3.5.0.140911
+* Improved compatibility with WooCommerce 2.2:
+	* Fixed Tax by Type report.
+	* Added new `Aelia\CurrencySwitcher\WC21\Reports` class.
+	* Added override for WooCommerce sales report in dashboard widget.
+
+####3.4.17.140903
+* Modified plugin to use the jQuery UI Tabs script included with WordPress.
+
+####3.4.16.140902
+* Improved warning message displayed when a past order was placed in a currency which is not enabled when the auto-update process runs.
+
+####3.4.15.140828
+* Added `WC_Aelia_CurrencySwitcher::base_currency()` method.
+* Replaced references to `self::settings()->base_currency` with `$this->base_currency()`.
+
+####3.4.14.140824
+* Added processing of widget titles through localisation functions.
+
+####3.4.13.140820
+* Removed duplicates from result returned by `WC_Aelia_CurrencySwitcher_Settings::get_enabled_currencies()`.
+
+####3.4.12.140819
+* Forced loading of WooCommerce session even when cart is empty. This is necessary for the currency selector to work properly.
+
+####3.4.11.140818
+* Added new filters:
+	* Filter `wc_aelia_currencyswitcher_product_currency_prices` will simplify integration with Prices by Country plugin.
+	* Filter `wc_aelia_cs_convert` can be invoked by 3rd parties to convert an amount from one currency to another, without having to invoke plugin's methods directly.
+
+####3.4.10.140808
+* Added check for core report file existence, to prevent warnings when external reports are added.
+
+####3.4.9.140806
+* Fixed bug in payment of existing orders. Bug caused the wrong currency to be picked, in some conditions.
+
+####3.4.8.140804
+* Improved user interface:
+	* Improved tooltip that explains the effect of the settings entered in the "*Decimals*" column.
+* Updated language files.
+
+####3.4.7.140803
+* Fixed method `WC_Aelia_CurrencySwitcher::load_order_currency_settings()`, which failed to return the localisation parameters for JS scripts.
+
+####3.4.6.140720
+* Fixed bug in display of variation prices (regular and sale) in WooCommerce 2.1.12.
+
 ####3.4.5.140717
 * Modified logic of "currency by billing country" feature, so that the default GeoIP currency is taken when a billing country uses an unsupported currency.
 * Optimised semaphore logic used for auto-updates to improve performance.

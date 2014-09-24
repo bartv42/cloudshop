@@ -3,7 +3,7 @@ namespace Aelia\CurrencySwitcher\WC21;
 if(!defined('ABSPATH')) exit; // Exit if accessed directly
 
 /**
- * Overrides standard WC_CS_Report_Taxes_By_Date class.
+ * Overrides standard WC_Report_Taxes_By_Date class.
  * This class is an almost exact clone of its parent, with the exception that it
  * takes amounts in base currency, rather than the ones in which orders were
  * placed, to ensure that totals are consistent (original reports only take

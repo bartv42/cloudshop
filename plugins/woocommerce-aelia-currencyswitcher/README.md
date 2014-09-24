@@ -21,7 +21,7 @@ This product includes GeoLite data created by MaxMind, available from http://www
 * PHP 5.3+
 * PHP Extensions
     * CURL
-* WooCommerce 2.0.x/2.1.x (plugin has been tested until WooCommerce 2.1.7)
+* WooCommerce 2.0.x/2.1.x/2.2.x
 
 ##Installation
 

@@ -125,15 +125,20 @@ class Reports extends \Aelia\CurrencySwitcher\Reports {
 		$report_name = str_replace('_', '-', $report_name);
 		$report_class_file = $this->woocommerce_admin_path() . '/reports/class-wc-report-' . $report_name . '.php';
 
-		Logger::log(sprintf(__('Loading original report class from file: "%s".', AELIA_CS_PLUGIN_TEXTDOMAIN),
-												$report_class_file),
-								true);
-		$result = include_once($report_class_file);
+		if(file_exists($report_class_file)) {
+			Logger::log(sprintf(__('Loading original report class from file: "%s".', AELIA_CS_PLUGIN_TEXTDOMAIN),
+													$report_class_file),
+									true);
+			$result = include_once($report_class_file);
 
-		Logger::log(sprintf(__('Result: "%d".', AELIA_CS_PLUGIN_TEXTDOMAIN),
-												(int)$result),
-								true);
-		return $result;
+			Logger::log(sprintf(__('Result: "%d".', AELIA_CS_PLUGIN_TEXTDOMAIN),
+													(int)$result),
+									true);
+			return $result;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**
