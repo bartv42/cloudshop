@@ -24,6 +24,8 @@ if( 'store.blender.org' == $_SERVER['SERVER_NAME'] ) {
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+include( 'gateway_manual_paypal.php' );
+
 function fontawesome_dashboard() {
    wp_enqueue_style('fontawesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css', '', '4.0.3', 'all'); 
 }
