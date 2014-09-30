@@ -857,16 +857,14 @@ class WC_Seq_Order_Number_Pro extends SV_WC_Plugin {
 		}
 
 		$formatted = $order_number_prefix . $order_number . $order_number_suffix;
-		
+
 		// UPDATE Bart Veldhuizen
 		// get email address for this order
 		if( $order_id != 0 ) {
 			$email = get_post_meta( $order_id, '_billing_email', true );
 
 			if( $email == '' ) {
-				$customer_user_id = $_POST['customer_user'];
-				$customer_data = get_userdata( $customer_user_id );
-				$email = $customer_data->data->user_email;
+				$email = $_POST['billing_email'];
 			}
 
 			$email = strtoupper( substr( $email, 0, 3 ) );
