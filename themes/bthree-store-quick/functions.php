@@ -113,8 +113,6 @@ function virtual_order_payment_complete_order_status( $order_status, $order_id )
         }
       }
     }
-
-    file_put_contents( '/tmp/store.log', "Setting order status for order $order_id : virtual_order=$virtual_order \n", FILE_APPEND );
  
     // virtual order, mark as completed
     if ( $virtual_order ) {
