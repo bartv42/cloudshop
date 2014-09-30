@@ -131,5 +131,33 @@ function wc_remove_related_products( $args ) {
   return array();
 }
 add_filter('woocommerce_related_products_args','wc_remove_related_products', 10);
+
+/***
+ * Decide which PayPal gateway to show depending on cart contents.
+ * Auto-renewing subscriptions -> paypal
+ * Manually renewing subscriptions -> bo_manual_paypal
+ */
+function bo_payment_gateway_disable_country( $available_gateways ) {
+	global $woocommerce;
+
+	$force_manual_renewal = false;
+	$contents = $woocommerce->cart->cart_contents;
+	foreach( $contents as $item ) {
+		if( isset( $item['variation']['attribute_pa_renewal-type'] ) ) {
+			if( $item['variation']['attribute_pa_renewal-type'] == 'manual' ) {
+				$force_manual_renewal = true;
+			}
+		}
+	}
+
+	if( $force_manual_renewal ) {
+	    unset(  $available_gateways['paypal'] );
+	} else {
+	    unset(  $available_gateways['bo_manual_paypal'] );
+	}
+
+	return $available_gateways;
+}
+add_filter( 'woocommerce_available_payment_gateways', 'bo_payment_gateway_disable_country' );
 		
 ?>
