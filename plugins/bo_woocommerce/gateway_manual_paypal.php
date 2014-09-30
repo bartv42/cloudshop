@@ -34,7 +34,7 @@ function bo_woocommerce_gateway_manual_paypal_init() {
 	    public function __construct() {
 
 			$this->id                 = 'bo_manual_paypal';
-			$this->icon               = apply_filters('woocommerce_bacs_icon', '');
+			$this->icon               = apply_filters( 'woocommerce_paypal_icon', WC()->plugin_url() . '/assets/images/icons/paypal.png' );
 			$this->has_fields         = false;
 			$this->method_title       = __( 'Manual Paypal', 'woocommerce' );
 			$this->method_description = __( 'Offers manual Paypal handling, similar to bank transactions.', 'woocommerce' );	
