@@ -187,19 +187,22 @@ function bo_save_post( $post_id ) {
 	if ( 'shop_order' != $post->post_type ) {
 		return;
 	}
-    
-	// update invoice number
-	$o = new WC_Seq_Order_Number_Pro;
-	$o->set_sequential_order_number( $post_id );
-	$order_number_a = get_post_meta( $post_id, '_order_number' );
-	$order_number = $order_number_a[0];
-	
-	$order_number_prefix = '{YY}{MM}{DD}-{EMAIL}-';
-	$order_number_suffix = '';
-	$order_number_length = 0;
-				
-	update_post_meta( $post_id, '_order_number_formatted', WC_Seq_Order_Number_Pro::format_order_number( $order_number, $order_number_prefix, $order_number_suffix, $order_number_length, $post_id ) );
 
+	// do not update formatted order numbers that have already been set
+	if( get_post_meta( $post_id, '_order_number_formatted') == '' ) {
+		// update invoice number
+		$o = new WC_Seq_Order_Number_Pro;
+		$o->set_sequential_order_number( $post_id );
+		$order_number_a = get_post_meta( $post_id, '_order_number' );
+		$order_number = $order_number_a[0];
+		
+		$order_number_prefix = '{YY}{MM}{DD}-{EMAIL}-';
+		$order_number_suffix = '';
+		$order_number_length = 0;
+					
+		update_post_meta( $post_id, '_order_number_formatted', WC_Seq_Order_Number_Pro::format_order_number( $order_number, $order_number_prefix, $order_number_suffix, $order_number_length, $post_id ) );
+	}
+    
 	// is this order auto-renewing?
 	$order = new WC_Order( $post_id );
 	$items = $order->get_items();	
