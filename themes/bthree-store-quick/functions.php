@@ -85,16 +85,10 @@ function blendercloud_has_starter_product() {
 /***
  * Set all virtual purchases to completed upon payment
  */
-add_filter( 'woocommerce_payment_complete_order_status', 'virtual_order_payment_complete_order_status', 10, 2 );
+add_filter( 'woocommerce_payment_complete_order_status', 'virtual_order_payment_complete_order_status' );
  
 function virtual_order_payment_complete_order_status( $order_status, $order_id ) {
   $order = new WC_Order( $order_id );
-
-  $log_email = "
-  	Function call to virtual_order_payment_complete_order_status()\n
-  	Order_id: $order_id\n
-  	Order_status: $order_status\n
-  	Order->status: " . $order->status . "\n";
  
   if ( 'processing' == $order_status &&
        ( 'on-hold' == $order->status || 'pending' == $order->status || 'failed' == $order->status ) ) {
@@ -119,10 +113,6 @@ function virtual_order_payment_complete_order_status( $order_status, $order_id )
         }
       }
     }
-
-    $log_email .= "Virtual order: " . $virtual_order?'yes':'no';
- 
-    wp_mail( 'bart.veldhuizen@gmail.com', 'store debug info', $log_email );
 
     // virtual order, mark as completed
     if ( $virtual_order ) {
