@@ -93,6 +93,9 @@ function virtual_order_payment_complete_order_status( $order_status, $order_id )
   if ( 'processing' == $order_status &&
        ( 'on-hold' == $order->status || 'pending' == $order->status || 'failed' == $order->status ) ) {
  
+ 	// skip checks for now
+  	return 'completed';
+
     $virtual_order = null;
  
     if ( count( $order->get_items() ) > 0 ) {
